@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Part D Worksheet — Energy Balance &amp; the Greenhouse Effect</title>
+<style>
+:root{
+  --ink:#1F2937; --blue:#1D4E89; --blue-light:#DCE9F5; --gold:#B45309; --gold-light:#FDECD2;
+  --grey-light:#F4F5F7; --border:#D5D9E0; --green:#1B7A3D; --green-light:#E7F3E8;
+}
+*{box-sizing:border-box;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--ink); line-height:1.55; max-width:920px; margin:0 auto; padding:0 20px 80px;
+  background:#fff;
+}
+h1,h2,h3{color:var(--blue); line-height:1.25;}
+h1{font-size:2rem; border-bottom:3px solid var(--blue); padding-bottom:.4rem; margin-top:3rem;}
+h2{font-size:1.4rem; margin-top:2.2rem;}
+h3{font-size:1.15rem; color:var(--gold); margin-top:1.6rem; margin-bottom:.4rem;}
+h3 .time{color:#6B7280; font-weight:normal; font-style:italic; font-size:.85rem; margin-left:.5rem;}
+p{margin:.6rem 0;}
+.hero{
+  background:linear-gradient(135deg,#EAF1FA,#FDF3E4); border-radius:14px; padding:2.4rem 2rem 1.6rem;
+  margin-top:1.6rem; text-align:center; border:1px solid var(--border);
+}
+.hero .eyebrow{color:var(--gold); font-weight:700; letter-spacing:.06em; font-size:.85rem;}
+.hero h1{border:none; margin:.4rem 0; font-size:2.3rem;}
+.hero .subtitle{font-style:italic; color:#374151; font-size:1.05rem;}
+nav.toc{
+  display:flex; flex-wrap:wrap; gap:.5rem; justify-content:center; margin:1.6rem 0 2.4rem;
+  padding:.9rem; background:var(--grey-light); border-radius:10px; border:1px solid var(--border);
+}
+nav.toc a{
+  color:var(--blue); text-decoration:none; background:#fff; border:1px solid var(--border);
+  padding:.4rem .85rem; border-radius:20px; font-size:.88rem; font-weight:600;
+}
+nav.toc a:hover{background:var(--blue); color:#fff;}
+table{border-collapse:collapse; width:100%; margin:1rem 0; font-size:.92rem;}
+th,td{border:1px solid var(--border); padding:.5rem .65rem; text-align:left; vertical-align:top;}
+th{background:var(--blue); color:#fff; font-weight:600;}
+table.zebra tbody tr:nth-child(even){background:var(--grey-light);}
+td.editable{background:#fff; min-height:1.4em; cursor:text;}
+td.editable:empty:before{content:attr(data-placeholder); color:#9CA3AF; font-style:italic;}
+td.editable:focus{outline:2px solid var(--gold); outline-offset:-2px; background:#FFFDF7;}
+.callout{border-radius:10px; padding:1rem 1.2rem; margin:1rem 0; border-left:5px solid;}
+.callout p{margin:.35rem 0;}
+.callout-title{font-weight:700; margin-bottom:.4rem !important;}
+.callout.definition{background:var(--blue-light); border-color:var(--blue);}
+.callout.definition .callout-title{color:var(--blue);}
+.callout.formula{background:var(--gold-light); border-color:var(--gold); font-weight:600; text-align:center;}
+.callout.note{background:var(--grey-light); border-color:#9CA3AF;}
+.callout.teacher{background:var(--gold-light); border-color:var(--gold);}
+.callout.teacher .callout-title{color:var(--gold);}
+.callout.investigation{background:var(--blue-light); border-color:var(--blue); font-weight:600;}
+.fig{margin:1.4rem 0; text-align:center;}
+.fig img{max-width:100%; border:1px solid var(--border); border-radius:8px;}
+.fig figcaption{font-size:.85rem; font-style:italic; color:#6B7280; margin-top:.5rem;}
+.widget-credit{font-size:.85rem; font-style:italic; color:#6B7280; text-align:center; margin:.6rem 0 1.8rem;}
+.widget-credit a{color:var(--blue);}
+.question{margin:1.3rem 0 1.8rem; padding:1rem 1.1rem; background:#FCFCFD; border:1px solid var(--border); border-radius:10px;}
+.qtext{margin:0 0 .6rem;}
+.qlabel{color:var(--gold); font-weight:700; margin-right:.3rem;}
+.marks{color:#6B7280; font-size:.85rem; margin-right:.4rem;}
+a.jump{font-size:.8rem; color:var(--blue); margin-left:.5rem; white-space:nowrap;}
+details.hint{margin:.5rem 0; border:1px dashed var(--gold); border-radius:8px; background:#FFFBF2;}
+details.hint summary{cursor:pointer; font-weight:600; color:var(--gold); padding:.5rem .8rem; list-style:revert;}
+details.hint .hint-body{padding:0 .9rem .8rem; color:#374151;}
+textarea{
+  width:100%; border:1px solid var(--border); border-radius:8px; padding:.6rem .7rem; font-family:inherit;
+  font-size:.95rem; resize:vertical; background:#fff;
+}
+textarea:focus{outline:2px solid var(--blue); outline-offset:-1px;}
+ul{padding-left:1.3rem;}
+li{margin:.3rem 0;}
+.worked{background:#F7F9FC; border-left:4px solid var(--blue); padding:.7rem 1rem; border-radius:6px; margin:.8rem 0;}
+.worked .label{color:var(--blue); font-weight:700;}
+.session-badge{display:inline-block; background:var(--gold-light); color:var(--gold); font-weight:700; padding:.25rem .7rem; border-radius:20px; font-size:.85rem; margin-bottom:.6rem;}
+.checklist td:first-child, .checklist th:first-child{text-align:center; width:2.2rem;}
+table.rating th:first-child{width:11rem;}
+ul.tasklist{list-style:none; padding-left:0; margin:1rem 0;}
+li.task-item{border:1px solid var(--border); border-radius:8px; padding:.7rem 1rem; margin:.6rem 0; background:#fff;}
+.task-check{display:flex; align-items:center; gap:.6rem; cursor:pointer; font-weight:700; color:var(--blue); margin:0;}
+.task-check input[type="checkbox"]{width:1.15rem; height:1.15rem; accent-color:var(--blue); cursor:pointer; flex-shrink:0;}
+.task-time{margin-left:auto; color:#6B7280; font-weight:normal; font-style:italic; font-size:.85rem; white-space:nowrap; padding-left:.8rem;}
+.task-desc{margin:.5rem 0 0 1.75rem; color:var(--ink); font-weight:normal;}
+.rating-cell{text-align:center;}
+select.rating-select{
+  font-family:inherit; font-size:.95rem; padding:.35rem .5rem; border:1px solid var(--border); border-radius:6px;
+  background:#fff; color:var(--ink); width:100%; cursor:pointer;
+}
+select.rating-select:focus{outline:2px solid var(--blue); outline-offset:-1px;}
+
+/* ---- Animated figures (Figure A.2 / A.3) ---- */
+.dual-fig{display:flex; gap:1.2rem; flex-wrap:wrap; margin:1.4rem 0;}
+.dual-fig .fig{flex:1 1 300px; min-width:280px; margin:0;}
+.anim-box{border:1px solid var(--border); border-radius:8px; padding:.6rem; background:#fff;}
+.anim-box svg{width:100%; height:auto; display:block;}
+
+.aw-wave{fill:none; stroke:#D97706; stroke-width:4; opacity:1; animation:awWaveGrow 4s linear infinite, awWaveClip 4s linear infinite;}
+.aw-wave-capture{fill:none; stroke:#DC2626; stroke-width:7; opacity:1; animation:awWaveGrow 4s linear infinite;}
+@keyframes awWaveGrow{
+  0%   { r:0;   opacity:1; }
+  75%  { r:560; opacity:.85; }
+  100% { r:820; opacity:0; }
+}
+/* the "missing slice" clip only switches on once a ring has fully swept past Earth (r > 580),
+   so no gap is ever visible before the wavefront reaches the planet */
+@keyframes awWaveClip{
+  0%, 76.9% { clip-path:none; }
+  77%, 100% { clip-path:url(#awExcludeWedge); }
+}
+.aw-wave2{animation-delay:-1.33s;}
+.aw-wave3{animation-delay:-2.66s;}
+.aw-sun-glow{animation:awSunPulse 2s ease-in-out infinite;}
+@keyframes awSunPulse{ 0%,100%{opacity:.55;} 50%{opacity:1;} }
+
+.sw-footprint{animation:swFootMove 24s ease-in-out infinite; transform-box:fill-box;}
+@keyframes swFootMove{
+  0%,8%    { cy:250; ry:30; rx:58; fill-opacity:.92; }
+  46%,54%  { cy:140; ry:68; rx:52; fill-opacity:.42; }
+  92%,100% { cy:250; ry:30; rx:58; fill-opacity:.92; }
+}
+
+@media print{
+  .aw-wave, .aw-wave-capture, .aw-sun-glow,
+  .sw-footprint{ animation:none !important; }
+  .aw-wave{ r:420; opacity:.7; }
+}
+.checklist td:last-child{text-align:center;}
+footer.sect-foot{border-top:1px solid var(--border); margin-top:2.2rem; padding-top:.6rem; text-align:right;}
+footer.sect-foot a{font-size:.85rem; color:var(--blue); text-decoration:none;}
+.answer-key{background:var(--grey-light); border-radius:10px; padding:1.4rem 1.6rem; margin-top:1rem;}
+.ans{margin:.55rem 0;}
+.alabel{color:var(--blue); font-weight:700; margin-right:.3rem;}
+.toolbar{position:sticky; top:0; background:#fff; padding:.6rem 0; border-bottom:1px solid var(--border); z-index:5; display:flex; gap:.6rem; justify-content:flex-end; margin-bottom:.4rem;}
+.toolbar button{
+  background:var(--blue); color:#fff; border:none; padding:.4rem .9rem; border-radius:20px; font-size:.82rem;
+  cursor:pointer; font-weight:600;
+}
+.toolbar button.secondary{background:#fff; color:var(--blue); border:1px solid var(--blue);}
+.field-row{display:grid; grid-template-columns:1fr 2fr; gap:0; margin:.4rem 0;}
+.field-row .lbl{background:var(--blue); color:#fff; padding:.5rem .7rem; border-radius:6px 0 0 6px; font-weight:600; font-size:.9rem; display:flex; align-items:center;}
+.field-row .val{border:1px solid var(--border); border-left:none; border-radius:0 6px 6px 0; padding:.5rem .7rem;}
+@media print{
+  .toolbar, nav.toc{display:none;}
+  details.hint{border-style:solid;}
+  a.jump{display:none;}
+}
+</style>
+</head>
+<body id="top">
+
+<div class="toolbar">
+  <button type="button" class="secondary" onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Expand all hints</button>
+  <button type="button" class="secondary" onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse all hints</button>
+  <button type="button" onclick="window.print()">Print / save as PDF</button>
+</div>
+
+<div class="hero">
+  <div class="eyebrow">IB DIPLOMA PROGRAMME &middot; PHYSICS</div>
+  <h1>Energy Balance &amp; the Greenhouse Effect</h1>
+  <p class="subtitle">Worksheet &mdash; Part D: Your Collaborative Sciences Project (CSP), with the Part E Checklist and Part F Answer Key</p>
+</div>
+
+<table>
+<tr><td class="lbl" style="background:var(--blue); color:#fff; font-weight:600; width:220px;">Name(s)</td><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td></tr>
+<tr><td class="lbl" style="background:var(--blue); color:#fff; font-weight:600;">CSP team / group</td><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td></tr>
+<tr><td class="lbl" style="background:var(--blue); color:#fff; font-weight:600;">Class &amp; teacher</td><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td></tr>
+<tr><td class="lbl" style="background:var(--blue); color:#fff; font-weight:600;">Date started</td><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td></tr>
+</table>
+
+<section id="partD">
+<h1>Part D — Your Collaborative Sciences Project</h1>
+<p>The Collaborative Sciences Project (CSP) gives you the chance to work in an interdisciplinary team on a real scientific question, using the physics of energy balance and the greenhouse effect you've just met — but seen through the lens of a genuine investigation rather than a textbook problem. The purpose of the CSP is for students to collaborate to identify a problem using science-based reasoning, leading to action. The focus is on the process of collaborative problem-solving, not on producing a single &ldquo;correct&rdquo; product, and the CSP itself is not formally assessed.</p>
+<h3 style="margin-top:1.6rem;">Sample outcomes for your project</h3>
+<p>Your outcome shouldn't be a physics experiment alone &mdash; data is used to inform actions. What action would you plan or suggest? Almost any local action can work, provided it's grounded in the physics of energy balance and clearly linked to either changing the albedo of the area, reducing carbon dioxide emissions, or the tree/shrub coverage of the area.</p>
+<ul>
+<li>A local rubbish-picking or clean-up drive that also promotes walking dogs locally instead of driving, cutting local vehicle emissions.</li>
+<li>A fashion show promoting second-hand clothing, to reduce the energy cost of producing new clothes.</li>
+<li>A publicity campaign encouraging people to delete unused files from cloud storage, to reduce the energy used by data centres.</li>
+<li>Designing simple sensors that help reduce a building's energy use.</li>
+<li>Modelling and proposing the most effective recycling system for your school.</li>
+<li>A campaign for reflective, brightly-coloured roofs and &ldquo;white roads&rdquo; (light-coloured road surfacing), to raise the local albedo.</li>
+<li>A campaign promoting more solar panels on roofs.</li>
+</ul>
+<p>The product could be a scientific poster, a planning document, or something to inspire action such as visual art (e.g. painting, sculpture, installation), performing art (e.g. theatre, film, music, dance), or literature (e.g. poetry, short story). Whatever the medium, it must connect to both a local context and a global issue, be documented in a process journal (in a medium of your choice &mdash; video, narrated presentation, booklet, website), and be shared with the school community.</p>
+
+<h2>D.1&nbsp; The 10-hour timeline</h2>
+<ul class="tasklist"><li class="task-item">
+      <label class="task-check"><input type="checkbox"><span class="task-label">1. Planning</span></label>
+      <p class="task-desc">Choose your investigation (Option A: albedo, or Option B: foliage energy shielding — see D.3/D.4). Consider what the actual outcome of this project will be, and what evidence you need to support that.</p>
+    </li><li class="task-item">
+      <label class="task-check"><input type="checkbox"><span class="task-label">2. Data collection</span></label>
+      
+    </li><li class="task-item">
+      <label class="task-check"><input type="checkbox"><span class="task-label">3. Analysis</span></label>
+      <p class="task-desc">Present the scientific data alongside a short conclusion and evaluation, then link that to your proposed action.</p>
+    </li><li class="task-item">
+      <label class="task-check"><input type="checkbox"><span class="task-label">4. Action</span></label>
+      <p class="task-desc">Describe, plan and execute your action.</p>
+    </li><li class="task-item">
+      <label class="task-check"><input type="checkbox"><span class="task-label">5. Review</span></label>
+      <p class="task-desc">View the other work from the cohort.</p>
+    </li><li class="task-item">
+      <label class="task-check"><input type="checkbox"><span class="task-label">6. Sharing &amp; reflection</span></label>
+      <p class="task-desc">Present to the rest of the cohort; individual 100-word written reflection (D.6).</p>
+    </li></ul>
+
+<h2>D.2&nbsp; Project proposal (complete in Session 1, then get mentor sign-off)</h2>
+<div class="field-row"><div class="lbl">Team members &amp; roles</div><div class="val editable" contenteditable="true" data-placeholder="Click to type…"></div></div>
+<div class="field-row"><div class="lbl">Investigation question</div><div class="val editable" contenteditable="true" data-placeholder="Click to type…"></div></div>
+<div class="field-row"><div class="lbl">Link to a global issue (e.g. climate change, urban heat islands, land-use change)</div><div class="val editable" contenteditable="true" data-placeholder="Click to type…"></div></div>
+<div class="field-row"><div class="lbl">Independent variable</div><div class="val editable" contenteditable="true" data-placeholder="Click to type…"></div></div>
+<div class="field-row"><div class="lbl">Dependent variable</div><div class="val editable" contenteditable="true" data-placeholder="Click to type…"></div></div>
+<div class="field-row"><div class="lbl">Controlled variables</div><div class="val editable" contenteditable="true" data-placeholder="Click to type…"></div></div>
+<div class="field-row"><div class="lbl">Outline of method (bullet points)</div><div class="val editable" contenteditable="true" data-placeholder="Click to type…"></div></div>
+<div class="field-row"><div class="lbl">Equipment list</div><div class="val editable" contenteditable="true" data-placeholder="Click to type…"></div></div>
+
+<h3>Risk assessment</h3>
+<table class="zebra "><thead><tr><th>Hazard</th><th>Who might be harmed?</th><th>Control measures</th></tr></thead><tbody><tr><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td></tr><tr><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td></tr><tr><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td></tr></tbody></table>
+<div class="field-row"><div class="lbl">Mentor approval &mdash; signature &amp; date</div><div class="val editable" contenteditable="true" data-placeholder="Click to type…"></div></div>
+
+<h2>D.3&nbsp; Option A — Measuring the albedo of different surfaces</h2>
+<p><em style="color:#6B7280;">Links directly to Understandings: albedo formula; Earth's albedo varies with cloud/latitude; conservation of energy</em></p>
+<h3>Aim</h3>
+<p>To measure and compare the albedo of a range of real surfaces (e.g. grass, tarmac/concrete, bare soil, white card, aluminium foil, water, gravel), and relate your results to why Earth's own albedo varies with cloud cover, ice cover and latitude.</p>
+<h3>Background theory</h3>
+<p>Albedo &alpha; = total scattered power &divide; total incident power. A real satellite-based albedometer uses a matched pair of sensors — one facing the sky to record incoming (incident) intensity, one facing the ground to record reflected intensity — and takes the ratio. You will build a simplified version of the same method.</p>
+<h3>Equipment</h3>
+<ul>
+<li>A small photovoltaic solar panel connected to a voltmeter.</li>
+<li>If you wish, a retort stand or fixed frame to hold the sensor at a constant height and angle above each surface.</li>
+<li>A way of recording weather/cloud conditions at the time of measurement.</li>
+</ul>
+<h3>Safety</h3>
+<ul><li>Never point a light sensor directly at the Sun. Avoid working in direct traffic areas. Apply sun-safety precautions (hat, sunscreen, water) if working outdoors for an extended period.</li></ul>
+<h3>Analysis &amp; evaluation prompts</h3>
+<ul>
+<li>Rank your surfaces from lowest to highest albedo. Does the order match what you'd predict from colour/texture?</li>
+<li>How would your results change on a cloudy day compared with a clear day? Link your answer to why Earth's whole-planet albedo varies daily.</li>
+<li>What is the main source of uncertainty in your method? How could a real satellite-based measurement avoid it?</li>
+<li>If your school is at a high or low latitude, discuss how the angle of the Sun's rays might affect your measured values at different times of day.</li>
+</ul>
+
+<h2>D.4&nbsp; Option B — Energy transfer under different foliage/canopy coverings</h2>
+<p><em style="color:#6B7280;">Links directly to Understandings: solar constant S and S/4; conservation of energy; absorption/emission of radiation</em></p>
+<h3>Aim</h3>
+<p>To investigate how different types or densities of foliage/canopy covering affect the amount of solar energy reaching the ground beneath them, as a simple physical model for how vegetation cover and land use affect a local (and, in aggregate, global) energy budget.</p>
+<h3>Background theory</h3>
+<p>A canopy of leaves — or an artificial substitute such as shade netting of different grades — intercepts and scatters incoming short-wave solar radiation before it reaches the ground, in much the same way that clouds intercept sunlight over the oceans (A.5). Comparing the energy reaching the ground with and without different coverings lets you quantify a &ldquo;local albedo/shielding effect.&rdquo; Note: this experiment models shielding of incoming shortwave radiation, which is not the same mechanism as the atmospheric greenhouse effect (which traps outgoing longwave radiation) — a good discussion point for your evaluation.</p>
+<h3>Equipment</h3>
+<ul>
+<li>A small photovoltaic solar panel connected to a voltmeter.</li>
+<li>If you wish, a stand to hold the sensor at a fixed, identical height under each covering and in the open control.</li>
+<li>A way of recording weather/cloud conditions.</li>
+</ul>
+<h3>Safety</h3>
+<ul><li>Take care working around trees/hedges (check for insects, uneven ground). Never point a light sensor directly at the Sun. Apply sun-safety precautions if working outdoors for an extended period.</li></ul>
+<h3>Analysis &amp; evaluation prompts</h3>
+<ul>
+<li>Which covering blocked the most energy? Does this match the density/thickness you observed?</li>
+<li>Estimate, using your control reading and S = 1360 W m&#8315;&sup2;, what fraction of the actual solar constant your open-sky reading represents (accounting for cloud cover, angle of the Sun, and atmospheric losses).</li>
+<li>Explain, in your own words, why this experiment models shielding of incoming shortwave radiation rather than the trapping of outgoing longwave radiation that defines the atmospheric greenhouse effect.</li>
+<li>What real-world land-use decision could your data inform (e.g. urban tree planting, greenhouse/polytunnel design, solar panel siting)?</li>
+</ul>
+
+<h2>D.5&nbsp; Sharing the outcome of your project</h2>
+<p>Your data informed something — but what? What will you now do? That outcome or action needs to be shared alongside your scientific data, not treated as an afterthought. Choose whichever medium suits your team, your data and your action best: a scientific poster, a short video, a podcast, a slide deck, a web page, or another format agreed with your mentor. Whatever the format, make sure it includes:</p>
+<ul>
+<li>The investigation question and its link to a local context and a global issue.</li>
+<li>Your method, in enough detail that someone else could repeat it.</li>
+<li>Your data and at least one clear graph or table.</li>
+<li>Your conclusion and evaluation, and how they informed the action you took (or plan to take).</li>
+<li>A description of the action itself &mdash; what you did, planned or executed, and why.</li>
+<li>One or two salient successes, and one or two challenges and how your team overcame them.</li>
+<li>A brief reflection on how your approach to learning skills — particularly collaboration and communication — developed over the project.</li>
+</ul>
+
+<h2>D.6&nbsp; Individual 100-word reflection</h2>
+<p>Write this individually, honestly, and specifically — it should be a genuine commentary on your experience, not a list of what you did. Consider:</p>
+<ul>
+<li>A challenge and a success in collaborating with your team.</li>
+<li>A challenge and a success in communicating your ideas or findings.</li>
+<li>One thing you now understand about energy balance or the greenhouse effect that you didn't before.</li>
+</ul>
+<textarea rows="7" data-placeholder="Type your 100-word reflection here…" placeholder="Type your 100-word reflection here…"></textarea>
+</section>
+
+<section id="partE">
+<h1>Part E — Understanding Coverage Checklist</h1>
+<p>For teacher (and student) reference: exactly where each required Understanding is introduced, practised and evidenced.</p>
+<table class="zebra checklist"><thead><tr><th>#</th><th>Understanding</th><th>Introduced in</th><th>Workbook Qs</th><th>Further evidence</th><th>&#10003;</th></tr></thead><tbody><tr><td>1</td><td>The conservation of energy.</td><td>A.1 (starter); B.2 (energy-balance derivation)</td><td>Q1, Q1b, Q13</td><td>CSP data analysis — checking absorbed &asymp; emitted</td><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td></tr><tr><td>2</td><td>Emissivity as the ratio of the power radiated per unit area by a surface compared to that of an ideal black surface at the same temperature.</td><td>A.2&ndash;A.3</td><td>Q2, Q3</td><td>Lesson 1 self-check</td><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td></tr><tr><td>3</td><td>Albedo as a measure of the average energy reflected off a macroscopic system: albedo = total scattered power / total incident power.</td><td>A.5, Figures A.4&ndash;A.5</td><td>Q5, Q12</td><td>CSP Option A directly measures albedo</td><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td></tr><tr><td>4</td><td>Earth's albedo varies daily and is dependent on cloud formations and latitude.</td><td>A.5</td><td>Q5, Q5b (open, city albedo)</td><td>CSP Option A (weather-condition notes); Lesson 1 self-check</td><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td></tr><tr><td>5</td><td>The solar constant, S.</td><td>A.4</td><td>Q4</td><td>CSP Option B (comparison to S)</td><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td></tr><tr><td>6</td><td>Incoming radiative power depends on the planet's projected surface along the direction of the rays, giving a mean incoming intensity of S/4.</td><td>A.4 (with Figure A.1 diagram)</td><td>Q4, Q6</td><td>Synthesis Part C</td><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td></tr><tr><td>7</td><td>Methane, water vapour, carbon dioxide and nitrous oxide are the main greenhouse gases, each with both natural and human (anthropogenic) origins.</td><td>B.4</td><td>Q10 &amp; sorting table</td><td>Lesson 2 self-check</td><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td></tr><tr><td>8</td><td>Absorption of infrared radiation by the main greenhouse gases in terms of molecular energy levels, and subsequent emission of radiation in all directions.</td><td>B.3 (The molecular energy levels model), Figure B.2</td><td>Q9</td><td>Part C, Q14 (Venus)</td><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td></tr><tr><td>9</td><td>The greenhouse effect can be explained in terms of both a resonance model and molecular energy levels.</td><td>B.3, Figures B.1&ndash;B.2</td><td>Q9</td><td>&mdash;</td><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td></tr><tr><td>10</td><td>The augmentation of the greenhouse effect due to human activities is known as the enhanced greenhouse effect.</td><td>B.5</td><td>Q11</td><td>CSP reflection (D.6)</td><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td></tr></tbody></table>
+</section>
+
+<section id="partF">
+<h1>Part F — Self-Marking Answer Key</h1>
+<div class="callout teacher"><p class="callout-title">Before you look&hellip;</p><p>Have a genuine attempt at every question in Parts A&ndash;C first, and try the 💡 Hint box if you're stuck. Checking an answer you haven't tried teaches you nothing — checking one you have tried tells you exactly what to revise.</p></div>
+
+<div class="answer-key">
+<h2 style="margin-top:0;">Part A</h2>
+<p class="ans" id="a1"><span class="alabel">A1</span> Because the planet's temperature is constant, its internal (thermal) energy is not changing on average. By conservation of energy, energy in (absorbed radiation) must equal energy out (emitted radiation) over any complete cycle (e.g. a year).</p>
+<p class="ans" id="a1b"><span class="alabel">A1b</span> The planet would warm up: absorbing more energy than it emits means its internal energy — and therefore its temperature — increases, which in turn increases the power it radiates (P &prop; T&#8308;) until a new, higher-temperature balance is reached.</p>
+<p class="ans" id="a2"><span class="alabel">A2</span> P = &sigma;AT&#8308; = (5.67&times;10&#8315;&#8312;)(0.020)(350)&#8308; &asymp; 17.0 W.</p>
+<p class="ans" id="a3"><span class="alabel">A3</span> The black-painted sphere (e &asymp; 0.95) radiates about 19 times more power than the polished sphere (e &asymp; 0.05), since P is directly proportional to e for two objects at the same T and A (0.95/0.05 = 19).</p>
+<p class="ans" id="a4"><span class="alabel">A4</span> S = P<sub>sun</sub>/(4&pi;d&sup2;) = (3.85&times;10&sup2;&#8310;)/(4&pi;(2.28&times;10&sup1;&sup1;)&sup2;) &asymp; 589 W m&#8315;&sup2; (this is close to the accepted value for Mars, &asymp; 586&ndash;590 W m&#8315;&sup2;).</p>
+<p class="ans" id="a5"><span class="alabel">A5</span> (a) More cloud over oceans reflects more sunlight back to space before it reaches the (relatively dark) ocean surface, so it increases local — and, in aggregate, global — albedo. (b) Losing polar sea-ice exposes darker ocean water beneath, which absorbs more and reflects less, so it decreases local albedo (this is the ice&ndash;albedo feedback).</p>
+<p class="ans" id="a6"><span class="alabel">A6</span> Net absorbed intensity = (S/4)(1&minus;&alpha;) = (589/4)(1&minus;0.25) &asymp; 147 &times; 0.75 &asymp; 110 W m&#8315;&sup2;.</p>
+
+<h2>Part B</h2>
+<p class="ans" id="a7"><span class="alabel">A7</span> (a) &alpha; = total scattered power/total incident power; (b) mean incoming intensity = S/4; (c) emissivity measures how efficiently a real surface radiates compared with an ideal black body at the same temperature (0 &le; e &le; 1).</p>
+<p class="ans" id="a8"><span class="alabel">A8</span> T = &#8308;&radic;[(S/4)(1&minus;&alpha;)/(e&sigma;)] = &#8308;&radic;[(900/4)(0.85)/(5.67&times;10&#8315;&#8312;)] = &#8308;&radic;[(225)(0.85)/(5.67&times;10&#8315;&#8312;)] = &#8308;&radic;(3.373&times;10&#8313;) &asymp; 241 K.</p>
+<p class="ans" id="a9"><span class="alabel">A9</span> N&#8322; and O&#8322; are symmetric diatomic molecules, so when their atoms vibrate the molecule's charge distribution doesn't change. The oscillating electric field of an IR wave has no unequal charge to push and pull on, so it can't drive the molecule's vibration into resonance and no energy is absorbed. CO&#8322; and H&#8322;O are asymmetric (or have polar bonds), so their vibrations do produce a changing charge distribution that the IR field can couple to and drive resonantly. This is why greenhouse gases can absorb IR strongly even though they make up only a tiny fraction of the atmosphere.</p>
+<p class="ans" id="a10"><span class="alabel">A10</span> Methane (CH&#8324;): natural sources include wetlands, oceans, lakes and rivers; anthropogenic sources include flooded rice fields and farm animals (livestock).</p>
+<p class="ans" id="a11"><span class="alabel">A11</span> (a) N — a natural part of the greenhouse effect. (b) E — human-caused increase in a greenhouse gas concentration. (c) N — part of the natural carbon cycle. (d) E — a human-caused change in land use that adds to atmospheric CO&#8322;.</p>
+
+<h2>Part C</h2>
+<p class="ans" id="a12"><span class="alabel">A12</span> &alpha; = 496/656 &asymp; 0.76. This is roughly two and a half times Earth's average albedo of 0.3, because Venus is almost completely covered by thick, highly reflective sulfuric-acid clouds, which scatter most incoming sunlight before it ever reaches the surface.</p>
+<p class="ans" id="a13"><span class="alabel">A13</span> Both being 22 W m&#8315;&sup2; confirms that Venus's surface is in energy equilibrium: the surface is absorbing and emitting energy at the same average rate, exactly as conservation of energy requires for a stable average temperature.</p>
+<p class="ans" id="a14"><span class="alabel">A14</span> Venus's atmosphere is extremely opaque to infrared radiation (very high CO&#8322; concentration and pressure). Once the surface emits IR radiation, it is absorbed and re-emitted by atmosphere molecules many times over — in all directions, including back down to the surface — before a net amount can finally escape to space. This repeated absorption/re-emission cycle allows the internal long-wave flux to build up to a value many times larger than the original incoming solar flux, which is why Venus's actual surface temperature (about 737 K) is vastly higher than the simple no-atmosphere blackbody estimate.</p>
+
+<h3>GHG sorting table — completed</h3>
+<table class="zebra "><thead><tr><th>Greenhouse gas</th><th>Formula</th><th>Natural sources</th><th>Anthropogenic sources</th></tr></thead><tbody><tr><td>Water vapour</td><td>H&#8322;O (g)</td><td>Evaporation from oceans, rivers and lakes</td><td>Flight (aviation emissions)</td></tr><tr><td>Carbon dioxide</td><td>CO&#8322;</td><td>Forest fires, volcanic eruptions, evaporation/outgassing from oceans</td><td>Burning fossil fuels in power plants and cars, burning forests</td></tr><tr><td>Methane</td><td>CH&#8324;</td><td>Wetlands, oceans, lakes and rivers</td><td>Flooded rice fields, farm animals, termites, processing of coal/natural gas/oil, burning biomass</td></tr><tr><td>Nitrous oxide</td><td>N&#8322;O</td><td>Forests, oceans, soils and grasslands</td><td>Burning fossil fuels, manufacture of cement and fertilisers, deforestation</td></tr></tbody></table>
+</div>
+<footer class="sect-foot"><a href="#top">↑ Back to top</a></footer>
+</section>
+<script>
+// Progressive enhancement only — page works fully without this.
+(function(){
+  try{
+    document.querySelectorAll('textarea[data-placeholder]').forEach(function(t){
+      t.addEventListener('input', function(){ t.style.height='auto'; t.style.height=(t.scrollHeight+2)+'px'; });
+    });
+  }catch(e){}
+})();
+</script>
+
+</body>
+</html>

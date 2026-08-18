@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Part C Worksheet — Energy Balance &amp; the Greenhouse Effect</title>
+<style>
+:root{
+  --ink:#1F2937; --blue:#1D4E89; --blue-light:#DCE9F5; --gold:#B45309; --gold-light:#FDECD2;
+  --grey-light:#F4F5F7; --border:#D5D9E0; --green:#1B7A3D; --green-light:#E7F3E8;
+}
+*{box-sizing:border-box;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--ink); line-height:1.55; max-width:920px; margin:0 auto; padding:0 20px 80px;
+  background:#fff;
+}
+h1,h2,h3{color:var(--blue); line-height:1.25;}
+h1{font-size:2rem; border-bottom:3px solid var(--blue); padding-bottom:.4rem; margin-top:3rem;}
+h2{font-size:1.4rem; margin-top:2.2rem;}
+h3{font-size:1.15rem; color:var(--gold); margin-top:1.6rem; margin-bottom:.4rem;}
+h3 .time{color:#6B7280; font-weight:normal; font-style:italic; font-size:.85rem; margin-left:.5rem;}
+p{margin:.6rem 0;}
+.hero{
+  background:linear-gradient(135deg,#EAF1FA,#FDF3E4); border-radius:14px; padding:2.4rem 2rem 1.6rem;
+  margin-top:1.6rem; text-align:center; border:1px solid var(--border);
+}
+.hero .eyebrow{color:var(--gold); font-weight:700; letter-spacing:.06em; font-size:.85rem;}
+.hero h1{border:none; margin:.4rem 0; font-size:2.3rem;}
+.hero .subtitle{font-style:italic; color:#374151; font-size:1.05rem;}
+nav.toc{
+  display:flex; flex-wrap:wrap; gap:.5rem; justify-content:center; margin:1.6rem 0 2.4rem;
+  padding:.9rem; background:var(--grey-light); border-radius:10px; border:1px solid var(--border);
+}
+nav.toc a{
+  color:var(--blue); text-decoration:none; background:#fff; border:1px solid var(--border);
+  padding:.4rem .85rem; border-radius:20px; font-size:.88rem; font-weight:600;
+}
+nav.toc a:hover{background:var(--blue); color:#fff;}
+table{border-collapse:collapse; width:100%; margin:1rem 0; font-size:.92rem;}
+th,td{border:1px solid var(--border); padding:.5rem .65rem; text-align:left; vertical-align:top;}
+th{background:var(--blue); color:#fff; font-weight:600;}
+table.zebra tbody tr:nth-child(even){background:var(--grey-light);}
+td.editable{background:#fff; min-height:1.4em; cursor:text;}
+td.editable:empty:before{content:attr(data-placeholder); color:#9CA3AF; font-style:italic;}
+td.editable:focus{outline:2px solid var(--gold); outline-offset:-2px; background:#FFFDF7;}
+.callout{border-radius:10px; padding:1rem 1.2rem; margin:1rem 0; border-left:5px solid;}
+.callout p{margin:.35rem 0;}
+.callout-title{font-weight:700; margin-bottom:.4rem !important;}
+.callout.definition{background:var(--blue-light); border-color:var(--blue);}
+.callout.definition .callout-title{color:var(--blue);}
+.callout.formula{background:var(--gold-light); border-color:var(--gold); font-weight:600; text-align:center;}
+.callout.note{background:var(--grey-light); border-color:#9CA3AF;}
+.callout.teacher{background:var(--gold-light); border-color:var(--gold);}
+.callout.teacher .callout-title{color:var(--gold);}
+.callout.investigation{background:var(--blue-light); border-color:var(--blue); font-weight:600;}
+.fig{margin:1.4rem 0; text-align:center;}
+.fig img{max-width:100%; border:1px solid var(--border); border-radius:8px;}
+.fig figcaption{font-size:.85rem; font-style:italic; color:#6B7280; margin-top:.5rem;}
+.widget-credit{font-size:.85rem; font-style:italic; color:#6B7280; text-align:center; margin:.6rem 0 1.8rem;}
+.widget-credit a{color:var(--blue);}
+.question{margin:1.3rem 0 1.8rem; padding:1rem 1.1rem; background:#FCFCFD; border:1px solid var(--border); border-radius:10px;}
+.qtext{margin:0 0 .6rem;}
+.qlabel{color:var(--gold); font-weight:700; margin-right:.3rem;}
+.marks{color:#6B7280; font-size:.85rem; margin-right:.4rem;}
+a.jump{font-size:.8rem; color:var(--blue); margin-left:.5rem; white-space:nowrap;}
+details.hint{margin:.5rem 0; border:1px dashed var(--gold); border-radius:8px; background:#FFFBF2;}
+details.hint summary{cursor:pointer; font-weight:600; color:var(--gold); padding:.5rem .8rem; list-style:revert;}
+details.hint .hint-body{padding:0 .9rem .8rem; color:#374151;}
+textarea{
+  width:100%; border:1px solid var(--border); border-radius:8px; padding:.6rem .7rem; font-family:inherit;
+  font-size:.95rem; resize:vertical; background:#fff;
+}
+textarea:focus{outline:2px solid var(--blue); outline-offset:-1px;}
+ul{padding-left:1.3rem;}
+li{margin:.3rem 0;}
+.worked{background:#F7F9FC; border-left:4px solid var(--blue); padding:.7rem 1rem; border-radius:6px; margin:.8rem 0;}
+.worked .label{color:var(--blue); font-weight:700;}
+.session-badge{display:inline-block; background:var(--gold-light); color:var(--gold); font-weight:700; padding:.25rem .7rem; border-radius:20px; font-size:.85rem; margin-bottom:.6rem;}
+.checklist td:first-child, .checklist th:first-child{text-align:center; width:2.2rem;}
+table.rating th:first-child{width:11rem;}
+ul.tasklist{list-style:none; padding-left:0; margin:1rem 0;}
+li.task-item{border:1px solid var(--border); border-radius:8px; padding:.7rem 1rem; margin:.6rem 0; background:#fff;}
+.task-check{display:flex; align-items:center; gap:.6rem; cursor:pointer; font-weight:700; color:var(--blue); margin:0;}
+.task-check input[type="checkbox"]{width:1.15rem; height:1.15rem; accent-color:var(--blue); cursor:pointer; flex-shrink:0;}
+.task-time{margin-left:auto; color:#6B7280; font-weight:normal; font-style:italic; font-size:.85rem; white-space:nowrap; padding-left:.8rem;}
+.task-desc{margin:.5rem 0 0 1.75rem; color:var(--ink); font-weight:normal;}
+.rating-cell{text-align:center;}
+select.rating-select{
+  font-family:inherit; font-size:.95rem; padding:.35rem .5rem; border:1px solid var(--border); border-radius:6px;
+  background:#fff; color:var(--ink); width:100%; cursor:pointer;
+}
+select.rating-select:focus{outline:2px solid var(--blue); outline-offset:-1px;}
+
+/* ---- Animated figures (Figure A.2 / A.3) ---- */
+.dual-fig{display:flex; gap:1.2rem; flex-wrap:wrap; margin:1.4rem 0;}
+.dual-fig .fig{flex:1 1 300px; min-width:280px; margin:0;}
+.anim-box{border:1px solid var(--border); border-radius:8px; padding:.6rem; background:#fff;}
+.anim-box svg{width:100%; height:auto; display:block;}
+
+.aw-wave{fill:none; stroke:#D97706; stroke-width:4; opacity:1; animation:awWaveGrow 4s linear infinite, awWaveClip 4s linear infinite;}
+.aw-wave-capture{fill:none; stroke:#DC2626; stroke-width:7; opacity:1; animation:awWaveGrow 4s linear infinite;}
+@keyframes awWaveGrow{
+  0%   { r:0;   opacity:1; }
+  75%  { r:560; opacity:.85; }
+  100% { r:820; opacity:0; }
+}
+/* the "missing slice" clip only switches on once a ring has fully swept past Earth (r > 580),
+   so no gap is ever visible before the wavefront reaches the planet */
+@keyframes awWaveClip{
+  0%, 76.9% { clip-path:none; }
+  77%, 100% { clip-path:url(#awExcludeWedge); }
+}
+.aw-wave2{animation-delay:-1.33s;}
+.aw-wave3{animation-delay:-2.66s;}
+.aw-sun-glow{animation:awSunPulse 2s ease-in-out infinite;}
+@keyframes awSunPulse{ 0%,100%{opacity:.55;} 50%{opacity:1;} }
+
+.sw-footprint{animation:swFootMove 24s ease-in-out infinite; transform-box:fill-box;}
+@keyframes swFootMove{
+  0%,8%    { cy:250; ry:30; rx:58; fill-opacity:.92; }
+  46%,54%  { cy:140; ry:68; rx:52; fill-opacity:.42; }
+  92%,100% { cy:250; ry:30; rx:58; fill-opacity:.92; }
+}
+
+@media print{
+  .aw-wave, .aw-wave-capture, .aw-sun-glow,
+  .sw-footprint{ animation:none !important; }
+  .aw-wave{ r:420; opacity:.7; }
+}
+.checklist td:last-child{text-align:center;}
+footer.sect-foot{border-top:1px solid var(--border); margin-top:2.2rem; padding-top:.6rem; text-align:right;}
+footer.sect-foot a{font-size:.85rem; color:var(--blue); text-decoration:none;}
+.answer-key{background:var(--grey-light); border-radius:10px; padding:1.4rem 1.6rem; margin-top:1rem;}
+.ans{margin:.55rem 0;}
+.alabel{color:var(--blue); font-weight:700; margin-right:.3rem;}
+.toolbar{position:sticky; top:0; background:#fff; padding:.6rem 0; border-bottom:1px solid var(--border); z-index:5; display:flex; gap:.6rem; justify-content:flex-end; margin-bottom:.4rem;}
+.toolbar button{
+  background:var(--blue); color:#fff; border:none; padding:.4rem .9rem; border-radius:20px; font-size:.82rem;
+  cursor:pointer; font-weight:600;
+}
+.toolbar button.secondary{background:#fff; color:var(--blue); border:1px solid var(--blue);}
+.field-row{display:grid; grid-template-columns:1fr 2fr; gap:0; margin:.4rem 0;}
+.field-row .lbl{background:var(--blue); color:#fff; padding:.5rem .7rem; border-radius:6px 0 0 6px; font-weight:600; font-size:.9rem; display:flex; align-items:center;}
+.field-row .val{border:1px solid var(--border); border-left:none; border-radius:0 6px 6px 0; padding:.5rem .7rem;}
+@media print{
+  .toolbar, nav.toc{display:none;}
+  details.hint{border-style:solid;}
+  a.jump{display:none;}
+}
+</style>
+</head>
+<body id="top">
+
+<div class="toolbar">
+  <button type="button" class="secondary" onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Expand all hints</button>
+  <button type="button" class="secondary" onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse all hints</button>
+  <button type="button" onclick="window.print()">Print / save as PDF</button>
+</div>
+
+<div class="hero">
+  <div class="eyebrow">IB DIPLOMA PROGRAMME &middot; PHYSICS</div>
+  <h1>Energy Balance &amp; the Greenhouse Effect</h1>
+  <p class="subtitle">Worksheet &mdash; Part C: Synthesis Task (Reading Real Planetary Energy Budgets)</p>
+</div>
+
+<table>
+<tr><td class="lbl" style="background:var(--blue); color:#fff; font-weight:600; width:220px;">Name(s)</td><td class="editable" contenteditable="true" data-placeholder="Click to type…"></td></tr>
+</table>
+
+<section id="partC">
+<h1>Part C — Synthesis Task: Reading Real Planetary Energy Budgets</h1>
+<p>Sylvia Knight's &ldquo;Planetary energy budgets&rdquo; infographic (<em>Physics Review</em>, February 2016) shows measured energy-flow data for Mars, Venus, Titan and Jupiter, each drawn the same way as the Earth energy-balance diagram on slide 20. Ask your teacher to display it so you can work through the questions below — the key numbers for Venus are reproduced in the table so you can calculate with them directly.</p>
+<table class="zebra "><thead><tr><th>Venus energy budget (selected values)</th><th>Intensity / W m&#8315;&sup2;</th></tr></thead><tbody><tr><td>Incoming solar radiation (short-wave)</td><td>656</td></tr><tr><td>Total short-wave reflected to space</td><td>496</td></tr><tr><td>Net energy absorbed by surface</td><td>22</td></tr><tr><td>Long-wave infrared radiation emitted to space</td><td>161</td></tr><tr><td>Long-wave infrared radiation emitted by surface, absorbed by atmosphere</td><td>17 154</td></tr><tr><td>Long-wave infrared radiation emitted by atmosphere back down to surface</td><td>17 132</td></tr><tr><td>Net energy emitted by surface</td><td>22</td></tr></tbody></table>
+<p style="font-size:.85rem; font-style:italic; color:#6B7280;">(Data adapted from Knight, S., &ldquo;Planetary energy budgets,&rdquo; <em>Physics Review</em>, February 2016, Hodder Education.)</p>
+
+
+    <div class="question" id="q12">
+      <p class="qtext"><span class="qlabel">Q12</span> <span class="marks">[3]</span>Calculate Venus's albedo from the flux values in the table. Compare it to Earth's average albedo of about 0.3, and suggest why Venus's is so different. <a class="jump" href="#a12">↓ check answer</a></p>
+      <details class="hint"><summary>💡 Hint</summary><div class="hint-body">Albedo = total scattered power &divide; total incident power. Use the two intensity values in the top two rows of the table.</div></details>
+      <textarea rows="3" data-placeholder="Type your answer here…" placeholder="Type your answer here…"></textarea>
+    </div>
+
+    <div class="question" id="q13">
+      <p class="qtext"><span class="qlabel">Q13</span> <span class="marks">[3]</span>The &ldquo;net energy absorbed by surface&rdquo; and &ldquo;net energy emitted by surface&rdquo; values are both 22 W m&#8315;&sup2;. Explain what this tells you, using the conservation of energy. <a class="jump" href="#a13">↓ check answer</a></p>
+      <details class="hint"><summary>💡 Hint</summary><div class="hint-body">If energy in and energy out are equal, what does that tell you about whether the surface's temperature is changing?</div></details>
+      <textarea rows="3" data-placeholder="Type your answer here…" placeholder="Type your answer here…"></textarea>
+    </div>
+
+    <div class="question" id="q14">
+      <p class="qtext"><span class="qlabel">Q14</span> <span class="marks">[4]</span>Notice that the long-wave flux emitted by Venus's surface (17 154 W m&#8315;&sup2;) is over 25 times larger than the incoming solar radiation (656 W m&#8315;&sup2;). Using ideas from B.3, explain qualitatively why Venus's thick CO&#8322; atmosphere allows such an enormous amount of infrared energy to circulate between the surface and the atmosphere before a comparatively tiny net amount finally escapes to space. <a class="jump" href="#a14">↓ check answer</a></p>
+      <details class="hint"><summary>💡 Hint</summary><div class="hint-body">Think about the re-emission idea from B.3: after a molecule re-emits a photon in a random direction, what happens if the atmosphere above and below it is also full of other absorbing molecules?</div></details>
+      <textarea rows="4" data-placeholder="Type your answer here…" placeholder="Type your answer here…"></textarea>
+    </div>
+</section>
+<script>
+// Progressive enhancement only — page works fully without this.
+(function(){
+  try{
+    document.querySelectorAll('textarea[data-placeholder]').forEach(function(t){
+      t.addEventListener('input', function(){ t.style.height='auto'; t.style.height=(t.scrollHeight+2)+'px'; });
+    });
+  }catch(e){}
+})();
+</script>
+
+</body>
+</html>
