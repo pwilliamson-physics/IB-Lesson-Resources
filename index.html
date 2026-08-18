@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IB Physics Lesson Resources</title>
+<style>
+  :root {
+    --bg: #f4f6f9;
+    --card-bg: #ffffff;
+    --border: #e2e6ea;
+    --accent: #1e5b8f;
+    --accent-light: #e8f1fb;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --placeholder-bg: #fafbfc;
+    --placeholder-border: #d7dce2;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  header {
+    background: linear-gradient(135deg, #1e5b8f, #2d7dc0);
+    color: white;
+    padding: 3rem 1.5rem 2.5rem;
+    text-align: center;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 2.25rem;
+    letter-spacing: 0.02em;
+  }
+  header p {
+    margin: 0.5rem 0 0;
+    opacity: 0.9;
+    font-size: 1.05rem;
+  }
+  header a.repo-link {
+    display: inline-block;
+    margin-top: 1.25rem;
+    color: #fff;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.4);
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background 0.15s ease;
+  }
+  header a.repo-link:hover {
+    background: rgba(255,255,255,0.28);
+  }
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+  .topic {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+  .topic.placeholder {
+    background: var(--placeholder-bg);
+    border: 1px dashed var(--placeholder-border);
+  }
+  .topic-header {
+    padding: 1.1rem 1.5rem;
+    background: var(--accent-light);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .topic.placeholder .topic-header {
+    background: transparent;
+    border-bottom: 1px dashed var(--placeholder-border);
+  }
+  .topic-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--accent);
+  }
+  .topic.placeholder .topic-header h2 {
+    color: var(--muted);
+  }
+  .status {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .status.ready {
+    background: #d7f0e0;
+    color: #1c7a44;
+  }
+  .status.pending {
+    background: #eef0f2;
+    color: var(--muted);
+  }
+  .resource-list {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0;
+  }
+  .resource-list li {
+    padding: 0.9rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .resource-list li:last-child {
+    border-bottom: none;
+  }
+  .resource-list a {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 1rem;
+  }
+  .resource-list a:hover {
+    text-decoration: underline;
+  }
+  .resource-list p {
+    margin: 0.3rem 0 0;
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+  .filename {
+    display: block;
+    margin-top: 0.3rem;
+    font-size: 0.72rem;
+    color: #9aa4b1;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    word-break: break-all;
+  }
+  .empty-note {
+    padding: 1rem 1.5rem;
+    color: var(--muted);
+    font-style: italic;
+    font-size: 0.92rem;
+  }
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    padding-bottom: 2rem;
+  }
+  footer a { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>IB Physics Lesson Resources</h1>
+  <p>A growing library of workbooks and resources, organised by topic</p>
+  <a class="repo-link" href="https://github.com/pwilliamson-physics/IB-Lesson-Resources/tree/main/modules" target="_blank" rel="noopener">Browse modules on GitHub &rarr;</a>
+</header>
+
+<main>
+
+  <!-- Astrophysics -->
+  <section class="topic placeholder">
+    <div class="topic-header">
+      <h2>Astrophysics</h2>
+      <span class="status pending">Coming soon</span>
+    </div>
+    <p class="empty-note">No resources published yet — check back soon.</p>
+  </section>
+
+  <!-- CSP -->
+  <section class="topic">
+    <div class="topic-header">
+      <h2>CSP</h2>
+      <span class="status ready">4 resources</span>
+    </div>
+    <ul class="resource-list">
+      <li>
+        <a href="modules/CSP-worksheets/Worksheet_PartA_Lesson1.html" target="_blank" rel="noopener">Part A &mdash; Energy Balance &amp; the Greenhouse Effect (Lesson 1)</a>
+        <p>Introduces radiative energy balance and the inverse-square law as it applies to incoming solar radiation, finishing with a self-check quiz.</p>
+        <span class="filename">CSP-worksheets/Worksheet_PartA_Lesson1.html</span>
+      </li>
+      <li>
+        <a href="modules/CSP-worksheets/Worksheet_PartB_Lesson2.html" target="_blank" rel="noopener">Part B &mdash; Energy Balance &amp; the Greenhouse Effect (Lesson 2)</a>
+        <p>Builds on Lesson 1 to develop the greenhouse effect model further, with an embedded self-check to consolidate understanding.</p>
+        <span class="filename">CSP-worksheets/Worksheet_PartB_Lesson2.html</span>
+      </li>
+      <li>
+        <a href="modules/CSP-worksheets/Worksheet_PartC_Synthesis.html" target="_blank" rel="noopener">Part C &mdash; Synthesis Task: Reading Real Planetary Energy Budgets</a>
+        <p>Students interpret real planetary energy budget data (based on Sylvia Knight's infographic) to synthesise their understanding of Earth's energy balance.</p>
+        <span class="filename">CSP-worksheets/Worksheet_PartC_Synthesis.html</span>
+      </li>
+      <li>
+        <a href="modules/CSP-worksheets/Worksheet_PartD_CSP.html" target="_blank" rel="noopener">Part D &mdash; The Collaborative Sciences Project Brief</a>
+        <p>The full CSP task: a 10-hour project timeline, a proposal template, two investigation options (surface albedo, or energy transfer under foliage), and guidance for sharing outcomes.</p>
+        <span class="filename">CSP-worksheets/Worksheet_PartD_CSP.html</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Currents and Circuits -->
+  <section class="topic">
+    <div class="topic-header">
+      <h2>Currents and Circuits</h2>
+      <span class="status ready">10 resources</span>
+    </div>
+    <ul class="resource-list">
+      <li>
+        <a href="modules/current-worksheets/00_modelling_electrical_circuits.html" target="_blank" rel="noopener">Modelling Electrical Circuits</a>
+        <p>Self-marking workbook introducing how to model and represent simple electrical circuits, laying the groundwork before quantitative work begins.</p>
+        <span class="filename">current-worksheets/00_modelling_electrical_circuits.html</span>
+      </li>
+      <li>
+        <a href="modules/current-worksheets/01_potential_difference_and_Kirchhoffs_laws.html" target="_blank" rel="noopener">Potential Difference and Kirchhoff's Laws</a>
+        <p>Interactive notes covering potential difference and Kirchhoff's voltage and current laws, with worked examples and embedded practice questions.</p>
+        <span class="filename">current-worksheets/01_potential_difference_and_Kirchhoffs_laws.html</span>
+      </li>
+      <li>
+        <a href="modules/current-worksheets/02_basic_circuits_workbook.html" target="_blank" rel="noopener">Basic Circuits &ndash; Practical Workbook</a>
+        <p>Practical workbook of series and parallel circuit problems for building fluency with the fundamentals of circuit analysis.</p>
+        <span class="filename">current-worksheets/02_basic_circuits_workbook.html</span>
+      </li>
+      <li>
+        <a href="modules/current-worksheets/02_DC_circuit_builder.html" target="_blank" rel="noopener">DC Circuit Builder</a>
+        <p>Drag-and-drop circuit simulator: build and wire up DC circuits on a canvas, then save or restore your circuit using a shareable code.</p>
+        <span class="filename">current-worksheets/02_DC_circuit_builder.html</span>
+      </li>
+      <li>
+        <a href="modules/current-worksheets/03_charge_and_current.html" target="_blank" rel="noopener">Charge, Current and Time</a>
+        <p>Practice workbook on the relationship between charge, current and time, reinforcing the core Q = It equation.</p>
+        <span class="filename">current-worksheets/03_charge_and_current.html</span>
+      </li>
+      <li>
+        <a href="modules/current-worksheets/03b_basic_circuits_concept_check.html" target="_blank" rel="noopener">Basic Circuits Concept Check</a>
+        <p>Short diagnostic quiz to check understanding of basic circuit concepts before progressing to resistance and Kirchhoff's laws.</p>
+        <span class="filename">current-worksheets/03b_basic_circuits_concept_check.html</span>
+      </li>
+      <li>
+        <a href="modules/current-worksheets/04_resistance.html" target="_blank" rel="noopener">Resistance</a>
+        <p>Worksheet covering resistance and Ohm's law, and how resistance depends on a conductor's properties.</p>
+        <span class="filename">current-worksheets/04_resistance.html</span>
+      </li>
+      <li>
+        <a href="modules/current-worksheets/06_adding_resistors.html" target="_blank" rel="noopener">Adding Resistors</a>
+        <p>Self-marking workbook on combining resistors in series and parallel to find equivalent resistance.</p>
+        <span class="filename">current-worksheets/06_adding_resistors.html</span>
+      </li>
+      <li>
+        <a href="modules/current-worksheets/08_potentiometer_simulation.html" target="_blank" rel="noopener">Potentiometer &amp; Voltage Divider Simulation</a>
+        <p>Interactive simulation comparing voltage control with a variable resistor (rheostat) against a potentiometer, to explore voltage-divider behaviour.</p>
+        <span class="filename">current-worksheets/08_potentiometer_simulation.html</span>
+      </li>
+      <li>
+        <a href="modules/current-worksheets/09_emf_and_internal_resistance.html" target="_blank" rel="noopener">EMF and Internal Resistance</a>
+        <p>Self-marking workbook on electromotive force, terminal potential difference and the internal resistance of real cells.</p>
+        <span class="filename">current-worksheets/09_emf_and_internal_resistance.html</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Electromagnetism -->
+  <section class="topic placeholder">
+    <div class="topic-header">
+      <h2>Electromagnetism</h2>
+      <span class="status pending">Coming soon</span>
+    </div>
+    <p class="empty-note">No resources published yet — check back soon.</p>
+  </section>
+
+  <!-- Mechanics -->
+  <section class="topic placeholder">
+    <div class="topic-header">
+      <h2>Mechanics</h2>
+      <span class="status pending">Coming soon</span>
+    </div>
+    <p class="empty-note">No resources published yet — check back soon.</p>
+  </section>
+
+  <!-- Nuclear Physics -->
+  <section class="topic placeholder">
+    <div class="topic-header">
+      <h2>Nuclear Physics</h2>
+      <span class="status pending">Coming soon</span>
+    </div>
+    <p class="empty-note">No resources published yet — check back soon.</p>
+  </section>
+
+  <!-- Rotational Dynamics -->
+  <section class="topic placeholder">
+    <div class="topic-header">
+      <h2>Rotational Dynamics</h2>
+      <span class="status pending">Coming soon</span>
+    </div>
+    <p class="empty-note">No resources published yet — check back soon.</p>
+  </section>
+
+  <!-- Special Relativity -->
+  <section class="topic placeholder">
+    <div class="topic-header">
+      <h2>Special Relativity</h2>
+      <span class="status pending">Coming soon</span>
+    </div>
+    <p class="empty-note">No resources published yet — check back soon.</p>
+  </section>
+
+  <!-- Thermal Physics -->
+  <section class="topic placeholder">
+    <div class="topic-header">
+      <h2>Thermal Physics</h2>
+      <span class="status pending">Coming soon</span>
+    </div>
+    <p class="empty-note">No resources published yet — check back soon.</p>
+  </section>
+
+  <!-- Tools -->
+  <section class="topic">
+    <div class="topic-header">
+      <h2>Tools</h2>
+      <span class="status ready">4 resources</span>
+    </div>
+    <ul class="resource-list">
+      <li>
+        <a href="modules/tools/Accuracy_and_Precision.html" target="_blank" rel="noopener">Accuracy and Precision</a>
+        <p>Practice questions distinguishing accuracy from precision in experimental measurements.</p>
+        <span class="filename">tools/Accuracy_and_Precision.html</span>
+      </li>
+      <li>
+        <a href="modules/tools/Scientific_Notation.html" target="_blank" rel="noopener">Scientific Notation (Standard Form)</a>
+        <p>Practice converting between standard form and ordinary numbers, and calculating with scientific notation.</p>
+        <span class="filename">tools/Scientific_Notation.html</span>
+      </li>
+      <li>
+        <a href="modules/tools/SigFigs_and_Estimates.html" target="_blank" rel="noopener">Significant Figures &amp; Estimates</a>
+        <p>Practice questions on applying significant figures correctly and making sensible physical estimates.</p>
+        <span class="filename">tools/SigFigs_and_Estimates.html</span>
+      </li>
+      <li>
+        <a href="modules/tools/Uncertainty.html" target="_blank" rel="noopener">Uncertainty Toolkit</a>
+        <p>Reference toolkit on measurement uncertainty: absolute and percentage uncertainty, propagating errors through calculations, and error bars.</p>
+        <span class="filename">tools/Uncertainty.html</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Waves -->
+  <section class="topic placeholder">
+    <div class="topic-header">
+      <h2>Waves</h2>
+      <span class="status pending">Coming soon</span>
+    </div>
+    <p class="empty-note">No resources published yet — check back soon.</p>
+  </section>
+
+</main>
+
+<footer>
+  <p>Part of the <a href="https://github.com/pwilliamson-physics/IB-Lesson-Resources" target="_blank" rel="noopener">IB-Lesson-Resources</a> repository.</p>
+</footer>
+
+</body>
+</html>
