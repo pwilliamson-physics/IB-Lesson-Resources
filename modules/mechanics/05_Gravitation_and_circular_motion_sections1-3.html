@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gravitation and Circular Motion — Student Workbook</title>
+<style>
+  :root{
+    --navy:#173a5e; --teal:#0e7c86; --teal-dark:#0a5b62; --amber:#d98324;
+    --soft-blue:#eaf3fb; --soft-amber:#fdf1e2; --soft-green:#eaf7ee; --soft-grey:#f4f6f8;
+    --line:#b9c6d3; --ink:#1f2933; --border:#d7e0e8;
+    --purple:#6b4c9a; --soft-purple:#f1ebf9;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; color:var(--ink); background:#f7f9fb; line-height:1.55; font-size:16.5px; padding-top:56px;}
+  .layout{display:flex; min-height:calc(100vh - 56px);}
+  nav.sidebar{width:250px; flex-shrink:0; background:var(--navy); color:#fff; padding:1.25rem 1rem; position:sticky; top:56px; height:calc(100vh - 56px); overflow-y:auto;}
+  nav.sidebar h1{font-size:1.05rem; line-height:1.3; margin:0 0 1rem 0; color:#fff;}
+  nav.sidebar a{display:block; color:#cfe3ee; text-decoration:none; font-size:0.88rem; padding:0.4rem 0.5rem; border-radius:6px; margin-bottom:0.15rem;}
+  nav.sidebar a:hover{background:rgba(255,255,255,0.12); color:#fff;}
+  nav.sidebar .tag{display:inline-block; background:var(--amber); color:#fff; font-size:0.68rem; padding:0.1rem 0.4rem; border-radius:4px; margin-left:0.3rem; vertical-align:middle;}
+  main{flex:1; max-width:920px; margin:0 auto; padding:2rem 2.5rem 5rem 2.5rem;}
+  .cover{background:linear-gradient(135deg,var(--navy),var(--teal-dark)); color:#fff; border-radius:14px; padding:2.5rem 2.5rem; margin-bottom:2rem;}
+  .cover h1{margin:0 0 0.4rem 0; font-size:1.9rem;}
+  .cover p.sub{margin:0; font-size:1.05rem; color:#dceaf0;}
+  .cover .meta{margin-top:1.2rem; font-size:0.9rem; color:#cfe3ee;}
+  .name-box{margin-top:1.4rem; background:rgba(255,255,255,0.1); border:1px dashed rgba(255,255,255,0.5); border-radius:8px; padding:0.9rem 1.1rem;}
+  .name-box label{display:block; font-size:0.8rem; color:#dceaf0; margin-bottom:0.2rem;}
+  .name-box .fill{display:block; width:100%; border:none; border-bottom:1px solid #dceaf0; height:1.6rem; background:transparent; color:#fff; font-size:1rem; font-family:inherit; padding:0; outline:none;}
+  .name-box .fill::placeholder{color:rgba(255,255,255,0.5);}
+  .goals{background:rgba(255,255,255,0.12); border-left:4px solid #fff; border-radius:6px; padding:0.9rem 1.1rem; font-size:0.92rem; color:#fff;}
+  .goals ul{margin:0.4rem 0 0 0; padding-left:1.2rem;}
+
+  section.topic{background:#fff; border:1px solid var(--border); border-radius:12px; padding:1.8rem 2rem; margin-bottom:1.6rem;}
+  section.topic h2{color:var(--navy); font-size:1.4rem; margin-top:0; border-bottom:3px solid var(--amber); padding-bottom:0.4rem;}
+  section.topic h3{color:var(--teal-dark); font-size:1.08rem; margin-top:1.6rem;}
+
+  .keybox{background:var(--soft-blue); border:1px solid #c7ddef; border-radius:8px; padding:0.9rem 1.1rem; margin:0.9rem 0; font-size:0.98rem;}
+  .keybox strong{color:var(--navy);}
+  .eqn{background:#fff; border:1px solid #c7ddef; border-radius:6px; padding:0.6rem 1rem; margin:0.6rem 0; font-size:1.08rem; text-align:center; font-family:"Cambria Math",Cambria,Georgia,serif;}
+  .keyword{background:var(--soft-amber); border-left:4px solid var(--amber); border-radius:6px; padding:0.7rem 1rem; margin:0.9rem 0; font-size:0.92rem;}
+  .keyword b{color:var(--amber);}
+  .example{background:var(--soft-green); border:1px solid #bfe3cc; border-radius:8px; padding:0.9rem 1.1rem; margin:1rem 0;}
+  .example .tag{display:inline-block; background:#3f9a5c; color:#fff; font-size:0.72rem; font-weight:600; letter-spacing:0.03em; padding:0.15rem 0.5rem; border-radius:4px; margin-bottom:0.5rem; text-transform:uppercase;}
+  .stretch-box{background:var(--soft-purple); border:1px solid #d9c9ec; border-radius:8px; padding:0.9rem 1.1rem; margin:1rem 0;}
+  .stretch-box .tag{display:inline-block; background:var(--purple); color:#fff; font-size:0.72rem; font-weight:600; letter-spacing:0.03em; padding:0.15rem 0.5rem; border-radius:4px; margin-bottom:0.5rem; text-transform:uppercase;}
+  .stretch-box strong{color:var(--purple);}
+
+  .question{background:var(--soft-grey); border:1px solid var(--border); border-radius:8px; padding:1rem 1.2rem; margin:1.1rem 0;}
+  .question .qnum{display:inline-block; background:var(--navy); color:#fff; font-weight:700; font-size:0.82rem; width:1.9rem; height:1.9rem; line-height:1.9rem; text-align:center; border-radius:50%; margin-right:0.5rem;}
+  .answer-lines{
+    display:block; width:100%; box-sizing:border-box;
+    background-image:repeating-linear-gradient(to bottom, transparent, transparent 1.65em, var(--line) 1.7em);
+    background-color:transparent;
+    min-height:5.1em; margin:0.6rem 0 0.2rem 0;
+    border:1px solid transparent; border-radius:6px;
+    outline:none; resize:none; overflow:hidden;
+    font:inherit; color:inherit; line-height:1.7em;
+    padding:0.05em 0.4em 0 0.2em;
+  }
+  .answer-lines:focus{
+    border:1px solid var(--teal); background-color:#fbfdff;
+    box-shadow:0 0 0 3px rgba(14,124,134,0.12);
+  }
+  .answer-lines::placeholder{color:#9aa8b4; font-style:italic;}
+  .answer-lines.short{min-height:1.7em;}
+  .answer-lines.long{min-height:8.5em;}
+  .reveal-btn{background:var(--teal); color:#fff; border:none; border-radius:6px; padding:0.35rem 0.8rem; font-size:0.82rem; cursor:pointer; margin-top:0.5rem;}
+  .reveal-btn:hover{background:var(--teal-dark);}
+  .answer-panel{display:none; background:#fff; border:1px dashed #3f9a5c; border-radius:6px; padding:0.7rem 1rem; margin-top:0.6rem; font-size:0.92rem;}
+  .answer-panel.shown{display:block;}
+
+  figure{margin:1.2rem auto; text-align:center; max-width:560px;}
+  figure.wide{max-width:none;}
+  figure svg{max-width:100%; height:auto; max-height:340px;}
+  figcaption{font-size:0.85rem; color:#5b6b78; margin-top:0.4rem;}
+
+  table.eqtable{width:100%; border-collapse:collapse; font-size:0.92rem; margin-top:0.7rem;}
+  table.eqtable th, table.eqtable td{border:1px solid var(--border); padding:0.5rem 0.7rem; text-align:left;}
+  table.eqtable th{background:var(--soft-blue); color:var(--navy);}
+
+  dl.glossary dt{font-weight:700; color:var(--navy); margin-top:0.7rem;}
+  dl.glossary dd{margin-left:0; margin-bottom:0.2rem;}
+
+  .topbar{
+    position:fixed; top:0; left:0; right:0; height:56px; z-index:200;
+    background:#fff; border-bottom:1px solid var(--border); box-shadow:0 2px 8px rgba(0,0,0,0.06);
+    display:flex; align-items:center; gap:0.6rem; padding:0 1.4rem; overflow-x:auto;
+  }
+  .topbar .topbar-title{font-weight:700; color:var(--navy); font-size:0.92rem; margin-right:auto; white-space:nowrap;}
+  .topbar button{background:#fff; color:var(--navy); border:1px solid var(--border); border-radius:50px; padding:0.5rem 1rem; font-size:0.82rem; cursor:pointer; white-space:nowrap; flex-shrink:0;}
+  .topbar button:hover{background:var(--soft-blue);}
+  .topbar button.primary{background:var(--amber); color:#fff; border-color:var(--amber); font-weight:600;}
+  .topbar button.primary:hover{background:#c0721c;}
+  .topbar .save-status{font-size:0.72rem; color:#5b6b78; white-space:nowrap; flex-shrink:0;}
+  @media (max-width: 820px){ .topbar .save-status{display:none;} }
+  @media (max-width: 620px){ .topbar .topbar-title{display:none;} }
+  footer.page{font-size:0.8rem; color:#7c8b98; text-align:center; margin-top:2rem;}
+
+  /* ---------- simulation embed conventions ---------- */
+  .sim-embed{background:#fff; border:1px solid var(--border); border-radius:10px; padding:1rem 1.2rem; margin:1rem 0;}
+  .sim-embed p.instructions{margin:0 0 0.6rem 0; font-size:0.92rem; color:#3a4753;}
+  .sim-frame{width:100%; border:none; display:block; border-radius:8px; height:520px;}
+  .sim-embed-credit{text-align:center; font-size:0.82rem; color:#7c8b98; margin-top:0.6rem;}
+  .sim-print-note{display:none;}
+
+  .sim-launch{
+    background:linear-gradient(135deg,var(--soft-blue),#fff); border:1px solid #c7ddef; border-radius:10px;
+    padding:1.2rem 1.4rem; margin:1.1rem 0; text-align:center;
+  }
+  .sim-launch a.launch-btn{
+    display:inline-block; background:var(--teal); color:#fff; text-decoration:none; font-weight:700;
+    padding:0.65rem 1.4rem; border-radius:8px; margin-top:0.6rem; font-size:0.98rem;
+  }
+  .sim-launch a.launch-btn:hover{background:var(--teal-dark);}
+  .sim-launch p.credit{font-size:0.8rem; color:#5b6b78; margin-top:0.7rem;}
+
+  /* custom-canvas sim layout (wide figure: canvas + controls side by side) */
+  .sim-wrap{display:flex; gap:1.4rem; align-items:flex-start; flex-wrap:wrap; background:#0f1f30; border-radius:10px; padding:1.1rem; }
+  .sim-wrap.stacked{flex-direction:column; align-items:center;}
+  .sim-wrap.stacked .sim-canvas-box{margin:0 auto;}
+  .sim-wrap.stacked .sim-controls{width:100%; max-width:480px; flex:none;}
+  .sim-canvas-box{flex:0 0 auto;}
+  .sim-canvas-box canvas{display:block; border-radius:8px; background:#0f1f30;}
+  .sim-controls{flex:1 1 220px; min-width:220px; color:#dceaf0; font-size:0.9rem;}
+  .sim-controls h4{margin:0 0 0.6rem 0; color:#fff; font-size:0.95rem;}
+  .sim-row{margin-bottom:0.9rem;}
+  .sim-row label{display:block; margin-bottom:0.3rem;}
+  .sim-row input[type="range"]{width:100%;}
+  .sim-readout{background:rgba(255,255,255,0.08); border-radius:6px; padding:0.6rem 0.8rem; font-size:0.86rem; line-height:1.6;}
+  .sim-btns{margin-top:0.8rem; display:flex; gap:0.5rem; flex-wrap:wrap;}
+  .sim-btns button{background:var(--teal); color:#fff; border:none; border-radius:6px; padding:0.4rem 0.9rem; font-size:0.82rem; cursor:pointer;}
+  .sim-btns button:hover{background:var(--teal-dark);}
+  .sim-btns button.alt{background:transparent; border:1px solid rgba(255,255,255,0.4); color:#dceaf0;}
+  .sim-btns button.alt:hover{background:rgba(255,255,255,0.1);}
+  .sim-tabs{display:flex; gap:0.4rem; margin-bottom:0.9rem; flex-wrap:wrap;}
+  .sim-tabs button{background:rgba(255,255,255,0.08); color:#dceaf0; border:1px solid rgba(255,255,255,0.25); border-radius:6px; padding:0.35rem 0.7rem; font-size:0.8rem; cursor:pointer;}
+  .sim-tabs button.active{background:var(--teal); color:#fff; border-color:var(--teal);}
+
+  @media print{
+    nav.sidebar, .topbar, .reveal-btn{display:none !important;}
+    .layout{display:block;}
+    main{max-width:100%; padding:0; margin:0;}
+    body{background:#fff; font-size:11.5pt; padding-top:0;}
+    section.topic{border:none; box-shadow:none; padding:0; margin:0 0 1.2rem 0; page-break-inside:avoid;}
+    .cover{page-break-after:always; border-radius:0;}
+    .answer-panel{display:none !important;}
+    body.answers-visible .answer-panel{display:block !important; border-style:solid;}
+    a{color:inherit; text-decoration:none;}
+    .page-break{page-break-before:always;}
+    .answer-lines{border-color:transparent !important; box-shadow:none !important; color:#000;}
+    .answer-lines::placeholder{color:transparent;}
+    .name-box .fill{color:#000; border-bottom-color:#5b6b78;}
+    .name-box .fill::placeholder{color:transparent;}
+    .sim-frame, .sim-embed-credit, .sim-embed p.instructions, .sim-wrap{display:none !important;}
+    .sim-print-note{display:block !important; text-align:center; font-size:0.85rem; color:#5b6b78; padding:0.9rem; border:1px dashed #b9c6d3; border-radius:8px; margin:0.6rem 0;}
+    .sim-launch{display:none !important;}
+  }
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <span class="topbar-title">Gravitation and Circular Motion</span>
+  <button onclick="revealAll()">Show all answers</button>
+  <button onclick="hideAll()">Hide all answers</button>
+  <button onclick="clearMyAnswers()">Clear my answers</button>
+  <span class="save-status">Answers are not saved automatically — print or copy your work before closing this tab</span>
+  <button class="primary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+</div>
+<div class="layout">
+  <nav class="sidebar no-print">
+    <h1>Gravitation and Circular Motion</h1>
+    <a href="#cover">Cover &amp; goals</a>
+    <a href="#s1">1. Newton's law of gravitation</a>
+    <a href="#s2">2. Gravitational field strength</a>
+    <a href="#s3">3. Gravitational potential energy</a>
+  </nav>
+
+  <main>
+    <section class="cover" id="cover">
+      <h1>Gravitation and Circular Motion</h1>
+      <p class="sub">Every planet, moon, star and satellite is held on its path by the same force: gravity, acting between any two masses in the universe. This workbook builds up the physics of that force from scratch, starting with the force itself and moving through the energy ideas it creates.</p>
+      <div class="goals" style="margin-top:1.3rem;">
+        <strong style="color:#fff;">By the end of this workbook you should be able to:</strong>
+        <ul>
+          <li>state and apply Newton's law of gravitation, and describe the conditions under which an extended body can be treated as a point mass</li>
+          <li>define gravitational field strength, sketch gravitational field lines, and combine fields from more than one mass</li>
+          <li>derive and use the equation for gravitational potential energy, including the convention that it is zero at infinite separation and negative everywhere else</li>
+        </ul>
+      </div>
+      <div class="name-box">
+        <label>Name</label><input type="text" class="fill" id="studentName" autocomplete="name">
+      </div>
+    </section>
+    <!-- ================= SECTION 1: NEWTON'S LAW OF GRAVITATION ================= -->
+    <section class="topic" id="s1">
+      <h2>1. Newton's law of gravitation</h2>
+      <p>Every object with mass attracts every other object with mass. This might seem surprising — you are not aware of being pulled towards your desk, your chair, or the person sitting next to you — but the attraction is there. It is simply too weak to notice unless at least one of the masses involved is enormous, such as a planet.</p>
+      <p>Isaac Newton's insight, in the seventeenth century, was that the force pulling an apple to the ground and the force keeping the Moon in orbit around the Earth are exactly the same force. He proposed that <strong>every</strong> pair of masses in the universe attracts every other pair — this is why the law is called <em>universal</em> gravitation.</p>
+
+      <div class="keybox"><strong>Key idea.</strong> The gravitational force between two point masses is proportional to the product of the masses, and inversely proportional to the square of the distance between them. It is always attractive — gravity only ever pulls, never pushes.</div>
+
+      <div class="eqn">gravitational force, F = Gm<sub>1</sub>m<sub>2</sub> / r&sup2;</div>
+
+      <div class="keyword"><b>G, the gravitational constant:</b> the constant of proportionality in Newton's law of gravitation, G = 6.67 &times; 10<sup>&minus;11</sup> N m&sup2; kg<sup>&minus;2</sup>. It is often called "Big G" to distinguish it from g, the gravitational field strength. G is believed to have the same value everywhere in the universe and at all times.</div>
+
+      <p>Because G is so small, the gravitational force between two ordinary-sized objects — two people, or a person and a building — is far too small to detect. It only becomes significant when at least one mass is planet-sized or larger.</p>
+
+      <figure>
+        <svg viewBox="0 0 460 210" width="460" height="210" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="mF1" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#173a5e"/></marker>
+          </defs>
+          <!-- row 0: separation r -->
+          <circle cx="70" cy="40" r="13" fill="#173a5e"/>
+          <circle cx="200" cy="40" r="13" fill="#0e7c86"/>
+          <text x="70" y="63" font-size="12" fill="#3a4753" text-anchor="middle">m<tspan font-size="9" baseline-shift="sub">1</tspan></text>
+          <text x="200" y="63" font-size="12" fill="#3a4753" text-anchor="middle">m<tspan font-size="9" baseline-shift="sub">2</tspan></text>
+          <line x1="83" y1="40" x2="121" y2="40" stroke="#173a5e" stroke-width="2.2" marker-end="url(#mF1)"/>
+          <line x1="187" y1="40" x2="149" y2="40" stroke="#173a5e" stroke-width="2.2" marker-end="url(#mF1)"/>
+          <text x="135" y="26" font-size="13" fill="#173a5e" text-anchor="middle" font-weight="600">F</text>
+          <text x="135" y="80" font-size="12" fill="#5b6b78" text-anchor="middle">r</text>
+          <line x1="15" y1="72" x2="445" y2="72" stroke="#d7e0e8" stroke-width="1.2" stroke-dasharray="4 3"/>
+          <!-- row 1: separation 2r -->
+          <circle cx="70" cy="105" r="13" fill="#173a5e"/>
+          <circle cx="300" cy="105" r="13" fill="#0e7c86"/>
+          <line x1="83" y1="105" x2="103" y2="105" stroke="#173a5e" stroke-width="2.2" marker-end="url(#mF1)"/>
+          <line x1="287" y1="105" x2="267" y2="105" stroke="#173a5e" stroke-width="2.2" marker-end="url(#mF1)"/>
+          <text x="185" y="91" font-size="13" fill="#173a5e" text-anchor="middle" font-weight="600">F/4</text>
+          <text x="185" y="128" font-size="12" fill="#5b6b78" text-anchor="middle">2r</text>
+          <line x1="15" y1="140" x2="445" y2="140" stroke="#d7e0e8" stroke-width="1.2" stroke-dasharray="4 3"/>
+          <!-- row 2: separation 4r -->
+          <circle cx="70" cy="175" r="13" fill="#173a5e"/>
+          <circle cx="410" cy="175" r="13" fill="#0e7c86"/>
+          <line x1="83" y1="175" x2="94" y2="175" stroke="#173a5e" stroke-width="2.2" marker-end="url(#mF1)"/>
+          <line x1="397" y1="175" x2="386" y2="175" stroke="#173a5e" stroke-width="2.2" marker-end="url(#mF1)"/>
+          <text x="240" y="161" font-size="13" fill="#173a5e" text-anchor="middle" font-weight="600">F/16</text>
+          <text x="240" y="198" font-size="12" fill="#5b6b78" text-anchor="middle">4r</text>
+        </svg>
+        <figcaption>Fig. 1.1 The gravitational force between two point masses falls away with the square of their separation: doubling the separation cuts the force to a quarter, and quadrupling it cuts the force to a sixteenth (vectors not drawn to scale). The same size force acts on both masses, in opposite directions — an example of Newton's third law.</figcaption>
+      </figure>
+
+      <h3>Treating extended bodies as point masses</h3>
+      <p>Newton's law is stated for <strong>point masses</strong> — masses concentrated at a single location. Real objects, such as planets, are not points; they are extended spheres of matter. Fortunately, Newton's <em>shell theorem</em> shows that a spherically symmetric object (uniform density, or made of uniform concentric shells) attracts other masses exactly as if all of its mass were concentrated at its centre — provided the other mass is entirely outside it.</p>
+
+      <div class="keyword"><b>Conditions for the point-mass approximation:</b> an extended body can be treated as a point mass, with all of its mass acting at its centre, when it is spherically symmetric (or approximately so, like a planet or star) and the distance to the other mass is measured from its centre, to a location outside the body itself.</div>
+
+      <div class="example">
+        <span class="tag">Worked example 1.1</span>
+        <p>Two asteroids, of mass 2.4 &times; 10<sup>12</sup> kg and 6.0 &times; 10<sup>12</sup> kg, have their centres 850 m apart. Calculate the gravitational force of attraction between them.</p>
+        <p><strong>Answer:</strong><br>
+        F = Gm<sub>1</sub>m<sub>2</sub> / r&sup2;<br>
+        F = (6.67 &times; 10<sup>&minus;11</sup> &times; 2.4 &times; 10<sup>12</sup> &times; 6.0 &times; 10<sup>12</sup>) &divide; 850&sup2;</p>
+      </div>
+
+      <h3>Check your understanding</h3>
+      <div class="question">
+        <span class="qnum">1</span><strong>The Earth has a mass of 6.0 &times; 10<sup>24</sup> kg and the Sun has a mass of 2.0 &times; 10<sup>30</sup> kg. Their centres are 1.5 &times; 10<sup>11</sup> m apart. Calculate the gravitational force of attraction between them.</strong>
+        <textarea class="answer-lines" rows="4" placeholder="Type your answer here…"></textarea>
+        <button class="reveal-btn no-print" onclick="toggleAnswer('q1')">Show answer</button>
+        <div class="answer-panel" id="q1">F = Gm<sub>1</sub>m<sub>2</sub>/r&sup2; = (6.67 &times; 10<sup>&minus;11</sup> &times; 6.0 &times; 10<sup>24</sup> &times; 2.0 &times; 10<sup>30</sup>) &divide; (1.5 &times; 10<sup>11</sup>)&sup2;</div>
+      </div>
+      <div class="question">
+        <span class="qnum">2</span><strong>Estimate the gravitational force of attraction between two students of mass 60 kg, sitting 1.0 m apart, then use your result to explain why we never notice the gravitational pull of nearby objects.</strong>
+        <textarea class="answer-lines" rows="4" placeholder="Type your answer here…"></textarea>
+        <button class="reveal-btn no-print" onclick="toggleAnswer('q2')">Show answer</button>
+        <div class="answer-panel" id="q2">F = Gm<sub>1</sub>m<sub>2</sub>/r&sup2; = (6.67 &times; 10<sup>&minus;11</sup> &times; 60 &times; 60) &divide; 1.0&sup2; = 2.4 &times; 10<sup>&minus;7</sup> N. This is roughly ten million times smaller than the weight of a single grain of sand, so it is completely undetectable — G is so small that gravitational forces only become significant when at least one mass is planet-sized or larger.</div>
+      </div>
+      <div class="question">
+        <span class="qnum">3</span><strong>The Moon is not a perfect sphere of uniform density. State the condition under which it is still reasonable to use Newton's law of gravitation with the Moon treated as a point mass, and identify what distance should be used for r in that case.</strong>
+        <textarea class="answer-lines" rows="4" placeholder="Type your answer here…"></textarea>
+        <button class="reveal-btn no-print" onclick="toggleAnswer('q3')">Show answer</button>
+        <div class="answer-panel" id="q3">Provided the Moon is approximately spherically symmetric (its density varies mainly with depth rather than direction) and the other mass lies outside the Moon's surface, the shell theorem lets us treat it as a point mass with all its mass acting at its centre. The distance r used in the equation must then be measured from the Moon's centre, not from its surface.</div>
+      </div>
+    </section>
+
+    <!-- ================= SECTION 2: GRAVITATIONAL FIELD STRENGTH ================= -->
+    <section class="topic" id="s2">
+      <h2>2. Gravitational field strength and field lines</h2>
+      <p>Newton's law tells us the force between two <em>specific</em> masses. But it is often more useful to describe the space around a mass in general — a region where <em>any</em> other mass would feel a force is called a <strong>gravitational field</strong>. Rather than asking "what force would a 5 kg rock feel here?" and then a different question for a 50 kg rock, we describe the field once, per unit mass, and can then find the force on any mass we like.</p>
+
+      <div class="keybox"><strong>Key idea.</strong> Gravitational field strength, g, at a point is defined as the gravitational force per unit mass experienced by a small test mass placed at that point.</div>
+
+      <div class="eqn">gravitational field strength, g = F / m</div>
+
+      <div class="keyword"><b>Test mass:</b> a mass small enough that its own gravitational field has a negligible effect on the field being measured. Gravitational field strength has SI unit N kg<sup>&minus;1</sup>, which is equivalent to m s<sup>&minus;2</sup> — numerically, g is the same as the acceleration due to gravity, since a = F/m by Newton's second law.</div>
+
+      <p>Combining g = F/m with Newton's law of gravitation, F = GMm/r&sup2;, gives an equation for the field strength around any point mass (or spherically symmetric mass) M:</p>
+
+      <div class="eqn">g = GM / r&sup2;</div>
+
+      <p>Like gravitational force, gravitational field strength follows an inverse square law: double the distance from the centre of a planet and the field strength falls to a quarter; treble it and the field strength falls to a ninth.</p>
+
+      <h3>Field lines</h3>
+      <p>A gravitational field can be drawn as a pattern of <strong>field lines</strong>. Each line shows the direction of the force that a test mass would feel if placed on it — and because gravity is always attractive, field lines always point <em>towards</em> the mass creating the field. Field lines are closer together where the field is stronger, and they never cross (a test mass cannot feel a force in two different directions at the same point).</p>
+
+      <figure>
+        <svg viewBox="0 0 460 190" width="460" height="190" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="mFl" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#0a5b62"/></marker>
+          </defs>
+          <circle cx="110" cy="95" r="34" fill="#eaf3fb" stroke="#173a5e" stroke-width="1.5"/>
+          <text x="110" y="100" font-size="12" fill="#173a5e" text-anchor="middle">M</text>
+          <g stroke="#0a5b62" stroke-width="1.8" marker-end="url(#mFl)">
+            <line x1="110" y1="10" x2="110" y2="54.7"/>
+            <line x1="110" y1="180" x2="110" y2="135.3"/>
+            <line x1="25" y1="95" x2="69.7" y2="95"/>
+            <line x1="195" y1="95" x2="150.3" y2="95"/>
+            <line x1="49" y1="34" x2="81.5" y2="66.5"/>
+            <line x1="171" y1="34" x2="138.5" y2="66.5"/>
+            <line x1="49" y1="156" x2="81.5" y2="123.5"/>
+            <line x1="171" y1="156" x2="138.5" y2="123.5"/>
+          </g>
+          <text x="110" y="176" font-size="12" fill="#3a4753" text-anchor="middle">a. radial field</text>
+
+          <rect x="290" y="145" width="150" height="14" fill="#8a6a4a"/>
+          <g stroke="#0a5b62" stroke-width="1.8" marker-end="url(#mFl)">
+            <line x1="300" y1="45" x2="300" y2="140"/>
+            <line x1="330" y1="45" x2="330" y2="140"/>
+            <line x1="360" y1="45" x2="360" y2="140"/>
+            <line x1="390" y1="45" x2="390" y2="140"/>
+            <line x1="420" y1="45" x2="420" y2="140"/>
+          </g>
+          <text x="365" y="176" font-size="12" fill="#3a4753" text-anchor="middle">b. uniform field</text>
+        </svg>
+        <figcaption>Fig. 2.1 Field lines point towards the mass creating the field, since gravity is attractive. <strong>a</strong> A radial field, such as around a planet — lines get closer together nearer the surface, showing the field is stronger there. <strong>b</strong> A uniform field, such as in a small region close to a planet's surface, where the field lines are evenly spaced and parallel.</figcaption>
+      </figure>
+
+      <h3>Live simulation: the inverse-square field</h3>
+      <p>Drag the slider to move a test mass away from a planet's surface, and watch how both the field lines and the g&ndash;r graph respond. The planet shown has a surface field strength g&#8320; = 9.8 N kg<sup>&minus;1</sup>.</p>
+      <figure class="wide">
+        <div class="sim-wrap">
+          <div class="sim-canvas-box"><canvas id="fieldCanvas" width="480" height="300"></canvas></div>
+          <div class="sim-controls">
+            <h4>Field strength explorer</h4>
+            <div class="sim-row"><label for="fieldSlider">Distance from centre, r = <span id="fieldRVal">1.0</span> R</label><input type="range" id="fieldSlider" min="1" max="6" step="0.1" value="1"></div>
+            <div class="sim-readout" id="fieldReadout">g = 9.80 N kg&minus;1</div>
+          </div>
+        </div>
+        <figcaption>Fig. 2.2 As the test mass moves further from the planet's centre, the field lines it crosses become more widely spaced and its field-strength arrow shrinks — both showing the same inverse square relationship traced out on the graph.</figcaption>
+      </figure>
+
+      <h3>Combining gravitational fields</h3>
+      <p>Gravitational field strength is a <strong>vector</strong> quantity. If a location is within the fields of two or more masses, the resultant field is found by adding the individual field vectors — remembering that each points towards its own mass.</p>
+
+      <div class="example">
+        <span class="tag">Worked example 2.1</span>
+        <p>At a point P between the Earth and the Moon, on the line joining their centres, the gravitational field strength due to the Earth is 4.20 &times; 10<sup>&minus;3</sup> N kg<sup>&minus;1</sup> (towards the Earth) and due to the Moon is 1.10 &times; 10<sup>&minus;3</sup> N kg<sup>&minus;1</sup> (towards the Moon). Calculate the resultant gravitational field strength at P.</p>
+        <p><strong>Answer:</strong><br>
+        Taking the direction towards the Earth as positive:<br>
+        resultant g = (+4.20 &times; 10<sup>&minus;3</sup>) + (&minus;1.10 &times; 10<sup>&minus;3</sup>)</p>
+      </div>
+
+      <h3>Check your understanding</h3>
+      <div class="question">
+        <span class="qnum">4</span><strong>A planet has a mass of 4.9 &times; 10<sup>24</sup> kg. Calculate the gravitational field strength at a point 8.2 &times; 10<sup>6</sup> m from its centre.</strong>
+        <textarea class="answer-lines" rows="4" placeholder="Type your answer here…"></textarea>
+        <button class="reveal-btn no-print" onclick="toggleAnswer('q4')">Show answer</button>
+        <div class="answer-panel" id="q4">g = GM/r&sup2; = (6.67 &times; 10<sup>&minus;11</sup> &times; 4.9 &times; 10<sup>24</sup>) &divide; (8.2 &times; 10<sup>6</sup>)&sup2;</div>
+      </div>
+      <div class="question">
+        <span class="qnum">5</span><strong>State two rules that gravitational field lines must always obey, and explain, in terms of field lines, what it means for a field to be "uniform".</strong>
+        <textarea class="answer-lines" rows="4" placeholder="Type your answer here…"></textarea>
+        <button class="reveal-btn no-print" onclick="toggleAnswer('q5')">Show answer</button>
+        <div class="answer-panel" id="q5">Field lines never cross, and they are always closer together where the field is stronger. A field is uniform where its field lines are evenly spaced and parallel, so that the field strength has the same magnitude and direction at every point in that region.</div>
+      </div>
+      <div class="question">
+        <span class="qnum">6</span><strong>A gravitational field strength of 5.0 N kg<sup>&minus;1</sup> is measured at the surface of a small moon. Determine the gravitational field strength at a distance of three moon-radii from its centre.</strong>
+        <textarea class="answer-lines" rows="4" placeholder="Type your answer here…"></textarea>
+        <button class="reveal-btn no-print" onclick="toggleAnswer('q6')">Show answer</button>
+        <div class="answer-panel" id="q6">Field strength follows an inverse square law with distance from the centre, so at three times the radius the field strength falls to 1/3&sup2; = 1/9 of its surface value: g = 5.0 &divide; 9 = 0.56 N kg<sup>&minus;1</sup>.</div>
+      </div>
+      <div class="question">
+        <span class="qnum">7</span><strong>Two stars, A and B, are far apart. At a certain point Q, the field due to star A is 6.0 &times; 10<sup>&minus;6</sup> N kg<sup>&minus;1</sup> towards A, and the field due to star B is 2.0 &times; 10<sup>&minus;6</sup> N kg<sup>&minus;1</sup>, also towards A (Q lies beyond B, so both fields point the same way). Calculate the resultant field strength at Q.</strong>
+        <textarea class="answer-lines" rows="4" placeholder="Type your answer here…"></textarea>
+        <button class="reveal-btn no-print" onclick="toggleAnswer('q7')">Show answer</button>
+        <div class="answer-panel" id="q7">Since both fields point in the same direction, they add directly: resultant g = 6.0 &times; 10<sup>&minus;6</sup> + 2.0 &times; 10<sup>&minus;6</sup></div>
+      </div>
+    </section>
+
+    <!-- ================= SECTION 3: GRAVITATIONAL POTENTIAL ENERGY ================= -->
+    <section class="topic" id="s3">
+      <h2>3. Gravitational potential energy</h2>
+      <p>You have previously used &Delta;E<sub>p</sub> = mg&Delta;h to calculate changes in gravitational potential energy near the Earth's surface. That equation only works because, over the small heights involved, g barely changes — it can be treated as a constant. Once we consider distances comparable to a planet's radius (an orbit, a journey to the Moon, an escaping rocket), g is no longer constant, and we need a more general definition.</p>
+
+      <div class="keybox"><strong>Key idea.</strong> The gravitational potential energy of a system is defined as the work done to assemble the system — that is, to bring its components together — from an infinite separation.</div>
+
+      <p>Why choose infinity? Two masses only stop attracting each other completely when they are infinitely far apart. Choosing this as our reference point means every real, finite separation has a well-defined gravitational potential energy relative to the same, universally agreed zero.</p>
+
+      <h3>From work done to an equation</h3>
+      <p>We know that work done = force &times; distance moved (in the direction of the force). If the gravitational force were constant, this would be simple. But as a mass m is brought in from infinity towards a mass M, the force grows continuously, following the inverse square law — so we cannot just multiply one force value by the whole distance. Instead, the total work done is the sum of many small contributions, each with the force appropriate to that separation. Graphically, this total is the <strong>area under a force&ndash;distance graph</strong>.</p>
+
+      <h3>The calculus version</h3>
+      <p>Summing infinitely many, infinitesimally small contributions of force &times; distance is exactly what integration does. Although you are not required to reproduce this derivation, it is worth seeing briefly, because it shows precisely where the equation for E<sub>p</sub> comes from.</p>
+      <p>The work done by the gravitational force as a mass m moves from a separation R out to infinity is:</p>
+      <div class="eqn">W = &int;<sub>R</sub><sup>&infin;</sup> (GMm / r&sup2;) dr = [ GMm / r ]<sub>R</sub><sup>&infin;</sup> = 0 &minus; (GMm / R) = &minus;GMm / R</div>
+      <p>Gravity is attractive, so it does <em>negative</em> work as the mass moves away — it is pulling the mass back in, not pushing it out. The work done by a force such as this is always equal to minus the change in potential energy, and since E<sub>p</sub> is defined to be zero at infinity, this negative work done by gravity turns out to be exactly equal to the gravitational potential energy stored at R:</p>
+
+      <div class="eqn">gravitational potential energy, E<sub>p</sub> = &minus;Gm<sub>1</sub>m<sub>2</sub> / r</div>
+
+      <div class="keybox"><strong>Key idea.</strong> E<sub>p</sub> is always negative (or zero, only at r = infinity). As r increases, E<sub>p</sub> increases too — becoming a smaller negative number — approaching, but never quite reaching, zero. As r decreases, E<sub>p</sub> becomes an increasingly large negative number.</div>
+
+      <div class="example">
+        <span class="tag">Worked example 3.1</span>
+        <p>Calculate the gravitational potential energy of a 1200 kg spacecraft at a distance of 8.0 &times; 10<sup>6</sup> m from the centre of a planet of mass 5.5 &times; 10<sup>24</sup> kg.</p>
+        <p><strong>Answer:</strong><br>
+        E<sub>p</sub> = &minus;Gm<sub>1</sub>m<sub>2</sub>/r<br>
+        E<sub>p</sub> = &minus;(6.67 &times; 10<sup>&minus;11</sup> &times; 5.5 &times; 10<sup>24</sup> &times; 1200) &divide; (8.0 &times; 10<sup>6</sup>)</p>
+      </div>
+
+      <h3>Check your understanding</h3>
+      <div class="question">
+        <span class="qnum">8</span><strong>Calculate the gravitational potential energy of the Earth&ndash;Moon system. (Mass of Earth = 6.0 &times; 10<sup>24</sup> kg, mass of Moon = 7.3 &times; 10<sup>22</sup> kg, separation = 3.8 &times; 10<sup>8</sup> m.)</strong>
+        <textarea class="answer-lines" rows="4" placeholder="Type your answer here…"></textarea>
+        <button class="reveal-btn no-print" onclick="toggleAnswer('q8')">Show answer</button>
+        <div class="answer-panel" id="q8">E<sub>p</sub> = &minus;Gm<sub>1</sub>m<sub>2</sub>/r = &minus;(6.67 &times; 10<sup>&minus;11</sup> &times; 6.0 &times; 10<sup>24</sup> &times; 7.3 &times; 10<sup>22</sup>) &divide; (3.8 &times; 10<sup>8</sup>)</div>
+      </div>
+      <div class="question">
+        <span class="qnum">9</span><strong>Explain, in terms of the definition of gravitational potential energy, why E<sub>p</sub> can never be positive for two masses at a finite separation.</strong>
+        <textarea class="answer-lines" rows="4" placeholder="Type your answer here…"></textarea>
+        <button class="reveal-btn no-print" onclick="toggleAnswer('q9')">Show answer</button>
+        <div class="answer-panel" id="q9">E<sub>p</sub> is defined as the work done to assemble the system from infinite separation, where E<sub>p</sub> = 0. Because gravity is attractive, bringing the masses together from infinity requires no energy input at all — if anything, energy would be released. So E<sub>p</sub> can only stay the same (at infinity) or decrease below zero as the masses are brought closer, meaning it is always negative or zero, never positive.</div>
+      </div>
+      <div class="question">
+        <span class="qnum">10</span><strong>A satellite moves from a distance of 2R to a distance of 4R from a planet's centre, where R is the planet's radius. State, with a reason, whether its gravitational potential energy increases or decreases, and whether it becomes more or less negative.</strong>
+        <textarea class="answer-lines" rows="4" placeholder="Type your answer here…"></textarea>
+        <button class="reveal-btn no-print" onclick="toggleAnswer('q10')">Show answer</button>
+        <div class="answer-panel" id="q10">Since E<sub>p</sub> = &minus;GMm/r, increasing r makes the magnitude of E<sub>p</sub> smaller, so E<sub>p</sub> becomes less negative — that is, E<sub>p</sub> increases (moves closer to zero) as the satellite moves further away.</div>
+      </div>
+      <div class="question">
+        <span class="qnum">11</span><strong>Explain why &Delta;E<sub>p</sub> = mg&Delta;h would give a very inaccurate answer for the change in gravitational potential energy of a rocket travelling from the Earth's surface into a high orbit, but works well for a book lifted from the floor onto a table.</strong>
+        <textarea class="answer-lines" rows="4" placeholder="Type your answer here…"></textarea>
+        <button class="reveal-btn no-print" onclick="toggleAnswer('q11')">Show answer</button>
+        <div class="answer-panel" id="q11">&Delta;E<sub>p</sub> = mg&Delta;h assumes g is constant over the height change involved. For a book on a table, the height change is tiny compared with the Earth's radius, so g barely changes and the approximation is excellent. For a rocket reaching orbit, the height change is comparable to (or larger than) the Earth's radius, over which g falls significantly — so a constant-g formula badly overestimates or underestimates the true change, and the full E<sub>p</sub> = &minus;GMm/r equation must be used instead.</div>
+      </div>
+    </section>
+
+    <footer class="page no-print">Gravitation and Circular Motion Workbook &middot; Sections 1&ndash;3 (Newton's law of gravitation, gravitational field strength, gravitational potential energy). Part of the Mechanics workbook set.</footer>
+  </main>
+</div>
+
+<script>
+/* ---------- text answer toggles ---------- */
+function toggleAnswer(id){ document.getElementById(id).classList.toggle('shown'); }
+function revealAll(){
+  document.querySelectorAll('.answer-panel').forEach(function(el){ el.classList.add('shown'); });
+  document.body.classList.add('answers-visible');
+}
+function hideAll(){
+  document.querySelectorAll('.answer-panel').forEach(function(el){ el.classList.remove('shown'); });
+  document.body.classList.remove('answers-visible');
+}
+
+/* ---------- fill in online: autosize ---------- */
+let fillableEls = [];
+
+function autosize(el){
+  if(el.tagName !== 'TEXTAREA') return;
+  el.style.height = 'auto';
+  el.style.height = Math.max(el.scrollHeight, el.offsetHeight) + 'px';
+}
+
+function initFillables(){
+  fillableEls = Array.prototype.slice.call(document.querySelectorAll('.answer-lines, .name-box .fill'));
+  fillableEls.forEach(function(el){
+    autosize(el);
+    el.addEventListener('input', function(){ autosize(el); });
+  });
+}
+
+function clearMyAnswers(){
+  if(!confirm('Clear everything you have typed in this workbook? This cannot be undone.')) return;
+  fillableEls.forEach(function(el){
+    el.value = '';
+    autosize(el);
+  });
+}
+
+window.addEventListener('beforeprint', function(){
+  fillableEls.forEach(autosize);
+});
+
+document.addEventListener('DOMContentLoaded', initFillables);
+
+/* ================= Per-simulation draw-loop scripts ================= */
+/* ---------- Sim 1: fieldCanvas (field strength explorer) ---------- */
+(function(){
+  const canvas = document.getElementById('fieldCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const slider = document.getElementById('fieldSlider');
+  const rValEl = document.getElementById('fieldRVal');
+  const readout = document.getElementById('fieldReadout');
+  const g0 = 9.80;
+  const planetX = 110, planetY = 150, planetR = 20;
+
+  function draw(){
+    const rOverR = parseFloat(slider.value);
+    rValEl.textContent = rOverR.toFixed(1);
+    const g = g0 / (rOverR*rOverR);
+
+    ctx.fillStyle = '#0f1f30';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    /* divider */
+    ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+    ctx.beginPath(); ctx.moveTo(262,10); ctx.lineTo(262,290); ctx.stroke();
+
+    /* --- left panel: radial field diagram --- */
+    ctx.fillStyle = '#173a5e';
+    ctx.beginPath(); ctx.arc(planetX, planetY, planetR, 0, 2*Math.PI); ctx.fill();
+    ctx.fillStyle = '#dceaf0';
+    ctx.font = '11px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('M', planetX, planetY+4);
+
+    /* static decorative field lines */
+    ctx.strokeStyle = 'rgba(220,234,240,0.35)';
+    ctx.lineWidth = 1.2;
+    for(let i=0;i<8;i++){
+      const ang = i*Math.PI/4;
+      if(Math.abs(ang) < 0.01) continue; /* skip the active line's angle, drawn separately */
+      const x1 = planetX + (planetR+30)*Math.cos(ang);
+      const y1 = planetY + (planetR+30)*Math.sin(ang);
+      const x2 = planetX + (planetR+6)*Math.cos(ang);
+      const y2 = planetY + (planetR+6)*Math.sin(ang);
+      ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+    }
+
+    /* active field line (horizontal, to the right) */
+    ctx.strokeStyle = '#0e7c86';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(planetX+planetR+4, planetY); ctx.lineTo(240, planetY); ctx.stroke();
+
+    /* test mass marker */
+    const markerX = planetX + planetR*(rOverR);
+    const clampedX = Math.min(markerX, 246);
+    ctx.fillStyle = '#d98324';
+    ctx.beginPath(); ctx.arc(clampedX, planetY, 6, 0, 2*Math.PI); ctx.fill();
+
+    /* force arrow, scaled for visibility (not to exact scale) */
+    const arrowLen = Math.max(40/rOverR, 6);
+    ctx.strokeStyle = '#d98324';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(clampedX, planetY); ctx.lineTo(clampedX-arrowLen, planetY); ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(clampedX-arrowLen, planetY);
+    ctx.lineTo(clampedX-arrowLen+7, planetY-4);
+    ctx.lineTo(clampedX-arrowLen+7, planetY+4);
+    ctx.closePath(); ctx.fill();
+
+    ctx.fillStyle = '#dceaf0';
+    ctx.font = '10px sans-serif'; ctx.textAlign='left';
+    ctx.fillText('test mass', clampedX+8, planetY-10);
+
+    /* --- right panel: g vs r/R graph --- */
+    const gx0 = 300, gx1 = 460, gy0 = 40, gy1 = 260;
+    ctx.strokeStyle = 'rgba(220,234,240,0.6)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(gx0,gy0); ctx.lineTo(gx0,gy1); ctx.lineTo(gx1,gy1); ctx.stroke();
+    ctx.fillStyle = '#9fb4c2'; ctx.font = '10px sans-serif';
+    ctx.textAlign = 'right'; ctx.fillText('r / R', gx1, gy1+14);
+    ctx.textAlign = 'left'; ctx.fillText('g', gx0-14, gy0+4);
+
+    ctx.strokeStyle = '#0e7c86';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for(let i=0;i<=60;i++){
+      const rr = 1 + (i/60)*5;
+      const gg = g0/(rr*rr);
+      const px = gx0 + (rr-1)/5*(gx1-gx0);
+      const py = gy1 - (gg/g0)*(gy1-gy0);
+      if(i===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+    }
+    ctx.stroke();
+
+    const dotX = gx0 + (rOverR-1)/5*(gx1-gx0);
+    const dotY = gy1 - (g/g0)*(gy1-gy0);
+    ctx.fillStyle = '#d98324';
+    ctx.beginPath(); ctx.arc(dotX,dotY,4.5,0,2*Math.PI); ctx.fill();
+
+    readout.innerHTML = 'g = ' + g.toFixed(2) + ' N kg&minus;1';
+  }
+
+  slider.addEventListener('input', draw);
+  draw();
+})();
+
+</script>
+</body>
+</html>
