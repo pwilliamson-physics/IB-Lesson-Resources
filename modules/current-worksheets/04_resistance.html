@@ -4,14 +4,12 @@
 <meta charset="UTF-8">
 <title>Resistance</title>
 <style>
-  :root{--navy:#1b2a4a;--navy-dark:#12203a;--blue:#2563eb;--good:#1a8a4a;--bad:#c0392b;--bg:#f4f6fb;--card:#fff;--border:#dbe2ef;--amber:#d97706;}
+  :root{--navy:#1b2a4a;--blue:#2563eb;--green:#15803d;--red:#b91c1c;--bg:#f7f8fb;--card:#fff;--border:#dbe1ea;--amber:#d97706;}
   *{box-sizing:border-box;}
-  body{font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:var(--bg);color:#1a1a1a;margin:0;padding:0 0 40px 0;line-height:1.55;}
-  .wb{max-width:920px;margin:0 auto;padding:0 20px;}
-  header.top{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-dark) 100%);color:#fff;padding:36px 20px 30px 20px;margin-bottom:28px;}
-  header.top .inner{max-width:920px;margin:0 auto;}
-  header.top h1{margin:0 0 6px 0;font-size:2rem;}
-  header.top p.tag{margin:0;color:#c9d4ea;font-size:1.05rem;}
+  body{font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:var(--bg);color:#1a1a1a;margin:0;padding:24px;line-height:1.55;}
+  .wb{max-width:880px;margin:0 auto;}
+  h1{color:var(--navy);font-size:1.5em;margin-bottom:4px;}
+  .subtitle{color:#555;margin-top:0;margin-bottom:20px;font-size:0.95em;}
   .namebox{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:20px;}
   .namebox input{padding:6px 10px;border:1px solid var(--border);border-radius:6px;width:240px;}
   .formulabox{background:#eef2ff;border-left:4px solid var(--blue);padding:12px 16px;border-radius:0 8px 8px 0;margin-bottom:20px;font-size:0.95em;}
@@ -30,20 +28,19 @@
   button:hover{opacity:0.9;}
   button.secondary{background:#6b7280;}
   .feedback{font-weight:600;margin-left:4px;}
-  .feedback.correct{color:var(--good);}
-  .feedback.incorrect{color:var(--bad);}
-  .solution{display:none;background:#ecfdf5;border-left:4px solid var(--good);padding:10px 14px;margin-top:8px;border-radius:0 8px 8px 0;font-size:0.9em;}
+  .feedback.correct{color:var(--green);}
+  .feedback.incorrect{color:var(--red);}
+  .solution{display:none;background:#ecfdf5;border-left:4px solid var(--green);padding:10px 14px;margin-top:8px;border-radius:0 8px 8px 0;font-size:0.9em;}
   .solution.show{display:block;}
   .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
   .summary{background:var(--card);border:2px solid var(--blue);border-radius:12px;padding:20px 24px;}
   #summaryBox{white-space:pre-wrap;background:#f1f5f9;border-radius:8px;padding:14px;margin-top:12px;font-family:Menlo,Consolas,monospace;font-size:0.85em;display:none;}
   .note{font-size:0.85em;color:#666;font-style:italic;}
-  .tagline{font-size:0.9em;color:#f4c76b;font-weight:600;margin:-6px 0 18px 0;}
+  .tagline{font-size:0.9em;color:var(--amber);font-weight:600;margin:-6px 0 18px 0;}
 
   .simbox{border-radius:12px;overflow:hidden;border:1px solid var(--border);margin-bottom:14px;}
-  .simbox iframe{width:100%;height:680px;border:0;display:block;background:#0d1117;}
+  .simbox iframe{width:100%;height:540px;border:0;display:block;background:#0d1117;}
   .simcaption{font-size:0.85em;color:#555;margin:-4px 0 14px 0;}
-  .print-only-note{display:none;}
 
   .circuit{border-top:1px dashed var(--border);padding-top:18px;margin-top:18px;}
   .circuit:first-of-type{border-top:none;padding-top:0;margin-top:0;}
@@ -73,26 +70,18 @@
   .print-btn:hover{opacity:0.9;}
   @media print{
     .print-btn-row{display:none !important;}
-    .check-btn,.reveal-btn,.hint-btn,#copyBtn,#summarize,input[type="range"]{display:none !important;}
+    .check-btn,.reveal-btn,.hint-btn{display:none !important;}
     .hint,.solution{display:block !important;}
-    .simbox{display:none !important;}
-    .print-only-note{display:block !important;font-style:italic;color:#555;margin:8px 0 16px;}
     body{background:#fff;padding:6px;}
-    .section,.circuit,.summary{page-break-inside:avoid;break-inside:avoid;}
+    .q,.section,.circuit{page-break-inside:avoid;break-inside:avoid;}
+    iframe{display:none !important;}
   }
 </style>
 </head>
 <body>
-<header class="top"><div class="inner">
-  <h1>Resistance</h1>
-  <p class="tag">"Join the resistance" ⚡ — resist the urge to skip the notes.</p>
-</div></header>
-
 <div class="wb">
-  <div class="namebox">
-    <label for="studentName"><strong>Name:</strong></label>
-    <input type="text" id="studentName" placeholder="Type your name">
-  </div>
+  <h1>Resistance</h1>
+  <p class="tagline">"Join the resistance" ⚡ — resist the urge to skip the notes.</p>
 
   <div class="formulabox">
     <strong>Key relationships:</strong><br>
@@ -128,7 +117,7 @@
     <h2>How are resistance and temperature linked? — the Drude model</h2>
 
     <div class="simbox">
-      <iframe title="Resistance and temperature simulation" onload="try{this.style.height=(this.contentWindow.document.documentElement.scrollHeight+24)+'px';}catch(e){}" srcdoc='<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
+      <iframe title="Resistance and temperature simulation" srcdoc='<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
     :root{--bg-color:#0d1117;--wire-color:#161b22;--ion-color:#ff4757;--electron-color:#00d2ff;}
     body{font-family:Segoe UI,Arial,sans-serif;background-color:var(--bg-color);color:#fff;display:flex;flex-direction:column;align-items:center;padding:10px;margin:0;}
     .container{width:100%;max-width:1000px;margin:0 auto;}
@@ -249,7 +238,6 @@
     </script>
     </body></html>'></iframe>
     </div>
-    <p class="print-only-note">Interactive simulation not included in the printed/PDF version — open the file in a browser to use it.</p>
     <p class="simcaption">Drag the slider to add thermal energy to the right-hand wire and compare it with the reference wire on the left — watch how a hotter lattice scatters the tracked electron (white-ringed dot) more often. (credit Dr Jones, https://www.drjonesphysics.com/electricity-apps1)</p>
 
     <div class="notes">
@@ -1101,18 +1089,8 @@
     </div>
   </div>
 
-  <div class="summary">
-    <h2 style="margin-top:0;color:var(--navy);">Your results</h2>
-    <p class="note">Paste this summary into your Canvas submission box so your teacher can see how you did without you waiting on marking.</p>
-    <div class="btnrow">
-      <button id="summarize">Show my results summary</button>
-      <button id="copyBtn" class="secondary">Copy summary</button>
-    </div>
-    <div id="summaryBox"></div>
-  </div>
-
   <div class="print-btn-row">
-    <button class="print-btn" onclick="preparePrint()">Print / PDF</button>
+    <button class="print-btn" onclick="preparePrint()">Print / Save as PDF</button>
   </div>
 </div>
 
@@ -1186,57 +1164,11 @@ document.querySelectorAll('.circuit').forEach(function(circuit){
   }
 });
 
-document.getElementById('summarize').addEventListener('click', function(){
-  const name = document.getElementById('studentName').value || '(name not entered)';
-  let correctCount=0, incorrectCount=0, other=0, total=0;
-  const lines = [];
-  let n = 0;
-  document.querySelectorAll('.q[data-type="mcq"]').forEach(function(q){
-    n++;
-    total++;
-    const state = q.dataset.state || 'not attempted';
-    if(state === 'correct') correctCount++;
-    else if(state === 'incorrect') incorrectCount++;
-    else other++;
-    lines.push('Q' + n + ': ' + state);
-  });
-  document.querySelectorAll('.reading-row[data-answer]').forEach(function(row){
-    n++;
-    total++;
-    const state = row.dataset.state || 'not attempted';
-    if(state === 'correct') correctCount++;
-    else if(state === 'incorrect') incorrectCount++;
-    else other++;
-    lines.push('Q' + n + ': ' + state);
-  });
-  const summary = 'Resistance — results\n' +
-    'Student: ' + name + '\n' +
-    'Score: ' + correctCount + ' / ' + total + ' correct\n' +
-    'Incorrect / needs another attempt: ' + incorrectCount + '\n' +
-    'Other (not attempted): ' + other + '\n\n' +
-    lines.join('\n');
-  const box = document.getElementById('summaryBox');
-  box.textContent = summary;
-  box.style.display = 'block';
-});
-document.getElementById('copyBtn').addEventListener('click', function(){
-  const box = document.getElementById('summaryBox');
-  if(!box.textContent){ document.getElementById('summarize').click(); }
-  navigator.clipboard.writeText(box.textContent).then(function(){
-    const btn = document.getElementById('copyBtn'); btn.textContent='Copied!';
-    setTimeout(()=>{btn.textContent='Copy summary';},1500);
-  }).catch(function(){});
-});
-
 function preparePrint(){
   document.querySelectorAll('.hint, .solution, .hint-box').forEach(function(el){
     el.classList.add('show');
     el.classList.add('visible');
   });
-  var sBtn = document.getElementById('summarize');
-  if(sBtn){ try{ sBtn.click(); }catch(e){} }
-  if(typeof generateExport === 'function'){ try{ generateExport(); }catch(e){} }
-  if(typeof computeAll === 'function'){ try{ computeAll(); }catch(e){} }
   setTimeout(function(){ window.print(); }, 60);
 }
 </script>

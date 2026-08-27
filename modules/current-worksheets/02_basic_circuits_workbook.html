@@ -7,33 +7,21 @@
 <style>
   :root {
     --ink:       #1a1f2e;
-    --paper:     #f4f6fb;
-    --wire:      #1b2a4a;
+    --paper:     #f7f8fc;
+    --wire:      #2c3e6b;
     --live:      #e8533a;
     --node:      #3a7bd5;
     --node-bg:   #e8f1ff;
-    --correct:   #1a8a4a;
+    --correct:   #1e7b4b;
     --correct-bg:#d4f0e3;
     --wrong:     #c0392b;
     --wrong-bg:  #fde8e6;
     --hint:      #7b5fa0;
     --hint-bg:   #f3eeff;
-    --lesson-bar:#1b2a4a;
-    --border:    #dbe2ef;
+    --lesson-bar:#2c3e6b;
     --radius:    6px;
-    --shadow:    0 2px 8px rgba(27,42,74,0.10);
+    --shadow:    0 2px 8px rgba(44,62,107,0.10);
   }
-  .namebox{
-    background:#fff;border:1px solid var(--border);border-radius:10px;
-    padding:16px 20px;margin:20px auto 0;max-width:860px;
-    display:flex;gap:24px;flex-wrap:wrap;
-  }
-  .namebox label{font-weight:600;margin-right:8px;color:#5a6478;}
-  .namebox input{
-    border:none;border-bottom:2px solid var(--border);
-    padding:4px 2px;font-size:1rem;background:transparent;min-width:220px;font-family:inherit;
-  }
-  .namebox input:focus{outline:none;border-bottom-color:var(--node);}
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: 'Segoe UI', Arial, sans-serif;
@@ -249,7 +237,7 @@
   .print-btn:hover{opacity:0.9;}
   @media print{
     .print-btn-row{display:none !important;}
-    .btn-check,.btn-hint,.btn-export,.copy-confirm{display:none !important;}
+    .btn-check,.btn-hint{display:none !important;}
     .hint-box{display:block !important;}
     body{background:#fff;}
     .card,.section{page-break-inside:avoid;break-inside:avoid;}
@@ -261,10 +249,6 @@
 <header>
   <h1>Basic Circuits – Practical Workbook</h1>
 </header>
-
-<div class="namebox">
-  <div><label>Name</label><input type="text" id="studentName" placeholder="Enter your name"></div>
-</div>
 
 <!-- ═══════════════════ SECTION 1 ═══════════════════ -->
 <div class="lesson-banner">Section 1 – Current in Series and Parallel Circuits</div>
@@ -989,29 +973,14 @@
     </div>
   </div>
 
-  <!-- ── Teacher dashboard / results export ── -->
-  <div class="export-area">
-    <h2>📤 Copy My Results to Submit</h2>
-    <p class="body" style="margin-bottom:10px;">
-      When you have finished, click the button below to generate a summary of all your answers.
-      Copy the text and paste it into the Canvas submission box.
-    </p>
-    <button class="btn btn-export" onclick="generateExport()">Generate results summary</button>
-    <span class="copy-confirm" id="copy-confirm">✓ Copied to clipboard!</span>
-    <textarea id="export-output" readonly placeholder="Your results will appear here…"></textarea>
-    <div style="margin-top:8px;">
-      <button class="btn btn-check" onclick="copyExport()">Copy to clipboard</button>
-    </div>
+  <div class="print-btn-row">
+    <button class="print-btn" onclick="preparePrint()">Print / Save as PDF</button>
   </div>
 
 </div><!-- end section 2 -->
 
 <div style="max-width:860px;margin:30px auto;padding:0 20px;text-align:center;color:#888;font-size:0.85rem;">
   IB Physics · Basic Circuits Workbook · Reference: Hodder IB Physics (3rd edition)
-</div>
-
-<div class="print-btn-row">
-  <button class="print-btn" onclick="preparePrint()">Print / PDF</button>
 </div>
 
 <script>
@@ -1096,12 +1065,9 @@ function val(id) {
 
 function generateExport() {
   const now = new Date().toLocaleString('en-GB');
-  const nameEl = document.getElementById('studentName');
-  const studentName = (nameEl && nameEl.value) ? nameEl.value : '(name not entered)';
   const lines = [
     '═══════════════════════════════════════════',
     '  Basic Circuits Workbook – Results Summary',
-    '  Student: ' + studentName,
     '  Generated: ' + now,
     '═══════════════════════════════════════════',
     '',
@@ -1184,8 +1150,7 @@ function legacyCopy() {
 }
 function showCopyConfirm() {
   const el = document.getElementById('copy-confirm');
-  el.style.display = 'inline';
-  setTimeout(() => { el.style.display = 'none'; }, 3000);
+  if(el){ el.style.display = 'inline'; setTimeout(() => { el.style.display = 'none'; }, 3000); }
 }
 
 function preparePrint(){
@@ -1193,10 +1158,6 @@ function preparePrint(){
     el.classList.add('show');
     el.classList.add('visible');
   });
-  var sBtn = document.getElementById('summarize');
-  if(sBtn){ try{ sBtn.click(); }catch(e){} }
-  if(typeof generateExport === 'function'){ try{ generateExport(); }catch(e){} }
-  if(typeof computeAll === 'function'){ try{ computeAll(); }catch(e){} }
   setTimeout(function(){ window.print(); }, 60);
 }
 </script>

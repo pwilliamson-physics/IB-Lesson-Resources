@@ -190,18 +190,16 @@
   .examq-card .check-btn:hover{background:#0b7d73;}
   .examq-card .reveal-btn{background:#115e59;}
   .examq-card .reveal-btn:hover{background:#0c433f;}
-  .print-only-note{display:none;}
   .print-btn-row{text-align:center;margin:30px 0 8px;}
   .print-btn{background:var(--navy);color:#fff;border:none;padding:12px 30px;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;font-family:inherit;}
   .print-btn:hover{opacity:0.9;}
   @media print{
     .print-btn-row{display:none !important;}
     .check-btn,.reveal-btn,.hint-btn,.copy-btn{display:none !important;}
-    .hint,.solution,.hint-box{display:block !important;}
-    .sim-frame-wrap{display:none !important;}
-    .print-only-note{display:block !important;font-style:italic;color:#555;margin:8px 0 16px;}
+    .hint,.solution{display:block !important;}
     body{background:#fff;padding:6px;}
-    .q,.circuit-block,.examq-card{page-break-inside:avoid;break-inside:avoid;}
+    .card,.circuit-block,.examq-card{page-break-inside:avoid;break-inside:avoid;}
+    iframe{display:none !important;}
   }
 </style>
 </head>
@@ -212,10 +210,6 @@
 </div></header>
 
 <div class="wrap">
-
-<div class="namebox">
-  <div><label>Name</label><input type="text" id="studentName" placeholder="Enter your name"></div>
-</div>
 
 <h2 class="section-title">Part A — Notes: emf and internal resistance</h2>
 
@@ -1118,7 +1112,6 @@
   </script>
 </div>"></iframe>
   </div>
-  <p class="print-only-note">Interactive simulation not included in the printed/PDF version — open the file in a browser to use it.</p>
   <div class="sim-credit">
     Simulation created by <strong>Dr Dan Jones</strong> (Dr Jones Physics) — used with attribution.<br>
     View the original and more physics simulations at <a href="https://www.drjonesphysics.com/emf-expt" target="_blank" rel="noopener">drjonesphysics.com/emf-expt</a>.
@@ -1442,16 +1435,6 @@
   </div>
 </div>
 
-<!-- ================= RESULTS SUMMARY ================= -->
-<div class="summary-card">
-  <h2 class="section-title" style="border-bottom-color:#5a7ac0;">Results</h2>
-  <div id="scoreLine">Click "Calculate score" to mark your work.</div>
-  <button class="check-btn" onclick="computeAll()">Calculate score</button>
-  <button class="copy-btn" onclick="copySummary()">Copy summary</button>
-  <p style="font-size:0.85rem;color:#a9b8d8;">Paste the summary below into your Canvas submission.</p>
-  <textarea id="summaryText" readonly></textarea>
-</div>
-
 <!-- ================= EXAM-STYLE QUESTION (not marked, not for Canvas) ================= -->
 <div class="examq-section">
 <h2 class="section-title">Exam-style question</h2>
@@ -1550,9 +1533,10 @@
 </div>
 </div>
 
-  <div class="print-btn-row">
-    <button class="print-btn" onclick="preparePrint()">Print / PDF</button>
-  </div>
+<div class="print-btn-row">
+  <button class="print-btn" onclick="preparePrint()">Print / Save as PDF</button>
+</div>
+
 </div>
 <script>
 function toggleSolution(btn){
@@ -1643,35 +1627,11 @@ function computeAll(){
   window._score = {total:total, correct:correct, missing:missing};
   document.getElementById('scoreLine').textContent = 'Score: ' + correct + ' / ' + total + ' (' + Math.round(100*correct/total) + '%)';
 }
-function copySummary(){
-  if(!window._score) computeAll();
-  var s = window._score;
-  var name = document.getElementById('studentName').value || '(name not entered)';
-  var lines = [];
-  lines.push('EMF and Internal Resistance — Self-Marking Workbook');
-  lines.push('Name: ' + name);
-  lines.push('Score: ' + s.correct + ' / ' + s.total + ' (' + Math.round(100*s.correct/s.total) + '%)');
-  if(s.missing.length){
-    lines.push('');
-    lines.push('Items to review:');
-    s.missing.forEach(function(m){ lines.push(' - ' + m); });
-  }
-  var text = lines.join('\n');
-  document.getElementById('summaryText').value = text;
-  document.getElementById('summaryText').select();
-  try{ document.execCommand('copy'); }catch(e){}
-  if(navigator.clipboard){ navigator.clipboard.writeText(text).catch(function(){}); }
-}
-
 function preparePrint(){
   document.querySelectorAll('.hint, .solution, .hint-box').forEach(function(el){
     el.classList.add('show');
     el.classList.add('visible');
   });
-  var sBtn = document.getElementById('summarize');
-  if(sBtn){ try{ sBtn.click(); }catch(e){} }
-  if(typeof generateExport === 'function'){ try{ generateExport(); }catch(e){} }
-  if(typeof computeAll === 'function'){ try{ computeAll(); }catch(e){} }
   setTimeout(function(){ window.print(); }, 60);
 }
 </script>

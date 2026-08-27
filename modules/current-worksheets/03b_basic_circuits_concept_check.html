@@ -4,14 +4,11 @@
 <meta charset="UTF-8">
 <title>Basic Circuits Concept Check</title>
 <style>
-  :root{--navy:#1b2a4a;--navy-dark:#12203a;--blue:#2563eb;--good:#1a8a4a;--bad:#c0392b;--bg:#f4f6fb;--card:#fff;--border:#dbe2ef;--amber:#d97706;}
+  :root{--navy:#1b2a4a;--blue:#2563eb;--green:#1a1f2e;--red:#b91c1c;--bg:#f7f8fb;--card:#fff;--border:#dbe1ea;--amber:#d97706;}
   *{box-sizing:border-box;}
-  body{font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:var(--bg);color:#1a1a1a;margin:0;padding:0 0 40px 0;line-height:1.5;}
-  .wb{max-width:920px;margin:0 auto;padding:0 20px;}
-  header.top{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-dark) 100%);color:#fff;padding:36px 20px 30px 20px;margin-bottom:28px;}
-  header.top .inner{max-width:920px;margin:0 auto;}
-  header.top h1{margin:0 0 6px 0;font-size:2rem;}
-  header.top p.tag{margin:0;color:#c9d4ea;font-size:1.05rem;}
+  body{font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:var(--bg);color:#1a1a1a;margin:0;padding:24px;line-height:1.5;}
+  .wb{max-width:900px;margin:0 auto;}
+  h1{color:var(--navy);font-size:1.5em;margin-bottom:4px;}
   .namebox{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:22px 26px;margin-bottom:20px;}
   .namebox label{font-size:1.15em;}
   .namebox input{padding:12px 16px;border:1px solid var(--border);border-radius:8px;width:100%;max-width:480px;font-size:1.15em;margin-top:8px;display:block;}
@@ -36,11 +33,11 @@
   button.secondary{background:#6b7280;}
   button.hint-btn{background:var(--amber);}
   .feedback{font-weight:600;margin-left:2px;font-size:0.9em;}
-  .feedback.correct{color:var(--good);}
-  .feedback.incorrect{color:var(--bad);}
+  .feedback.correct{color:var(--green);}
+  .feedback.incorrect{color:var(--red);}
   .hint,.solution{display:none;padding:8px 14px;margin-top:8px;border-radius:0 8px 8px 0;font-size:0.88em;}
   .hint{background:#fffbeb;border-left:4px solid var(--amber);}
-  .solution{background:#ecfdf5;border-left:4px solid var(--good);}
+  .solution{background:#ecfdf5;border-left:4px solid var(--green);}
   .hint.show,.solution.show{display:block;}
   .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
   .summary{background:var(--card);border:2px solid var(--blue);border-radius:12px;padding:20px 24px;}
@@ -53,24 +50,16 @@
   .print-btn:hover{opacity:0.9;}
   @media print{
     .print-btn-row{display:none !important;}
-    .check-btn,.reveal-btn,.hint-btn,#copyBtn,#summarize{display:none !important;}
+    .check-btn,.reveal-btn,.hint-btn{display:none !important;}
     .hint,.solution{display:block !important;}
     body{background:#fff;padding:6px;}
-    .section,.summary{page-break-inside:avoid;break-inside:avoid;}
+    .section{page-break-inside:avoid;break-inside:avoid;}
   }
 </style>
 </head>
 <body>
-<header class="top"><div class="inner">
-  <h1>Basic Circuits Concept Check</h1>
-  <p class="tag">Electricity — worked circuit-reading practice</p>
-</div></header>
-
 <div class="wb">
-  <div class="namebox">
-    <label for="studentName"><strong>Name:</strong></label>
-    <input type="text" id="studentName" placeholder="Type your name">
-  </div>
+  <h1>Basic Circuits Concept Check</h1>
 
   <div class="titleslide">
     <h2>Basic circuits concept check</h2>
@@ -1018,18 +1007,8 @@
     </div>
   </div>
 
-  <div class="summary">
-    <h2 style="margin-top:0;color:var(--navy);">Your results</h2>
-    <p class="note">Paste this summary into your Canvas submission box so your teacher can see how you did without you waiting on marking.</p>
-    <div class="btnrow">
-      <button id="summarize">Show my results summary</button>
-      <button id="copyBtn" class="secondary">Copy summary</button>
-    </div>
-    <div id="summaryBox"></div>
-  </div>
-
   <div class="print-btn-row">
-    <button class="print-btn" onclick="preparePrint()">Print / PDF</button>
+    <button class="print-btn" onclick="preparePrint()">Print / Save as PDF</button>
   </div>
 </div>
 
@@ -1073,47 +1052,11 @@ document.querySelectorAll('.section[data-circuit]').forEach(function(section){
   }
 });
 
-document.getElementById('summarize').addEventListener('click', function(){
-  const name = document.getElementById('studentName').value || '(name not entered)';
-  let correctCount=0, incorrectCount=0, other=0, total=0;
-  const lines = [];
-  document.querySelectorAll('.reading-row[data-answer]').forEach(function(row, i){
-    total++;
-    const state = row.dataset.state || 'not attempted';
-    if(state === 'correct') correctCount++;
-    else if(state === 'incorrect') incorrectCount++;
-    else other++;
-    const lbl = row.querySelector('.lbl').textContent;
-    lines.push(lbl + ': ' + state);
-  });
-  const summary = 'Basic Circuits Concept Check — results\n' +
-    'Student: ' + name + '\n' +
-    'Score: ' + correctCount + ' / ' + total + ' correct\n' +
-    'Incorrect / needs another attempt: ' + incorrectCount + '\n' +
-    'Not attempted: ' + other + '\n\n' +
-    lines.join('\n');
-  const box = document.getElementById('summaryBox');
-  box.textContent = summary;
-  box.style.display = 'block';
-});
-document.getElementById('copyBtn').addEventListener('click', function(){
-  const box = document.getElementById('summaryBox');
-  if(!box.textContent){ document.getElementById('summarize').click(); }
-  navigator.clipboard.writeText(box.textContent).then(function(){
-    const btn = document.getElementById('copyBtn'); btn.textContent='Copied!';
-    setTimeout(()=>{btn.textContent='Copy summary';},1500);
-  }).catch(function(){});
-});
-
 function preparePrint(){
   document.querySelectorAll('.hint, .solution, .hint-box').forEach(function(el){
     el.classList.add('show');
     el.classList.add('visible');
   });
-  var sBtn = document.getElementById('summarize');
-  if(sBtn){ try{ sBtn.click(); }catch(e){} }
-  if(typeof generateExport === 'function'){ try{ generateExport(); }catch(e){} }
-  if(typeof computeAll === 'function'){ try{ computeAll(); }catch(e){} }
   setTimeout(function(){ window.print(); }, 60);
 }
 </script>

@@ -167,9 +167,9 @@
   @media print{
     .print-btn-row{display:none !important;}
     .check-btn,.reveal-btn,.hint-btn,.copy-btn{display:none !important;}
-    .hint,.solution,.hint-box{display:block !important;}
+    .hint,.solution{display:block !important;}
     body{background:#fff;padding:6px;}
-    .q,.circuit-block{page-break-inside:avoid;break-inside:avoid;}
+    .card,.circuit-block{page-break-inside:avoid;break-inside:avoid;}
   }
 </style>
 </head>
@@ -180,10 +180,6 @@
 </div></header>
 
 <div class="wrap">
-
-<div class="namebox">
-  <div><label>Name</label><input type="text" id="studentName" placeholder="Enter your name"></div>
-</div>
 
 <!-- ================= NOTES SECTION (slides 1-7) ================= -->
 <h2 class="section-title">Part A — Notes: combining resistors</h2>
@@ -1173,19 +1169,10 @@
   <div class="solution">R₁ and R₂ are in series in a branch directly across the battery, carrying the given 4 A. The voltmeters read V₂ = 5 V across R₁ and V₃ = 3 V across R₂, so R₁ = V₂/A₄ = 5/4 = … Ω and R₂ = V₃/A₄ = 3/4 = … Ω. This branch's total pd = V₂ + V₃ = 5 + 3 = … V = V₁ (and V₄, since the 3 Ω ∥ 2 Ω branch is also directly across the battery). 3 Ω ∥ 2 Ω = 1.2 Ω, so A₂ = V₄/1.2 = … A. A₁ = A₃ = A₄ + A₂ = … A.</div>
 </div>
 
-<!-- ================= RESULTS SUMMARY ================= -->
-<div class="summary-card">
-  <h2 class="section-title" style="border-bottom-color:#5a7ac0;">Results</h2>
-  <div id="scoreLine">Click "Calculate score" to mark your work.</div>
-  <button class="check-btn" onclick="computeAll()">Calculate score</button>
-  <button class="copy-btn" onclick="copySummary()">Copy summary</button>
-  <p style="font-size:0.85rem;color:#a9b8d8;">Paste the summary below into your Canvas submission.</p>
-  <textarea id="summaryText" readonly></textarea>
+<div class="print-btn-row">
+  <button class="print-btn" onclick="preparePrint()">Print / Save as PDF</button>
 </div>
 
-  <div class="print-btn-row">
-    <button class="print-btn" onclick="preparePrint()">Print / PDF</button>
-  </div>
 </div>
 <script>
 function toggleSolution(btn){
@@ -1273,35 +1260,11 @@ function computeAll(){
   window._score = {total:total, correct:correct, missing:missing};
   document.getElementById('scoreLine').textContent = 'Score: ' + correct + ' / ' + total + ' (' + Math.round(100*correct/total) + '%)';
 }
-function copySummary(){
-  if(!window._score) computeAll();
-  var s = window._score;
-  var name = document.getElementById('studentName').value || '(name not entered)';
-  var lines = [];
-  lines.push('Adding Resistors — Self-Marking Workbook');
-  lines.push('Name: ' + name);
-  lines.push('Score: ' + s.correct + ' / ' + s.total + ' (' + Math.round(100*s.correct/s.total) + '%)');
-  if(s.missing.length){
-    lines.push('');
-    lines.push('Items to review:');
-    s.missing.forEach(function(m){ lines.push(' - ' + m); });
-  }
-  var text = lines.join('\n');
-  document.getElementById('summaryText').value = text;
-  document.getElementById('summaryText').select();
-  try{ document.execCommand('copy'); }catch(e){}
-  if(navigator.clipboard){ navigator.clipboard.writeText(text).catch(function(){}); }
-}
-
 function preparePrint(){
   document.querySelectorAll('.hint, .solution, .hint-box').forEach(function(el){
     el.classList.add('show');
     el.classList.add('visible');
   });
-  var sBtn = document.getElementById('summarize');
-  if(sBtn){ try{ sBtn.click(); }catch(e){} }
-  if(typeof generateExport === 'function'){ try{ generateExport(); }catch(e){} }
-  if(typeof computeAll === 'function'){ try{ computeAll(); }catch(e){} }
   setTimeout(function(){ window.print(); }, 60);
 }
 </script>
