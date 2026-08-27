@@ -36,6 +36,16 @@
   textarea{width:100%;min-height:70px;padding:8px;border:1px solid var(--border);border-radius:6px;font-family:inherit;}
   .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;}
   .flag{background:#fef2f2;border-left:4px solid var(--red);padding:8px 12px;border-radius:0 8px 8px 0;font-size:0.85em;margin-top:8px;}
+  .print-btn-row{text-align:center;margin:30px 0 8px;}
+  .print-btn{background:var(--navy);color:#fff;border:none;padding:12px 30px;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;font-family:inherit;}
+  .print-btn:hover{opacity:0.9;}
+  @media print{
+    .print-btn-row{display:none !important;}
+    .check-btn,.reveal-btn,.hint-btn,.btn-check,.btn-hint,.btn-export,#copyBtn,#summarize,#copy-confirm,.copy-btn,input[type="range"]{display:none !important;}
+    .hint,.solution,.hint-box{display:block !important;}
+    body{background:#fff;padding:6px;}
+    .q,.card,.section,.circuit-block,.examq-card,.sim-card,.diagram-row,.namebox,.practical,figure{page-break-inside:avoid;break-inside:avoid;}
+  }
 </style>
 </head>
 <body>
@@ -176,6 +186,10 @@
       <div class="solution">There's no single correct choice — this is a judgement question. A strong answer names one model, gives a concrete reason (e.g. "the coal truck model made it clearest that the current doesn't get 'used up'"), and names at least one thing that model still doesn't capture (e.g. potential difference, resistance, parallel circuits).</div>
     </div>
   </div>
+
+  <div class="print-btn-row">
+    <button class="print-btn" onclick="preparePrint()">Print / PDF</button>
+  </div>
 </div>
 
 <script>
@@ -214,6 +228,18 @@ document.querySelectorAll('.q').forEach(function(q){
     });
   }
 });
+
+function preparePrint(){
+  document.querySelectorAll('.hint, .solution, .hint-box').forEach(function(el){
+    el.classList.add('show');
+    el.classList.add('visible');
+  });
+  var sBtn = document.getElementById('summarize');
+  if(sBtn){ try{ sBtn.click(); }catch(e){} }
+  if(typeof generateExport === 'function'){ try{ generateExport(); }catch(e){} }
+  if(typeof computeAll === 'function'){ try{ computeAll(); }catch(e){} }
+  setTimeout(function(){ window.print(); }, 60);
+}
 </script>
 </body>
 </html>
