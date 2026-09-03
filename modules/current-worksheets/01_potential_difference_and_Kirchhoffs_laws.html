@@ -69,11 +69,11 @@
     <p><strong>Electrical potential difference</strong> is the same idea: it is the energy change of one coulomb of charge as it moves between two points with different electrical potential. A coulomb is a defined number of electrons: 1 C = 6.25 × 10¹⁸ electrons.</p>
 
     <div class="check" data-type="numeric" data-answer="1.6e-18" data-tol="0.05">
-      <p class="qtext">Check your understanding: a power pack has a pd of 10 V. Calculate the energy change of <em>one electron</em> as it moves through this pd. (e = 1.6 × 10⁻¹⁹ C)</p>
+      <p class="qtext">Check your understanding: a power pack has a pd of 10 V. Calculate the energy change of <em>one electron</em> as it moves through this pd. (e = 1.6 × 10<sup>-19</sup> C)</p>
       <div class="answer-row"><input type="text" class="ans-input"><span class="unit-label">J</span><button class="check-btn">Check</button><span class="feedback"></span></div>
       <div class="btnrow"><button class="hint-btn">Hint</button><button class="reveal-btn secondary">Show working</button></div>
       <div class="hint">Energy transferred = charge × pd. Use the charge of a single electron.</div>
-      <div class="solution">E = qV = 1.6×10⁻¹⁹ × 10</div>
+      <div class="solution">E = qV = 1.6×10<sup>-19</sup> × 10</div>
     </div>
   </div>
 
@@ -130,7 +130,12 @@
 <script>
 function parseNum(str){
   if(!str) return NaN;
-  str = str.trim().replace(/×10\^?/,'e').replace(/x10\^?/i,'e').replace(/\s/g,'');
+  str = str.trim();
+  const sci = str.match(/^([+-]?[\d.]+)\s*[x×]\s*10\s*\^?\s*\(?\s*([+-]?\d+)\s*\)?\s*$/i);
+  if(sci){
+    return parseFloat(sci[1]) * Math.pow(10, parseFloat(sci[2]));
+  }
+  str = str.replace(/×10\^?/,'e').replace(/x10\^?/i,'e').replace(/\s/g,'');
   return parseFloat(str);
 }
 document.querySelectorAll('.check').forEach(function(q){
