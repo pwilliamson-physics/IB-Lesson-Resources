@@ -2,233 +2,217 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>EMF and Internal Resistance — Self-Marking Workbook</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EMF and Internal Resistance — Student Workbook</title>
 <style>
+
   :root{
-    --navy:#1b2a4a;
-    --navy-dark:#12203a;
-    --blue:#2563eb;
-    --red:#e8533a;
-    --red-bg:#fff3f1;
-    --blue-bg:#e8f1ff;
-    --bg:#f4f6fb;
-    --card:#ffffff;
-    --border:#dbe2ef;
-    --good:#1a8a4a;
-    --bad:#c0392b;
-    --text:#1b2333;
-    --muted:#5a6478;
+    --navy:#173a5e; --teal:#0e7c86; --teal-dark:#0a5b62; --amber:#d98324;
+    --soft-blue:#eaf3fb; --soft-amber:#fdf1e2; --soft-green:#eaf7ee; --soft-grey:#f4f6f8;
+    --line:#b9c6d3; --ink:#1f2933; --border:#d7e0e8;
+    --purple:#6b4c9a; --soft-purple:#f1ebf9;
+    --good:#2f8f4e; --bad:#c0392b; --soft-bad:#fbebea;
+    /* circuit-diagram accents, carried over from the v1 electricity set for
+       consistency across this worksheet family (style-guide.md: "the v1
+       ammeter/voltmeter/... conventions below are still good practice and
+       worth reusing for consistency with the Electricity set") */
+    --diagram-ammeter:#e8533a; --diagram-ammeter-bg:#fff3f1;
+    --diagram-voltmeter:#3a7bd5; --diagram-voltmeter-bg:#e8f1ff;
   }
   *{box-sizing:border-box;}
-  body{
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    margin:0;
-    padding:0 0 60px 0;
-    line-height:1.55;
+  body{margin:0; font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; color:var(--ink); background:#f7f9fb; line-height:1.55; font-size:16.5px; padding-top:56px;}
+  main{max-width:920px; margin:0 auto; padding:2rem 2.5rem 5rem 2.5rem;}
+  .cover{background:linear-gradient(135deg,var(--navy),var(--teal-dark)); color:#fff; border-radius:14px; padding:2.5rem 2.5rem; margin-bottom:2rem;}
+  .cover h1{margin:0 0 0.4rem 0; font-size:1.9rem;}
+  .cover p.sub{margin:0; font-size:1.05rem; color:#dceaf0;}
+  .cover .meta{margin-top:1.2rem; font-size:0.9rem; color:#cfe3ee;}
+  .name-box{margin-top:1.4rem; background:rgba(255,255,255,0.1); border:1px dashed rgba(255,255,255,0.5); border-radius:8px; padding:0.9rem 1.1rem;}
+  .name-box label{display:block; font-size:0.8rem; color:#dceaf0; margin-bottom:0.2rem;}
+  .name-box .fill{display:block; width:100%; border:none; border-bottom:1px solid #dceaf0; height:1.6rem; background:transparent; color:#fff; font-size:1rem; font-family:inherit; padding:0; outline:none;}
+  .name-box .fill::placeholder{color:rgba(255,255,255,0.5);}
+  .goals{background:rgba(255,255,255,0.12); border-left:4px solid #fff; border-radius:6px; padding:0.9rem 1.1rem; font-size:0.92rem; color:#fff;}
+  .goals ul{margin:0.4rem 0 0 0; padding-left:1.2rem;}
+
+  section.topic{background:#fff; border:1px solid var(--border); border-radius:12px; padding:1.8rem 2rem; margin-bottom:1.6rem;}
+  section.topic h2{color:var(--navy); font-size:1.4rem; margin-top:0; border-bottom:3px solid var(--amber); padding-bottom:0.4rem;}
+  section.topic h3{color:var(--teal-dark); font-size:1.08rem; margin-top:1.6rem;}
+
+  .keybox{background:var(--soft-blue); border:1px solid #c7ddef; border-radius:8px; padding:0.9rem 1.1rem; margin:0.9rem 0; font-size:0.98rem;}
+  .keybox strong{color:var(--navy);}
+  .eqn{background:#fff; border:1px solid #c7ddef; border-radius:6px; padding:0.6rem 1rem; margin:0.6rem 0; font-size:1.08rem; text-align:center; font-family:"Cambria Math",Cambria,Georgia,serif;}
+  .keyword{background:var(--soft-amber); border-left:4px solid var(--amber); border-radius:6px; padding:0.7rem 1rem; margin:0.9rem 0; font-size:0.92rem;}
+  .keyword b{color:var(--amber);}
+  .example{background:var(--soft-green); border:1px solid #bfe3cc; border-radius:8px; padding:0.9rem 1.1rem; margin:1rem 0;}
+  .example .tag{display:inline-block; background:#3f9a5c; color:#fff; font-size:0.72rem; font-weight:600; letter-spacing:0.03em; padding:0.15rem 0.5rem; border-radius:4px; margin-bottom:0.5rem; text-transform:uppercase;}
+  .stretch-box{background:var(--soft-purple); border:1px solid #d9c9ec; border-radius:8px; padding:0.9rem 1.1rem; margin:1rem 0;}
+  .stretch-box .tag{display:inline-block; background:var(--purple); color:#fff; font-size:0.72rem; font-weight:600; letter-spacing:0.03em; padding:0.15rem 0.5rem; border-radius:4px; margin-bottom:0.5rem; text-transform:uppercase;}
+  .stretch-box strong{color:var(--purple);}
+  .practical-box{background:var(--soft-amber); border:1.5px dashed var(--amber); border-radius:8px; padding:0.9rem 1.1rem; margin:1rem 0;}
+  .practical-box .tag{display:inline-block; background:var(--amber); color:#fff; font-size:0.72rem; font-weight:600; letter-spacing:0.03em; padding:0.15rem 0.5rem; border-radius:4px; margin-bottom:0.5rem; text-transform:uppercase;}
+
+  .question{background:var(--soft-grey); border:1px solid var(--border); border-radius:8px; padding:1rem 1.2rem; margin:1.1rem 0;}
+  .question .qnum{display:inline-block; background:var(--navy); color:#fff; font-weight:700; font-size:0.82rem; width:1.9rem; height:1.9rem; line-height:1.9rem; text-align:center; border-radius:50%; margin-right:0.5rem;}
+  .answer-lines{
+    display:block; width:100%; box-sizing:border-box;
+    background-image:repeating-linear-gradient(to bottom, transparent, transparent 1.65em, var(--line) 1.7em);
+    background-color:transparent;
+    min-height:5.1em; margin:0.6rem 0 0.2rem 0;
+    border:1px solid transparent; border-radius:6px;
+    outline:none; resize:none; overflow:hidden;
+    font:inherit; color:inherit; line-height:1.7em;
+    padding:0.05em 0.4em 0 0.2em;
   }
-  .wrap{max-width:920px;margin:0 auto;padding:0 20px;}
-  header.top{
-    background:linear-gradient(135deg,var(--navy) 0%,var(--navy-dark) 100%);
-    color:#fff;
-    padding:36px 20px 30px 20px;
-    margin-bottom:28px;
+  .answer-lines:focus{
+    border:1px solid var(--teal); background-color:#fbfdff;
+    box-shadow:0 0 0 3px rgba(14,124,134,0.12);
   }
-  header.top .inner{max-width:920px;margin:0 auto;}
-  header.top h1{margin:0 0 6px 0;font-size:2rem;}
-  header.top p.tag{margin:0;color:#c9d4ea;font-size:1.05rem;}
-  .namebox{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:10px;
-    padding:16px 20px;
-    margin-bottom:24px;
-    display:flex;
-    gap:24px;
-    flex-wrap:wrap;
+  .answer-lines::placeholder{color:#9aa8b4; font-style:italic;}
+  .answer-lines.short{min-height:1.7em;}
+  .answer-lines.long{min-height:8.5em;}
+  .reveal-btn{background:var(--teal); color:#fff; border:none; border-radius:6px; padding:0.35rem 0.8rem; font-size:0.82rem; cursor:pointer; margin-top:0.5rem; margin-right:0.5rem;}
+  .reveal-btn:hover{background:var(--teal-dark);}
+  .answer-panel{display:none; background:#fff; border:1px dashed #3f9a5c; border-radius:6px; padding:0.7rem 1rem; margin-top:0.6rem; font-size:0.92rem;}
+  .answer-panel.shown{display:block;}
+
+  /* ---------- self-marking (auto-checked) question type ---------- */
+  .sm-row{display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; margin-top:0.6rem;}
+  input.sm-input.answer-lines{
+    background:#fff !important; border:1.5px solid var(--line) !important;
+    min-height:0; width:auto; max-width:220px; padding:0.4rem 0.6rem; font-size:0.98rem;
+    background-image:none !important; line-height:normal;
   }
-  .namebox label{font-weight:600;margin-right:8px;color:var(--muted);}
-  .namebox input{
-    border:none;border-bottom:2px solid var(--border);
-    padding:4px 2px;font-size:1rem;background:transparent;min-width:220px;
+  input.sm-input.answer-lines:focus{border-color:var(--teal) !important;}
+  .sm-input.short{max-width:130px;}
+  .sm-unit{color:#5b6b78; font-size:0.92rem;}
+  .check-btn{background:var(--navy); color:#fff; border:none; border-radius:6px; padding:0.35rem 0.8rem; font-size:0.82rem; cursor:pointer;}
+  .check-btn:hover{background:#0f2540;}
+  .hint-btn{background:#fff; color:var(--amber); border:1.5px solid var(--amber); border-radius:6px; padding:0.35rem 0.8rem; font-size:0.82rem; cursor:pointer; margin-top:0.5rem; margin-right:0.5rem;}
+  .hint-btn:hover{background:var(--soft-amber);}
+  .hint-panel{display:none; background:var(--soft-amber); border-left:4px solid var(--amber); border-radius:0 6px 6px 0; padding:0.6rem 1rem; margin-top:0.6rem; font-size:0.9rem;}
+  .hint-panel.shown{display:block;}
+  .sm-feedback{font-weight:700; font-size:0.92rem;}
+  .sm-feedback.correct{color:var(--good);}
+  .sm-feedback.incorrect{color:var(--bad);}
+  .sm-feedback.long{display:block; font-weight:400; margin-top:0.6rem; padding:0.7rem 1rem; border-radius:6px; line-height:1.5;}
+  .sm-feedback.long.correct{background:var(--soft-green); border-left:4px solid var(--good); color:#145233;}
+  .sm-feedback.long.incorrect{background:var(--soft-bad); border-left:4px solid var(--bad); color:#7a1a14;}
+  .reading-input{border:1.5px solid var(--line); border-radius:6px; padding:0.4rem 0.6rem; font-size:0.95rem; font:inherit; color:inherit; width:130px; background:#fff;}
+  .reading-input:focus{outline:none; border-color:var(--teal); box-shadow:0 0 0 3px rgba(14,124,134,0.12);}
+  .progress-status{font-size:0.72rem; color:#5b6b78; white-space:nowrap; flex-shrink:0;}
+
+  .reading-row{display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; margin:0.5rem 0;}
+  .reading-row .lbl{min-width:2.4rem; font-weight:700; color:var(--navy);}
+
+  figure{margin:1.2rem auto; text-align:center; max-width:560px;}
+  figure.wide{max-width:none;}
+  figure svg{max-width:100%; height:auto; max-height:340px;}
+  figcaption{font-size:0.85rem; color:#5b6b78; margin-top:0.4rem;}
+
+  table.eqtable{width:100%; border-collapse:collapse; font-size:0.92rem; margin-top:0.7rem;}
+  table.eqtable th, table.eqtable td{border:1px solid var(--border); padding:0.5rem 0.7rem; text-align:left;}
+  table.eqtable th{background:var(--soft-blue); color:var(--navy);}
+
+  dl.glossary dt{font-weight:700; color:var(--navy); margin-top:0.7rem;}
+  dl.glossary dd{margin-left:0; margin-bottom:0.2rem;}
+
+  .topbar{
+    position:fixed; top:0; left:0; right:0; height:56px; z-index:200;
+    background:#fff; border-bottom:1px solid var(--border); box-shadow:0 2px 8px rgba(0,0,0,0.06);
+    display:flex; align-items:center; gap:0.6rem; padding:0 1rem;
   }
-  .namebox input:focus{outline:none;border-bottom-color:var(--blue);}
-  h2.section-title{
-    color:var(--navy);
-    border-bottom:3px solid var(--blue);
-    padding-bottom:8px;
-    margin:40px 0 18px 0;
-    font-size:1.5rem;
+  .topbar-actions{
+    display:flex; align-items:center; gap:0.6rem; overflow-x:auto;
+    flex:1 1 auto; min-width:0; height:100%; padding-right:0.4rem;
   }
-  h3.sub-title{color:var(--navy);margin:28px 0 10px 0;font-size:1.15rem;}
-  .card{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:10px;
-    padding:20px 24px;
-    margin-bottom:18px;
-  }
-  .note{
-    background:#fbfcfe;
-    border-left:4px solid var(--blue);
-    padding:14px 18px;
-    margin:14px 0;
-    border-radius:0 6px 6px 0;
-  }
-  .note.formula{font-size:1.1rem;}
-  .formula-box{
-    border:2px solid var(--blue);
-    border-radius:8px;
-    padding:14px 20px;
-    background:#f7faff;
-    display:inline-block;
-    margin:10px 0;
-    font-size:1.05rem;
-  }
-  .diagram-row{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start;margin:14px 0;}
-  .diagram-cap{font-size:0.85rem;color:var(--muted);text-align:center;margin-top:4px;max-width:280px;}
-  figure{margin:0;text-align:center;}
-  .q{
-    border:1px solid var(--border);
-    border-radius:8px;
-    padding:16px 20px;
-    margin:16px 0;
-    background:#fbfcfe;
-  }
-  .q .qtitle{font-weight:600;color:var(--navy);margin-bottom:8px;}
-  .q .qsub{margin:10px 0;}
-  .q .qsub label{margin-right:6px;}
-  select.mcq-select, input.mcq-input{
-    font-size:1rem;padding:6px 10px;border:1px solid var(--border);border-radius:6px;margin-left:6px;
-  }
-  .qinput{width:110px;padding:5px 8px;border:1px solid var(--border);border-radius:6px;font-size:0.95rem;}
-  .reveal-btn{
-    background:var(--navy);color:#fff;border:none;border-radius:6px;
-    padding:8px 16px;font-size:0.9rem;cursor:pointer;margin-top:8px;
-  }
-  .reveal-btn:hover{background:var(--navy-dark);}
-  .solution{
-    display:none;
-    background:#f1f5fb;
-    border:1px dashed #9fb3d1;
-    border-radius:6px;
-    padding:12px 16px;
-    margin-top:10px;
-    font-size:0.95rem;
-  }
-  .solution.show{display:block;}
-  .check-btn{
-    background:var(--blue);color:#fff;border:none;border-radius:6px;
-    padding:7px 16px;font-size:0.9rem;cursor:pointer;margin-right:8px;
-  }
-  .check-btn:hover{background:#1d4fc4;}
-  .feedback{margin-left:10px;font-weight:600;font-size:0.9rem;}
-  .feedback.correct{color:var(--good);}
-  .feedback.incorrect{color:var(--bad);}
-  .circuit-block{
-    border:1px solid var(--border);border-radius:10px;padding:18px 22px;margin:20px 0;background:#fff;
-  }
-  .circuit-flex{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start;}
-  .answer-box{
-    border:2px solid var(--blue);border-radius:8px;padding:14px 18px;min-width:230px;background:#f7faff;
-  }
-  .answer-box table{border-collapse:collapse;}
-  .answer-box td{padding:5px 6px;}
-  .answer-box input{width:95px;padding:4px 6px;border:1px solid var(--border);border-radius:5px;}
-  .credit{font-size:0.75rem;color:var(--muted);margin-top:4px;}
-  .summary-card{
-    background:var(--navy);color:#fff;border-radius:10px;padding:24px;margin-top:36px;
-  }
-  .summary-card h2{color:#fff;border-bottom:2px solid #5a7ac0;}
-  #scoreLine{font-size:1.3rem;font-weight:700;margin:10px 0;}
-  #summaryText{
-    width:100%;min-height:140px;background:#0f1a30;color:#d8e2f5;border:1px solid #3a4d75;
-    border-radius:6px;padding:10px;font-family:monospace;font-size:0.85rem;
-  }
-  .copy-btn{
-    background:#fff;color:var(--navy);border:none;border-radius:6px;padding:10px 20px;
-    font-weight:700;cursor:pointer;margin-top:10px;
-  }
-  .flag{color:var(--red);font-size:0.85rem;}
-  ol.notes-list li{margin-bottom:8px;}
-  /* --- Simulation embed --- */
-  .sim-card{
-    border:2px solid var(--blue);border-radius:10px;padding:20px 24px;margin:18px 0;background:#f7faff;
-  }
-  .sim-frame-wrap{border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#fff;}
-  .sim-frame-wrap iframe{width:100%;height:620px;border:none;display:block;}
-  .sim-credit{
-    font-size:0.85rem;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--border);
-  }
-  .sim-credit a{color:var(--blue);text-decoration:none;font-weight:600;}
-  .sim-credit a:hover{text-decoration:underline;}
-  /* --- Exam-style question section (Part C) --- */
-  .examq-section{margin-top:40px;}
-  .examq-section h2.section-title{border-bottom-color:#0d9488;}
-  .examq-card{
-    background:#ecfdf9;
-    border:2px solid #0d9488;
-    border-radius:10px;
-    padding:20px 24px;
-    margin:16px 0;
-  }
-  .examq-badge{
-    display:inline-block;
-    background:#0d9488;
-    color:#fff;
-    font-size:0.72rem;
-    font-weight:700;
-    letter-spacing:0.06em;
-    text-transform:uppercase;
-    padding:4px 12px;
-    border-radius:20px;
-    margin-bottom:12px;
-  }
-  .examq-note{font-size:0.85rem;color:#0f6d63;margin:0 0 14px 0;}
-  .examq-card .check-btn{background:#0d9488;}
-  .examq-card .check-btn:hover{background:#0b7d73;}
-  .examq-card .reveal-btn{background:#115e59;}
-  .examq-card .reveal-btn:hover{background:#0c433f;}
-  .print-btn-row{text-align:center;margin:30px 0 8px;}
-  .print-btn{background:var(--navy);color:#fff;border:none;padding:12px 30px;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;font-family:inherit;}
-  .print-btn:hover{opacity:0.9;}
+  .topbar .topbar-title{font-weight:700; color:var(--navy); font-size:0.92rem; white-space:nowrap; flex-shrink:0; margin-right:0.4rem;}
+  .topbar button{background:#fff; color:var(--navy); border:1px solid var(--border); border-radius:50px; padding:0.5rem 1rem; font-size:0.82rem; cursor:pointer; white-space:nowrap; flex-shrink:0;}
+  .topbar button:hover{background:var(--soft-blue);}
+  .topbar button.primary{background:var(--amber); color:#fff; border-color:var(--amber); font-weight:600; flex-shrink:0;}
+  .topbar button.primary:hover{background:#c0721c;}
+  .topbar .save-status{font-size:0.72rem; color:#5b6b78; white-space:nowrap; flex-shrink:0;}
+  @media (max-width: 900px){ .topbar .save-status{display:none;} }
+  @media (max-width: 620px){ .topbar .topbar-title{display:none;} }
+  footer.page{font-size:0.8rem; color:#7c8b98; text-align:center; margin-top:2rem;}
+
+  .sim-embed{background:#fff; border:1px solid var(--border); border-radius:10px; padding:1rem 1.2rem; margin:1rem 0;}
+  .sim-embed p.instructions{margin:0 0 0.6rem 0; font-size:0.92rem; color:#3a4753;}
+  .sim-frame{width:100%; border:none; display:block; border-radius:8px; height:560px;}
+  .sim-embed-credit{text-align:center; font-size:0.82rem; color:#7c8b98; margin-top:0.6rem;}
+  .sim-print-note{display:none;}
+
   @media print{
-    .print-btn-row{display:none !important;}
-    .check-btn,.reveal-btn,.hint-btn,.copy-btn{display:none !important;}
-    .hint,.solution{display:block !important;}
-    body{background:#fff;padding:6px;}
-    .card,.circuit-block,.examq-card{page-break-inside:avoid;break-inside:avoid;}
-    iframe{display:none !important;}
+    .topbar, .reveal-btn, .check-btn, .hint-btn{display:none !important;}
+    main{max-width:100%; padding:0; margin:0;}
+    body{background:#fff; font-size:11.5pt; padding-top:0;}
+    section.topic{border:none; box-shadow:none; padding:0; margin:0 0 1.2rem 0; page-break-inside:avoid;}
+    .cover{page-break-after:always; border-radius:0;}
+    .answer-panel{display:block !important; border-style:solid;}
+    .hint-panel{display:block !important;}
+    a{color:inherit; text-decoration:none;}
+    .page-break{page-break-before:always;}
+    .answer-lines{border-color:transparent !important; box-shadow:none !important; color:#000;}
+    .answer-lines::placeholder{color:transparent;}
+    .sm-input.answer-lines{border-bottom:1.5px solid #5b6b78 !important; border-top:none !important; border-left:none !important; border-right:none !important; border-radius:0 !important;}
+    .sm-feedback, .progress-status{display:none !important;}
+    .name-box .fill{color:#000; border-bottom-color:#5b6b78;}
+    .name-box .fill::placeholder{color:transparent;}
+    .sim-frame, .sim-embed-credit, .sim-embed p.instructions{display:none !important;}
+    .sim-print-note{display:block !important; text-align:center; font-size:0.85rem; color:#5b6b78; padding:0.9rem; border:1px dashed #b9c6d3; border-radius:8px; margin:0.6rem 0;}
   }
+
+
 </style>
 </head>
 <body>
+<div class="topbar no-print">
+  <div class="topbar-actions">
+    <span class="topbar-title">EMF and Internal Resistance</span>
+    <button onclick="revealAll()">Show all answers</button>
+    <button onclick="hideAll()">Hide all answers</button>
+    <button onclick="clearMyAnswers()">Clear my answers</button>
+    <button onclick="saveAnswersToFile()">💾 Save answers</button>
+    <button onclick="triggerLoadAnswers()">📂 Load answers</button>
+    <input type="file" id="loadFileInput" accept="application/json" style="display:none" onchange="handleLoadFile(event)">
+    <button id="btnLinkFile" style="display:none;" onclick="linkSaveFile()">🔗 Link a save file</button>
+    <span class="progress-status" id="progressStatus"></span>
+    <span class="save-status" id="saveStatus">Checking autosave…</span>
+  </div>
+  <button class="primary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+</div>
 
-<header class="top"><div class="inner">
-  <h1>EMF and Internal Resistance</h1>
-</div></header>
+<main>
+  <section class="cover" id="cover">
+    <h1>EMF and Internal Resistance</h1>
+    <div class="goals" style="margin-top:1.3rem;">
+      <strong style="color:#fff;">By the end of this workbook you should be able to:</strong>
+      <ul>
+        <li>distinguish emf (energy per coulomb supplied) from terminal p.d. (energy per coulomb available to the external circuit)</li>
+        <li>explain, using &epsilon; = I(R + r), why terminal p.d. falls as current increases, in terms of the cell's internal resistance</li>
+        <li>find the emf and internal resistance of a cell from a V against I graph (or from a simulated/practical investigation)</li>
+        <li>solve circuit problems involving cells with internal resistance, including series/parallel combinations of external resistors</li>
+        <li>calculate power dissipated in the external resistance and in the internal resistance of a cell</li>
+      </ul>
+    </div>
+    <div class="name-box">
+      <label>Name</label><input type="text" class="fill" id="studentName" autocomplete="name">
+    </div>
+  </section>
 
-<div class="wrap">
-
-<h2 class="section-title">Part A — Notes: emf and internal resistance</h2>
-
-<div class="card">
-  <h3 class="sub-title" style="margin-top:0">emf and potential difference</h3>
-  <p>In a circuit there are components that put energy <strong>into</strong> the circuit, and components that take energy <strong>out</strong> of it.</p>
-  <p>A device putting energy into a circuit is providing an <strong>electromotive force (emf)</strong>. A device taking energy out of the circuit has a <strong>potential difference (p.d.)</strong> across it. Both emf and p.d. are measured in volts, V.</p>
-  <ul>
+  <section class="topic" id="s1">
+    <h2>Part A &mdash; emf and internal resistance</h2>
+    <h3>emf and potential difference</h3>
+    <p>In a circuit there are components that put energy <strong>into</strong> the circuit, and components that take energy <strong>out</strong> of it.</p>
+    <p>A device putting energy into a circuit is providing an <strong>electromotive force (emf)</strong>. A device taking energy out of the circuit has a <strong>potential difference (p.d.)</strong> across it. Both emf and p.d. are measured in volts, V.</p>
+    <ul>
     <li><strong>Emf, ε</strong> — the total energy transferred (theoretical maximum) per coulomb of charge that passes through the source.</li>
     <li><strong>Potential difference</strong> — the energy transferred <em>out of</em> the circuit per coulomb of charge.</li>
   </ul>
-</div>
 
-<div class="card">
-  <h3 class="sub-title" style="margin-top:0">Terminal p.d. and "lost volts"</h3>
-  <p>When a cell is supplying no current, the potential difference across the cell (its <strong>terminal p.d.</strong>) is equal to its emf. Once the cell starts supplying current, some of the emf is "lost" — dissipated through heating the cell.</p>
-  <div class="diagram-row">
-    <figure>
-      <svg width="230" height="170" viewBox="0 0 230 170">
+    <h3>Terminal p.d. and &ldquo;lost volts&rdquo;</h3>
+    <p>When a cell is supplying no current, the potential difference across the cell (its <strong>terminal p.d.</strong>) is equal to its emf. Once the cell starts supplying current, some of the emf is "lost" — dissipated through heating the cell.</p>
+    <div style="display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;">
+      <figure>
+        <svg width="230" height="170" viewBox="0 0 230 170">
         <line x1="20" y1="30" x2="90" y2="30" stroke="#1b2a4a" stroke-width="2"/>
         <rect x="90" y="20" width="1.5" height="20" fill="#1b2a4a"/>
         <rect x="96.5" y="24" width="3.5" height="12" fill="#1b2a4a"/>
@@ -255,10 +239,10 @@
         <line x1="150" y1="140" x2="181" y2="120" stroke="#1b2a4a" stroke-width="2"/>
         <line x1="184" y1="140" x2="210" y2="140" stroke="#1b2a4a" stroke-width="2"/>
       </svg>
-      <div class="diagram-cap"><strong>Switch open, I = 0 A:</strong> V = 1.5 V = emf (no current, no p.d. lost internally)</div>
-    </figure>
-    <figure>
-      <svg width="230" height="170" viewBox="0 0 230 170">
+        <figcaption><strong>Switch open, I = 0 A:</strong> V = 1.5 V = emf (no current, no p.d. lost internally)</figcaption>
+      </figure>
+      <figure>
+        <svg width="230" height="170" viewBox="0 0 230 170">
         <line x1="20" y1="30" x2="90" y2="30" stroke="#1b2a4a" stroke-width="2"/>
         <rect x="90" y="20" width="1.5" height="20" fill="#1b2a4a"/>
         <rect x="96.5" y="24" width="3.5" height="12" fill="#1b2a4a"/>
@@ -285,21 +269,20 @@
         <line x1="150" y1="140" x2="184" y2="140" stroke="#1b2a4a" stroke-width="2"/>
         <line x1="184" y1="140" x2="210" y2="140" stroke="#1b2a4a" stroke-width="2"/>
       </svg>
-      <div class="diagram-cap"><strong>Switch closed, I = 0.2 A:</strong> V = 1.4 V. p.d. lost = 1.5 − 1.4 = 0.1 V</div>
-    </figure>
-  </div>
-  <p>As the current increases further (I = 0.4 A), the terminal p.d. drops again (V = 1.3 V, so p.d. lost = 0.2 V). The larger the current, the more potential difference is "lost" inside the cell.</p>
-</div>
+        <figcaption><strong>Switch closed, I = 0.2 A:</strong> V = 1.4 V. p.d. lost = 1.5 − 1.4 = 0.1 V</figcaption>
+      </figure>
+    </div>
 
-<div class="card">
-  <h3 class="sub-title" style="margin-top:0">Internal resistance</h3>
-  <p>An electrical cell is made from metals and chemicals which themselves have some resistance. This is called the <strong>internal resistance</strong> of the cell, r.</p>
-  <div class="note">This resistance is small, so it is given the symbol "little r."</div>
-  <p>Inside the cell, energy is put into the circuit by the emf (ε), but some of this energy is taken back out by the internal resistance before it ever reaches the rest of the circuit. So the p.d. available to the rest of the circuit is:</p>
-  <div class="formula-box">available p.d. = emf − p.d. lost internally</div>
-  <div class="diagram-row">
-    <figure>
-      <svg width="320" height="170" viewBox="0 0 320 170">
+    <p>As the current increases further (I = 0.4 A), the terminal p.d. drops again (V = 1.3 V, so p.d. lost = 0.2 V). The larger the current, the more potential difference is "lost" inside the cell.</p>
+
+    <h3>Internal resistance</h3>
+    <p>An electrical cell is made from metals and chemicals which themselves have some resistance. This is called the <strong>internal resistance</strong> of the cell, r.</p>
+    <div class="keybox">This resistance is small, so it is given the symbol &ldquo;little r.&rdquo;</div>
+    <p>Inside the cell, energy is put into the circuit by the emf (ε), but some of this energy is taken back out by the internal resistance before it ever reaches the rest of the circuit. So the p.d. available to the rest of the circuit is:</p>
+    <div class="eqn">available p.d. = emf &minus; p.d. lost internally</div>
+    <div style="display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;">
+      <figure>
+        <svg width="320" height="170" viewBox="0 0 320 170">
         <line x1="20" y1="30" x2="90" y2="30" stroke="#1b2a4a" stroke-width="2"/>
         <line x1="120" y1="30" x2="170" y2="30" stroke="#1b2a4a" stroke-width="2"/>
         <rect x="90" y="20" width="1.5" height="20" fill="#1b2a4a"/>
@@ -322,25 +305,24 @@
         <rect x="120" y="131" width="70" height="18" fill="#fff" stroke="#1b2a4a" stroke-width="2"/>
         <text x="155" y="164" text-anchor="middle" font-size="11">R</text>
       </svg>
-      <div class="diagram-cap">The emf source (ε) and internal resistance (r) act together — you cannot get between them in a real cell. V is the terminal p.d.; R is the external (load) resistance.</div>
-    </figure>
-  </div>
-  <p>Using Ohm's law: emf = p.d. across R + p.d. across r, and since the same current I flows through both:</p>
-  <div class="formula-box">ε = IR + Ir &nbsp;&nbsp;&nbsp;&nbsp; ε = I(R + r)</div>
-</div>
+        <figcaption>The emf source (ε) and internal resistance (r) act together — you cannot get between them in a real cell. V is the terminal p.d.; R is the external (load) resistance.</figcaption>
+      </figure>
+    </div>
 
-<div class="card">
-  <h3 class="sub-title" style="margin-top:0">Finding emf and r from a graph</h3>
-  <p>Rearranging ε = I(R + r) in terms of the terminal p.d., V (where V = IR):</p>
-  <div class="formula-box">ε = V + Ir &nbsp;&nbsp;&nbsp;&nbsp; V = −Ir + ε</div>
-  <p>This has the same form as a straight-line graph, y = mx + c, if we plot V (y-axis) against I (x-axis):</p>
-  <ul>
+    <p>Using Ohm's law: emf = p.d. across R + p.d. across r, and since the same current I flows through both:</p>
+    <div class="eqn">&epsilon; = IR + Ir &nbsp;&nbsp;&nbsp;&nbsp; &epsilon; = I(R + r)</div>
+
+    <h3>Finding emf and r from a graph</h3>
+    <p>Rearranging ε = I(R + r) in terms of the terminal p.d., V (where V = IR):</p>
+    <div class="eqn">&epsilon; = V + Ir &nbsp;&nbsp;&nbsp;&nbsp; V = &minus;Ir + &epsilon;</div>
+    <p>This has the same form as a straight-line graph, y = mx + c, if we plot V (y-axis) against I (x-axis):</p>
+    <ul>
     <li>gradient, m = −r (so the internal resistance is the <strong>magnitude</strong> of the gradient)</li>
     <li>y-intercept, c = ε (the emf is the value of V when the graph is extrapolated back to I = 0)</li>
   </ul>
-  <div class="diagram-row">
-    <figure>
-      <svg width="260" height="190" viewBox="0 0 260 190">
+    <div style="display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;">
+      <figure>
+        <svg width="260" height="190" viewBox="0 0 260 190">
         <line x1="40" y1="160" x2="245" y2="160" stroke="#1b2a4a" stroke-width="2"/>
         <polygon points="252,160 242,155 242,165" fill="#1b2a4a"/>
         <line x1="40" y1="160" x2="40" y2="15" stroke="#1b2a4a" stroke-width="2"/>
@@ -355,16 +337,17 @@
         <text x="108" y="76" font-size="12" font-style="italic">gradient = −r</text>
         <text x="188" y="178" font-size="11">I(max)</text>
       </svg>
-      <div class="diagram-cap">Sketch graph of V against I: the y-intercept (extrapolated back to I = 0) gives the emf, ε, and the magnitude of the (negative) gradient gives the internal resistance, r.</div>
-    </figure>
-  </div>
-</div>
+        <figcaption>Sketch graph of V against I: the y-intercept (extrapolated back to I = 0) gives the emf, ε, and the magnitude of the (negative) gradient gives the internal resistance, r.</figcaption>
+      </figure>
+    </div>
 
-<div class="sim-card">
-  <h3 class="sub-title" style="margin-top:0">Try it yourself — interactive simulation</h3>
-  <p>Use the simulation below to carry out the investigation yourself. With the switch open, the voltmeter reads the emf. Close the switch, vary the rheostat, and record several V–I pairs — then plot V against I: the y-intercept (extrapolated to I = 0) gives the emf, and the magnitude of the gradient gives the internal resistance.</p>
-  <div class="sim-frame-wrap">
-    <iframe title="Finding the EMF and Internal Resistance of a Cell" loading="lazy" srcdoc="<!-- ===================================================================
+  </section>
+
+  <section class="topic" id="s2">
+    <h3>Try it yourself &mdash; interactive simulation</h3>
+    <div class="sim-embed">
+      <p class="instructions">Use the simulation below to carry out the investigation yourself. With the switch open, the voltmeter reads the emf. Close the switch, vary the rheostat, and record several V&ndash;I pairs &mdash; then plot V against I: the y-intercept (extrapolated to I = 0) gives the emf, and the magnitude of the gradient gives the internal resistance.</p>
+      <iframe title="Finding the EMF and Internal Resistance of a Cell" loading="lazy" srcdoc="<!-- ===================================================================
      EMF &amp; Internal Resistance of a Cell - investigation
      Single-file, embed-safe HTML. All CSS/JS scoped under #ir-sim-root.
      Method: V = e - I r  ->  intercept = EMF, |gradient| = internal resistance.
@@ -1111,77 +1094,83 @@
   })();
   </script>
 </div>"></iframe>
-  </div>
-  <div class="sim-credit">
-    Simulation created by <strong>Dr Dan Jones</strong> (Dr Jones Physics) — used with attribution.<br>
-    View the original and more physics simulations at <a href="https://www.drjonesphysics.com/emf-expt" target="_blank" rel="noopener">drjonesphysics.com/emf-expt</a>.
-  </div>
-</div>
+      <p class="sim-print-note">Interactive simulation &mdash; open the online version of this workbook to launch it.</p>
+      <p class="sim-embed-credit">Simulation created by <strong>Dr Dan Jones</strong> (Dr Jones Physics) &mdash; used with attribution. View the original and more physics simulations at <a href="https://www.drjonesphysics.com/emf-expt" target="_blank" rel="noopener">drjonesphysics.com/emf-expt</a>.</p>
+    </div>
 
-<div class="card">
-  <h3 class="sub-title" style="margin-top:0">Worked examples</h3>
-  <p><strong>Example 1.</strong> What is the terminal p.d. for a cell of emf 2 V and internal resistance 1 Ω when it is connected to a 9 Ω resistor?</p>
-  <div class="note">
+    <h3>Worked examples</h3>
+    <div class="example">
+      <span class="tag">Worked example 1</span>
+      <p>What is the terminal p.d. for a cell of emf 2 V and internal resistance 1 Ω when it is connected to a 9 Ω resistor?</p>
+      <p><strong>Answer:</strong><br>
     ε = IR + Ir = I(R + r)<br><br>
     2 = I(9 + 1)<br><br>
     I = 2/10 = 0.2 A<br><br>
     V = IR = 0.2 × 9 = 1.8 V<br><br>
     So this 2 V cell actually supplies only 1.8 V to the external circuit.
-  </div>
-  <p><strong>Example 2.</strong> Find the internal resistance of the cell if the emf is 2 V, the current is 0.2 A and R = 9 Ω.</p>
-  <div class="note">
+  </p>
+    </div>
+    <div class="example">
+      <span class="tag">Worked example 2</span>
+      <p>Find the internal resistance of the cell if the emf is 2 V, the current is 0.2 A and R = 9 Ω.</p>
+      <p><strong>Answer:</strong><br>
     ε = I(R + r)<br><br>
     2 = 0.2(9 + r)<br><br>
     r = 1 Ω
-  </div>
-  <p><strong>Example 3.</strong> The p.d. across the terminals of a cell is 3.0 V when it is not connected to a circuit (no current flowing). When connected to a circuit with a current of 0.37 A flowing, the terminal p.d. falls to 2.8 V. What is the internal resistance of the cell?</p>
-  <div class="note">
+  </p>
+    </div>
+    <div class="example">
+      <span class="tag">Worked example 3</span>
+      <p>The p.d. across the terminals of a cell is 3.0 V when it is not connected to a circuit (no current flowing). When connected to a circuit with a current of 0.37 A flowing, the terminal p.d. falls to 2.8 V. What is the internal resistance of the cell?</p>
+      <p><strong>Answer:</strong><br>
     ε − V = Ir<br><br>
     3.0 − 2.8 = Ir<br><br>
     r = 0.2 / 0.37 = 0.54 Ω
-  </div>
-</div>
+  </p>
+    </div>
+  </section>
 
-<h2 class="section-title">Part B — Workbook: review questions</h2>
-<p>This is a review lesson, so most of the questions below revisit ideas you have already met. Use them to check how confident you are before the exam-style question at the end.</p>
-
-<h3 class="sub-title" style="margin-top:0">Your turn</h3>
-
-<div class="q" data-type="numeric" data-answer="1" data-tol="0.03" data-qname="Your turn 1: r from I=0.5A">
-  <div class="qtitle">1. A current of 0.5 A flows when a cell of emf 6 V is connected to an 11 Ω resistor. What is the internal resistance of the cell?</div>
-  r = <input type="text" class="qinput"> Ω
-  <button class="check-btn" onclick="checkNumeric(this)">Check</button>
-  <span class="feedback"></span>
-  <button class="reveal-btn" onclick="toggleSolution(this)">Show working</button>
-  <div class="solution">
-    ε = I(R + r)<br><br>
+  <section class="topic" id="s3">
+    <h2>Part B &mdash; Workbook: review questions</h2>
+    <p>This is a review lesson, so most of the questions below revisit ideas you have already met. Use them to check how confident you are before the exam-style question at the end.</p>
+    <h3>Your turn</h3>
+    <div class="question sm-question" data-qtype="number" data-answer="1" data-tol="0.03" id="q1">
+      <span class="qnum">1</span><strong>1. A current of 0.5 A flows when a cell of emf 6 V is connected to an 11 Ω resistor. What is the internal resistance of the cell?</strong>
+      <div class="sm-row">
+        r = <input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="Answer to question 1"> <span class="sm-unit">Ω</span>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q1-ans')">Show working</button>
+      <div class="answer-panel" id="q1-ans">ε = I(R + r)<br><br>
     6 = 0.5(11 + r)<br><br>
     12 = 11 + r<br><br>
-    r = … Ω
-  </div>
-</div>
+    r = … Ω</div>
+    </div>
+    <div class="question sm-question" data-qtype="number" data-answer="11.5" data-tol="0.02" id="q2">
+      <span class="qnum">2</span><strong>2. A 12 V cell with internal resistance 1 Ω is connected to a 23 Ω resistor. What is the p.d. across the 23 Ω resistor?</strong>
+      <div class="sm-row">
+        V = <input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="Answer to question 2"> <span class="sm-unit">V</span>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q2-ans')">Show working</button>
+      <div class="answer-panel" id="q2-ans">I = ε/(R + r) = 12/(23 + 1) = 0.5 A. V = IR = 0.5 × 23 = … V</div>
+    </div>
+    <div class="question sm-question" data-qtype="number" data-answer="7.5" data-tol="0.02" id="q3">
+      <span class="qnum">3</span><strong>3. A cell of emf 12 V and internal resistance r = 1.5 Ω produces a current of 3.0 A. What is the potential difference across the cell terminals?</strong>
+      <div class="sm-row">
+        V = <input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="Answer to question 3"> <span class="sm-unit">V</span>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q3-ans')">Show working</button>
+      <div class="answer-panel" id="q3-ans">V = ε − Ir = 12 − (3.0 × 1.5) = 12 − 4.5 = … V</div>
+    </div>
 
-<div class="q" data-type="numeric" data-answer="11.5" data-tol="0.02" data-qname="Your turn 2: V across 23Ω">
-  <div class="qtitle">2. A 12 V cell with internal resistance 1 Ω is connected to a 23 Ω resistor. What is the p.d. across the 23 Ω resistor?</div>
-  V = <input type="text" class="qinput"> V
-  <button class="check-btn" onclick="checkNumeric(this)">Check</button>
-  <span class="feedback"></span>
-  <button class="reveal-btn" onclick="toggleSolution(this)">Show working</button>
-  <div class="solution">I = ε/(R + r) = 12/(23 + 1) = 0.5 A. V = IR = 0.5 × 23 = … V</div>
-</div>
-
-<div class="q" data-type="numeric" data-answer="7.5" data-tol="0.02" data-qname="Your turn 3: terminal pd, I=3A">
-  <div class="qtitle">3. A cell of emf 12 V and internal resistance r = 1.5 Ω produces a current of 3.0 A. What is the potential difference across the cell terminals?</div>
-  V = <input type="text" class="qinput"> V
-  <button class="check-btn" onclick="checkNumeric(this)">Check</button>
-  <span class="feedback"></span>
-  <button class="reveal-btn" onclick="toggleSolution(this)">Show working</button>
-  <div class="solution">V = ε − Ir = 12 − (3.0 × 1.5) = 12 − 4.5 = … V</div>
-</div>
-
-<div class="diagram-row">
-  <figure>
-    <svg width="300" height="250" viewBox="0 0 300 250">
+    <div style="display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;">
+      <figure>
+        <svg width="300" height="250" viewBox="0 0 300 250">
       <line x1="40" y1="40" x2="90" y2="40" stroke="#1b2a4a" stroke-width="2"/>
       <rect x="90" y="30" width="1.5" height="20" fill="#1b2a4a"/>
       <rect x="96.5" y="34" width="3.5" height="12" fill="#1b2a4a"/>
@@ -1203,10 +1192,10 @@
       <text x="110" y="222" text-anchor="middle" font-size="11">R</text>
       <line x1="130" y1="190" x2="210" y2="190" stroke="#1b2a4a" stroke-width="2"/>
     </svg>
-    <div class="diagram-cap"><strong>(a) Parallel:</strong> the two resistors in parallel, ammeter reads the current leaving the cell.</div>
-  </figure>
-  <figure>
-    <svg width="260" height="170" viewBox="0 0 260 170">
+        <figcaption><strong>(a) Parallel:</strong> the two resistors in parallel, ammeter reads the current leaving the cell.</figcaption>
+      </figure>
+      <figure>
+        <svg width="260" height="170" viewBox="0 0 260 170">
       <line x1="20" y1="30" x2="90" y2="30" stroke="#1b2a4a" stroke-width="2"/>
       <rect x="90" y="20" width="1.5" height="20" fill="#1b2a4a"/>
       <rect x="96.5" y="24" width="3.5" height="12" fill="#1b2a4a"/>
@@ -1227,38 +1216,39 @@
       <text x="160" y="164" text-anchor="middle" font-size="11">R</text>
       <line x1="180" y1="140" x2="210" y2="140" stroke="#1b2a4a" stroke-width="2"/>
     </svg>
-    <div class="diagram-cap"><strong>(b) Series:</strong> the same two resistors in series, ammeter reads the total current.</div>
-  </figure>
-</div>
+        <figcaption><strong>(b) Series:</strong> the same two resistors in series, ammeter reads the total current.</figcaption>
+      </figure>
+    </div>
 
-<div class="q" data-type="numeric" data-answer="3.25" data-tol="0.02" data-qname="Your turn 4: two 4Ω resistors (r)">
-  <div class="qtitle">4. When two 4.0 Ω resistors are connected in parallel with a cell, the current leaving the cell is 3.0 A. When the same two resistors are connected in series with the cell, the total current is 1.4 A. Calculate the internal resistance of the cell.</div>
-  r = <input type="text" class="qinput"> Ω
-  <button class="check-btn" onclick="checkNumeric(this)">Check</button>
-  <span class="feedback"></span>
-  <button class="reveal-btn" onclick="toggleSolution(this)">Show working</button>
-  <div class="solution">
-    Parallel: R = (4×4)/(4+4) = 2 Ω, so ε = 3.0(2 + r) = 6 + 3r.<br><br>
+    <div class="question sm-question" data-qtype="number" data-answer="3.25" data-tol="0.02" id="q4">
+      <span class="qnum">4</span><strong>4. When two 4.0 Ω resistors are connected in parallel with a cell, the current leaving the cell is 3.0 A. When the same two resistors are connected in series with the cell, the total current is 1.4 A. Calculate the internal resistance of the cell.</strong>
+      <div class="sm-row">
+        r = <input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="Answer to question 4"> <span class="sm-unit">Ω</span>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q4-ans')">Show working</button>
+      <div class="answer-panel" id="q4-ans">Parallel: R = (4×4)/(4+4) = 2 Ω, so ε = 3.0(2 + r) = 6 + 3r.<br><br>
     Series: R = 4+4 = 8 Ω, so ε = 1.4(8 + r) = 11.2 + 1.4r.<br><br>
     Setting equal: 6 + 3r = 11.2 + 1.4r<br><br>
     1.6r = 5.2<br><br>
-    r = … Ω.
-  </div>
-</div>
+    r = … Ω.</div>
+    </div>
+    <div class="question sm-question" data-qtype="number" data-answer="15.75" data-tol="0.02" id="q5">
+      <span class="qnum">5</span><strong>4 (continued). Using your value of r, calculate the emf of the cell.</strong>
+      <div class="sm-row">
+        ε = <input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="Answer to question 5"> <span class="sm-unit">V</span>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q5-ans')">Show working</button>
+      <div class="answer-panel" id="q5-ans">ε = 6 + 3r = 6 + 3(3.25) = … V (check: ε = 11.2 + 1.4r = 11.2 + 1.4(3.25) gives the same value)</div>
+    </div>
 
-<div class="q" data-type="numeric" data-answer="15.75" data-tol="0.02" data-qname="Your turn 4: two 4Ω resistors (emf)">
-  <div class="qtitle">4 (continued). Using your value of r, calculate the emf of the cell.</div>
-  ε = <input type="text" class="qinput"> V
-  <button class="check-btn" onclick="checkNumeric(this)">Check</button>
-  <span class="feedback"></span>
-  <button class="reveal-btn" onclick="toggleSolution(this)">Show working</button>
-  <div class="solution">ε = 6 + 3r = 6 + 3(3.25) = … V (check: ε = 11.2 + 1.4r = 11.2 + 1.4(3.25) gives the same value)</div>
-</div>
-
-<p>A cell of emf 12 V and internal resistance r = 2 Ω is connected to two resistors, X = 6 Ω and Y = 6 Ω, in parallel.</p>
-<div class="circuit-block">
-  <div class="circuit-flex">
-    <svg width="300" height="250" viewBox="0 0 300 250">
+    <div class="question" id="parallel-circuit">
+      <p><strong>A cell of emf 12 V and internal resistance r = 2 &Omega; is connected to two resistors, X = 6 &Omega; and Y = 6 &Omega;, in parallel.</strong></p>
+      <figure>
+        <svg width="300" height="250" viewBox="0 0 300 250">
       <line x1="40" y1="40" x2="90" y2="40" stroke="#1b2a4a" stroke-width="2"/>
       <rect x="90" y="30" width="1.5" height="20" fill="#1b2a4a"/>
       <rect x="96.5" y="34" width="3.5" height="12" fill="#1b2a4a"/>
@@ -1283,58 +1273,53 @@
       <text x="110" y="222" text-anchor="middle" font-size="11">X = 6 Ω</text>
       <line x1="130" y1="190" x2="210" y2="190" stroke="#1b2a4a" stroke-width="2"/>
     </svg>
-    <div class="answer-box">
-      <table>
-        <tr><td>ε = 12 V, r = 2 Ω</td></tr>
-        <tr><td>X = Y = 6 Ω</td></tr>
-        <tr><td>Current through cell =</td><td><input class="reading-input" data-answer="2.4" data-tol="0.03"> A</td></tr>
-        <tr><td>Current through each branch =</td><td><input class="reading-input" data-answer="1.2" data-tol="0.03"> A</td></tr>
-      </table>
-    </div>
-  </div>
-  <button class="check-btn" onclick="checkCircuit(this)">Check circuit</button>
-  <span class="feedback"></span>
-  <button class="reveal-btn" onclick="toggleSolution(this)">Show working</button>
-  <div class="solution">
-    X ∥ Y = (6×6)/(6+6) = 3 Ω<br><br>
+      </figure>
+      <div class="reading-row"><span class="lbl" style="min-width:auto;">ε = 12 V, r = 2 Ω</span></div>
+      <div class="reading-row"><span class="lbl" style="min-width:auto;">X = Y = 6 Ω</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="2.4" data-tol="0.03" data-notype="true"><span class="lbl">Current through cell =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="Current through cell = reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="1.2" data-tol="0.03" data-notype="true"><span class="lbl">Current through each branch =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="Current through each branch = reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="reveal-btn no-print" onclick="toggleAnswer('parallel-circuit-ans')">Show working</button>
+      </div>
+      <div class="answer-panel" id="parallel-circuit-ans">X ∥ Y = (6×6)/(6+6) = 3 Ω<br><br>
     ε = I(R + r)<br><br>
     12 = I(3 + 2)<br><br>
     I = … A (current through the cell)<br><br>
-    Since X = Y, the current splits equally between the two branches: … A each.
-  </div>
-</div>
-
-<div class="q" data-type="mcq" data-answer="b" data-qname="Show me Q6: power in external R">
-  <div class="qtitle">6. Using the symbols ε, I, R and r, what is the formula for the power dissipated in the <strong>external resistance</strong>?</div>
-  <select class="mcq-select">
+    Since X = Y, the current splits equally between the two branches: … A each.</div>
+    </div>
+    <div class="question sm-question" data-qtype="mcq" data-answer="b" id="q6">
+      <span class="qnum">6</span><strong>6. Using the symbols ε, I, R and r, what is the formula for the power dissipated in the <strong>external resistance</strong>?</strong>
+      <div class="sm-row">
+        <select class="sm-input sm-select">
     <option value="">-- choose --</option>
     <option value="a">Iε²</option>
     <option value="b">I²R</option>
     <option value="c">Ir</option>
     <option value="d">I(r+R)</option>
   </select>
-  <button class="check-btn" onclick="checkMCQ(this)">Check</button>
-  <span class="feedback"></span>
-</div>
-
-<div class="q" data-type="mcq" data-answer="b" data-qname="Show me Q7: power in internal r">
-  <div class="qtitle">7. What is the formula for the power dissipated in the <strong>internal resistance</strong>?</div>
-  <select class="mcq-select">
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+    </div>
+    <div class="question sm-question" data-qtype="mcq" data-answer="b" id="q7">
+      <span class="qnum">7</span><strong>7. What is the formula for the power dissipated in the <strong>internal resistance</strong>?</strong>
+      <div class="sm-row">
+        <select class="sm-input sm-select">
     <option value="">-- choose --</option>
     <option value="a">Ir²</option>
     <option value="b">I²r</option>
     <option value="c">Iε</option>
     <option value="d">I(r+R)²</option>
   </select>
-  <button class="check-btn" onclick="checkMCQ(this)">Check</button>
-  <span class="feedback"></span>
-</div>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+    </div>
 
-<h3 class="sub-title">Self-assessment questions</h3>
-
-<div class="diagram-row">
-  <figure>
-    <svg width="230" height="190" viewBox="0 0 230 190">
+    <h3>Self-assessment questions</h3>
+    <div style="display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;">
+      <figure>
+        <svg width="230" height="190" viewBox="0 0 230 190">
       <line x1="20" y1="40" x2="85" y2="40" stroke="#1b2a4a" stroke-width="2"/>
       <rect x="85" y="30" width="1.5" height="20" fill="#1b2a4a"/>
       <rect x="91.5" y="34" width="3.5" height="12" fill="#1b2a4a"/>
@@ -1353,97 +1338,99 @@
       <line x1="133" y1="140" x2="210" y2="140" stroke="#1b2a4a" stroke-width="2"/>
       <text x="115" y="176" text-anchor="middle" font-size="11">2.5 V, 0.5 A</text>
     </svg>
-    <div class="diagram-cap">Two 1.5 V cells in series supplying a lamp rated 2.5 V, 0.5 A.</div>
-  </figure>
-</div>
+        <figcaption>Two 1.5 V cells in series supplying a lamp rated 2.5 V, 0.5 A.</figcaption>
+      </figure>
+    </div>
 
-<div class="q" data-type="numeric" data-answer="0.5" data-tol="0.03" data-qname="SA1: torch cells, r each">
-  <div class="qtitle">1. A typical hand-held torch runs off two 1.5 V cells (in series), yet has a lamp rated 2.5 V, 0.5 A. What is the internal resistance of each cell (assume they are identical)?</div>
-  r (each cell) = <input type="text" class="qinput"> Ω
-  <button class="check-btn" onclick="checkNumeric(this)">Check</button>
-  <span class="feedback"></span>
-  <button class="reveal-btn" onclick="toggleSolution(this)">Show working</button>
-  <div class="solution">
-    Total emf = 2 × 1.5 = 3 V<br><br>
+
+    <div class="question sm-question" data-qtype="number" data-answer="0.5" data-tol="0.03" id="q8">
+      <span class="qnum">8</span><strong>1. A typical hand-held torch runs off two 1.5 V cells (in series), yet has a lamp rated 2.5 V, 0.5 A. What is the internal resistance of each cell (assume they are identical)?</strong>
+      <div class="sm-row">
+        r (each cell) = <input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="Answer to question 8"> <span class="sm-unit">Ω</span>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q8-ans')">Show working</button>
+      <div class="answer-panel" id="q8-ans">Total emf = 2 × 1.5 = 3 V<br><br>
     ε = V + Ir<br><br>
     3 = 2.5 + (0.5 × r<sub>total</sub>)<br><br>
     r<sub>total</sub> = 0.5/0.5 = 1 Ω (for both cells), so r per cell = 1/2 = … Ω.<br><br>
-    (The 0.5 V "lost" is shared between the two cells.)
-  </div>
-</div>
-
-<div class="q" data-type="numeric" data-answer="4" data-tol="0.03" data-qname="SA2: car battery lost volts">
-  <div class="qtitle">2. A typical car battery has an emf of 12 V and must provide a current of 80 A to the starter motor. If the internal resistance is 0.05 Ω, find the potential difference across this internal resistance when the starter motor is running.</div>
-  V<sub>r</sub> = <input type="text" class="qinput"> V
-  <button class="check-btn" onclick="checkNumeric(this)">Check</button>
-  <span class="feedback"></span>
-  <button class="reveal-btn" onclick="toggleSolution(this)">Show working</button>
-  <div class="solution">V<sub>r</sub> = Ir = 80 × 0.05 = … V ("lost volts"). The car battery needs a very low internal resistance so it can supply this high current without losing too much terminal p.d. Starting the car with the headlights on dims them, because the extra 4 V lost internally leaves only 8 V for the lights instead of the full 12 V.</div>
-</div>
-
-<div class="q" data-type="numeric" data-answer="60" data-tol="0.05" data-qname="SA3: EHT max current">
-  <div class="qtitle">3. Some school laboratories have EHT (Extra High Tension) power packs giving up to 3000 V. For safety, they are provided with a 50 MΩ resistor in series with the supply. What is the maximum current that could be drawn from the supply? Give your answer in μA.</div>
-  I<sub>max</sub> = <input type="text" class="qinput"> μA
-  <button class="check-btn" onclick="checkNumeric(this)">Check</button>
-  <span class="feedback"></span>
-  <button class="reveal-btn" onclick="toggleSolution(this)">Show working</button>
-  <div class="solution">Maximum current happens when the external resistance is 0 (short circuit): I<sub>max</sub> = ε/r = 3000/(50×10⁶) = 6 × 10⁻⁵ A = … μA. A torch bulb of 10 Ω connected across this supply would only receive about I×R ≈ 6 × 10⁻⁴ V — the 50 MΩ resistor dominates completely, which is exactly why it's there for safety.</div>
-</div>
-
-<div class="q" data-type="numeric" data-answer="200" data-tol="0.05" data-qname="SA4: solar cell internal resistance">
-  <div class="qtitle">4. A student experimenting with a solar cell connects a 1000 Ω voltmeter across it and reads a p.d. of 1.0 V. Using an (almost) infinite-resistance digital voltmeter instead, the reading is larger: 1.2 V. What is the internal resistance of the solar cell?</div>
-  r = <input type="text" class="qinput"> Ω
-  <button class="check-btn" onclick="checkNumeric(this)">Check</button>
-  <span class="feedback"></span>
-  <button class="reveal-btn" onclick="toggleSolution(this)">Show working</button>
-  <div class="solution">
-    The low-resistance voltmeter allows a small current to flow, so it reads less than the true emf; the near-infinite-resistance voltmeter draws (almost) no current, so it reads the true emf ≈ 1.2 V.<br><br>
+    (The 0.5 V "lost" is shared between the two cells.)</div>
+    </div>
+    <div class="question sm-question" data-qtype="number" data-answer="4" data-tol="0.03" id="q9">
+      <span class="qnum">9</span><strong>2. A typical car battery has an emf of 12 V and must provide a current of 80 A to the starter motor. If the internal resistance is 0.05 Ω, find the potential difference across this internal resistance when the starter motor is running.</strong>
+      <div class="sm-row">
+        V<sub>r</sub> = <input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="Answer to question 9"> <span class="sm-unit">V</span>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q9-ans')">Show working</button>
+      <div class="answer-panel" id="q9-ans">V<sub>r</sub> = Ir = 80 × 0.05 = … V ("lost volts"). The car battery needs a very low internal resistance so it can supply this high current without losing too much terminal p.d. Starting the car with the headlights on dims them, because the extra 4 V lost internally leaves only 8 V for the lights instead of the full 12 V.</div>
+    </div>
+    <div class="question sm-question" data-qtype="number" data-answer="60" data-tol="0.05" id="q10">
+      <span class="qnum">10</span><strong>3. Some school laboratories have EHT (Extra High Tension) power packs giving up to 3000 V. For safety, they are provided with a 50 MΩ resistor in series with the supply. What is the maximum current that could be drawn from the supply? Give your answer in μA.</strong>
+      <div class="sm-row">
+        I<sub>max</sub> = <input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="Answer to question 10"> <span class="sm-unit">μA</span>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q10-ans')">Show working</button>
+      <div class="answer-panel" id="q10-ans">Maximum current happens when the external resistance is 0 (short circuit): I<sub>max</sub> = ε/r = 3000/(50×10⁶) = 6 × 10⁻⁵ A = … μA. A torch bulb of 10 Ω connected across this supply would only receive about I×R ≈ 6 × 10⁻⁴ V — the 50 MΩ resistor dominates completely, which is exactly why it's there for safety.</div>
+    </div>
+    <div class="question sm-question" data-qtype="number" data-answer="200" data-tol="0.05" id="q11">
+      <span class="qnum">11</span><strong>4. A student experimenting with a solar cell connects a 1000 Ω voltmeter across it and reads a p.d. of 1.0 V. Using an (almost) infinite-resistance digital voltmeter instead, the reading is larger: 1.2 V. What is the internal resistance of the solar cell?</strong>
+      <div class="sm-row">
+        r = <input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="Answer to question 11"> <span class="sm-unit">Ω</span>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q11-ans')">Show working</button>
+      <div class="answer-panel" id="q11-ans">The low-resistance voltmeter allows a small current to flow, so it reads less than the true emf; the near-infinite-resistance voltmeter draws (almost) no current, so it reads the true emf ≈ 1.2 V.<br><br>
     With the 1000 Ω meter: I = V/R = 1.0/1000 = 0.001 A.<br><br>
     Lost p.d. = 1.2 − 1.0 = 0.2 V = Ir<br><br>
-    r = 0.2/0.001 = … Ω.
-  </div>
-</div>
-
-<div class="q" data-type="numeric" data-answer="8.4" data-tol="0.02" data-qname="SA5a: 9V battery terminal pd">
-  <div class="qtitle">5. A 9.0 V battery has an internal resistance of 12.0 Ω. (a) What is the potential difference across its terminals when it is supplying a current of 50.0 mA?</div>
-  V = <input type="text" class="qinput"> V
-  <button class="check-btn" onclick="checkNumeric(this)">Check</button>
-  <span class="feedback"></span>
-  <button class="reveal-btn" onclick="toggleSolution(this)">Show working</button>
-  <div class="solution">V = ε − Ir = 9 − (50×10⁻³ × 12) = 9 − 0.6 = … V</div>
-</div>
-
-<div class="q" data-type="numeric" data-answer="0.75" data-tol="0.02" data-qname="SA5b: 9V battery max current">
-  <div class="qtitle">5 (continued). (b) What is the maximum current this battery could supply?</div>
-  I<sub>max</sub> = <input type="text" class="qinput"> A
-  <button class="check-btn" onclick="checkNumeric(this)">Check</button>
-  <span class="feedback"></span>
-  <button class="reveal-btn" onclick="toggleSolution(this)">Show working</button>
-  <div class="solution">Maximum current occurs when R = 0: I<sub>max</sub> = ε/r = 9/12 = … A. (c) A sketch of terminal p.d. V against supplied current I would be a straight line sloping downward from V = ε (at I = 0) with gradient −r — so the internal resistance can be found from the magnitude of the gradient.</div>
-</div>
-
-<div class="q" data-type="numeric" data-answer="0.6" data-tol="0.03" data-qname="SA7: shorted cell r">
-  <div class="qtitle">6. When a cell is connected directly across a high-resistance voltmeter, the reading is 1.50 V. When the cell is shorted through a low-resistance ammeter, the current is 2.5 A. What is the internal resistance of the cell?</div>
-  r = <input type="text" class="qinput"> Ω
-  <button class="check-btn" onclick="checkNumeric(this)">Check</button>
-  <span class="feedback"></span>
-  <button class="reveal-btn" onclick="toggleSolution(this)">Show working</button>
-  <div class="solution">
-    emf = 1.5 V (high-resistance voltmeter draws almost no current, so reads the true emf).<br><br>
+    r = 0.2/0.001 = … Ω.</div>
+    </div>
+    <div class="question sm-question" data-qtype="number" data-answer="8.4" data-tol="0.02" id="q12">
+      <span class="qnum">12</span><strong>5. A 9.0 V battery has an internal resistance of 12.0 Ω. (a) What is the potential difference across its terminals when it is supplying a current of 50.0 mA?</strong>
+      <div class="sm-row">
+        V = <input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="Answer to question 12"> <span class="sm-unit">V</span>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q12-ans')">Show working</button>
+      <div class="answer-panel" id="q12-ans">V = ε − Ir = 9 − (50×10⁻³ × 12) = 9 − 0.6 = … V</div>
+    </div>
+    <div class="question sm-question" data-qtype="number" data-answer="0.75" data-tol="0.02" id="q13">
+      <span class="qnum">13</span><strong>5 (continued). (b) What is the maximum current this battery could supply?</strong>
+      <div class="sm-row">
+        I<sub>max</sub> = <input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="Answer to question 13"> <span class="sm-unit">A</span>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q13-ans')">Show working</button>
+      <div class="answer-panel" id="q13-ans">Maximum current occurs when R = 0: I<sub>max</sub> = ε/r = 9/12 = … A. (c) A sketch of terminal p.d. V against supplied current I would be a straight line sloping downward from V = ε (at I = 0) with gradient −r — so the internal resistance can be found from the magnitude of the gradient.</div>
+    </div>
+    <div class="question sm-question" data-qtype="number" data-answer="0.6" data-tol="0.03" id="q14">
+      <span class="qnum">14</span><strong>6. When a cell is connected directly across a high-resistance voltmeter, the reading is 1.50 V. When the cell is shorted through a low-resistance ammeter, the current is 2.5 A. What is the internal resistance of the cell?</strong>
+      <div class="sm-row">
+        r = <input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="Answer to question 14"> <span class="sm-unit">Ω</span>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q14-ans')">Show working</button>
+      <div class="answer-panel" id="q14-ans">emf = 1.5 V (high-resistance voltmeter draws almost no current, so reads the true emf).<br><br>
     I<sub>max</sub> = 2.5 A occurs when R = 0 (short circuit), so I<sub>max</sub> = ε/r<br><br>
-    r = ε/I<sub>max</sub> = 1.5/2.5 = … Ω.
-  </div>
-</div>
+    r = ε/I<sub>max</sub> = 1.5/2.5 = … Ω.</div>
+    </div>
+  </section>
 
-<!-- ================= EXAM-STYLE QUESTION (not marked, not for Canvas) ================= -->
-<div class="examq-section">
-<h2 class="section-title">Exam-style question</h2>
-<div class="examq-card">
-  <span class="examq-badge">Exam practice</span>
-  <p class="examq-note">This is a classic exam-style question (Cambridge Physics for the IB Diploma). It is for extra practice only and is not counted in the score above.</p>
-  <div class="qtitle">In the circuit below, a variable resistor is connected to a battery of emf ε.</div>
-  <div class="circuit-flex" style="margin:14px 0;">
-    <svg width="260" height="200" viewBox="0 0 260 200">
+  <section class="topic" id="s4">
+    <h2>Exam-style question</h2>
+    <div class="keyword"><b>Exam practice.</b> This is a classic exam-style question (Cambridge Physics for the IB Diploma). It is for extra practice only and is not counted in the score above.</div>
+    <div class="question" id="examq">
+      <strong>In the circuit below, a variable resistor is connected to a battery of emf ε.</strong>
+      <div style="display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin:0.8rem 0;">
+        <figure><svg width="260" height="200" viewBox="0 0 260 200">
       <line x1="40" y1="30" x2="100" y2="30" stroke="#1b2a4a" stroke-width="2"/>
       <line x1="130" y1="30" x2="210" y2="30" stroke="#1b2a4a" stroke-width="2"/>
       <rect x="100" y="20" width="1.5" height="20" fill="#1b2a4a"/>
@@ -1465,8 +1452,8 @@
       <rect x="90" y="131" width="70" height="18" fill="#fff" stroke="#1b2a4a" stroke-width="2"/>
       <line x1="85" y1="155" x2="165" y2="125" stroke="#1b2a4a" stroke-width="2"/>
       <polygon points="165.0,125.0 158.2,132.4 155.0,123.9" fill="#1b2a4a"/>
-    </svg>
-    <svg width="470" height="300" viewBox="0 0 470 300">
+    </svg></figure>
+        <figure><svg width="470" height="300" viewBox="0 0 470 300">
       <line x1="60" y1="20" x2="60" y2="280" stroke="#1b2a4a" stroke-width="2"/>
       <path d="M 60 20 L 55 30 L 65 30 Z" fill="#1b2a4a"/>
       <line x1="60" y1="280" x2="430" y2="280" stroke="#1b2a4a" stroke-width="2"/>
@@ -1499,142 +1486,391 @@
       <line x1="110" y1="87.5" x2="360" y2="227.5" stroke="#e8533a" stroke-width="2.5"/>
       <circle cx="110" cy="87.5" r="3" fill="#e8533a"/>
       <circle cx="360" cy="227.5" r="3" fill="#e8533a"/>
-    </svg>
-  </div>
-  <p>The graph shows how the reading of the voltmeter (in V) varies with current (in A) as the variable resistance changes. Use the graph (extrapolating the dashed line where needed) to determine:</p>
-
-  <div style="margin:14px 0;">
-    <strong>a</strong> the internal resistance of the battery.<br>
-    r = <input type="text" class="qinput" id="examq-r"> Ω
-    <button class="check-btn" onclick="checkExamQ('examq-r', 1.6, 0.12)">Check</button>
-    <span class="feedback" id="examq-r-fb"></span>
-  </div>
-  <div style="margin:14px 0;">
-    <strong>b</strong> the emf of the battery.<br>
-    ε = <input type="text" class="qinput" id="examq-emf"> V
-    <button class="check-btn" onclick="checkExamQ('examq-emf', 6.3, 0.08)">Check</button>
-    <span class="feedback" id="examq-emf-fb"></span>
-  </div>
-  <div style="margin:14px 0;">
-    <strong>c</strong> the maximum current that can be established in this circuit.<br>
-    I<sub>max</sub> = <input type="text" class="qinput" id="examq-imax"> A
-    <button class="check-btn" onclick="checkExamQ('examq-imax', 3.9, 0.1)">Check</button>
-    <span class="feedback" id="examq-imax-fb"></span>
-  </div>
-
-  <button class="reveal-btn" onclick="toggleSolution(this)">Show working</button>
-  <div class="solution">
-    Reading two points from the line, approximately (I = 0.5 A, V = 5.5 V) and (I = 3.0 A, V = 1.5 V):<br>
+    </svg></figure>
+      </div>
+      <p>The graph shows how the reading of the voltmeter (in V) varies with current (in A) as the variable resistance changes. Use the graph (extrapolating the dashed line where needed) to determine:</p>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="1.6" data-tol="0.12" data-notype="true"><span class="lbl">a</span><span style="margin-right:0.4rem;">the internal resistance of the battery. r =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="part a"><span class="sm-unit">Ω</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="6.3" data-tol="0.08" data-notype="true"><span class="lbl">b</span><span style="margin-right:0.4rem;">the emf of the battery. ε =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="part b"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="3.9" data-tol="0.1" data-notype="true"><span class="lbl">c</span><span style="margin-right:0.4rem;">the maximum current that can be established in this circuit. I<sub>max</sub> =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="part c"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="reveal-btn no-print" onclick="toggleAnswer('examq-ans')">Show working</button>
+      </div>
+      <div class="answer-panel" id="examq-ans">Reading two points from the line, approximately (I = 0.5 A, V = 5.5 V) and (I = 3.0 A, V = 1.5 V):<br>
     <strong>a</strong> gradient = (1.5 − 5.5)/(3.0 − 0.5) = −4.0/2.5 = −1.6, so r = |gradient| = … Ω.<br>
     <strong>b</strong> extrapolating back to I = 0 (the y-intercept): ε = V + Ir = 5.5 + (1.6 × 0.5) = … V.<br>
-    <strong>c</strong> maximum current occurs when the variable resistance is reduced to 0 (short circuit): I<sub>max</sub> = ε/r = 6.3/1.6 = … A.
-  </div>
-  <p class="credit">Source: Cambridge Physics for the IB Diploma, Extension Worksheet — Topic 5, Worksheet 3. © Cambridge University Press 2012.</p>
-</div>
-</div>
+    <strong>c</strong> maximum current occurs when the variable resistance is reduced to 0 (short circuit): I<sub>max</sub> = ε/r = 6.3/1.6 = … A.</div>
+      <p style="font-size:0.8rem;color:#7c8b98;margin-top:0.8rem;">Source: Cambridge Physics for the IB Diploma, Extension Worksheet — Topic 5, Worksheet 3. © Cambridge University Press 2012.</p>
+    </div>
+  </section>
 
-<div class="print-btn-row">
-  <button class="print-btn" onclick="preparePrint()">Print / Save as PDF</button>
-</div>
+<footer class="page no-print">EMF and Internal Resistance Workbook · Companion resources: <em>04 – Resistance</em>, <em>06 – Adding Resistors</em>.</footer>
+</main>
 
-</div>
 <script>
-function toggleSolution(btn){
-  var sol = btn.nextElementSibling;
-  sol.classList.toggle('show');
-  btn.textContent = sol.classList.contains('show') ? 'Hide working' : 'Show working';
+const WORKBOOK_ID = 'emf-and-internal-resistance';
+const STORAGE_PREFIX = 'ib-workbook-' + WORKBOOK_ID + '-v1-';
+let fillableEls = [];
+
+function toggleAnswer(id){ document.getElementById(id).classList.toggle('shown'); }
+function revealAll(){
+  document.querySelectorAll('.answer-panel, .hint-panel').forEach(function(el){ el.classList.add('shown'); });
+  document.body.classList.add('answers-visible');
 }
-function withinTol(val, ans, tol){
-  if(isNaN(val)) return false;
-  var t = Math.max(tol*Math.abs(ans), 0.01);
-  return Math.abs(val-ans) <= t;
+function hideAll(){
+  document.querySelectorAll('.answer-panel, .hint-panel').forEach(function(el){ el.classList.remove('shown'); });
+  document.body.classList.remove('answers-visible');
 }
-function checkNumeric(btn){
-  var q = btn.closest('.q');
-  var input = q.querySelector('.qinput');
-  var ans = parseFloat(q.getAttribute('data-answer'));
-  var tol = parseFloat(q.getAttribute('data-tol'))||0.02;
-  var val = parseFloat(input.value);
-  var fb = q.querySelector('.feedback');
-  if(withinTol(val, ans, tol)){
-    fb.textContent = 'Correct'; fb.className='feedback correct'; input.style.borderColor='#1a8a4a';
-  } else {
-    fb.textContent = 'Not quite'; fb.className='feedback incorrect'; input.style.borderColor='#c0392b';
-  }
+function toggleHint(btn){
+  const panel = btn.parentElement.querySelector('.hint-panel') || btn.closest('.question, .reading-row, .sm-block').querySelector('.hint-panel');
+  panel.classList.toggle('shown');
+  btn.textContent = panel.classList.contains('shown') ? 'Hide hint' : 'Hint';
 }
-function checkMCQ(btn){
-  var q = btn.closest('.q');
-  var sel = q.querySelector('.mcq-select');
-  var ans = q.getAttribute('data-answer');
-  var fb = q.querySelector('.feedback');
-  if(sel.value === ans){
-    fb.textContent = 'Correct'; fb.className='feedback correct';
-  } else {
-    fb.textContent = 'Not quite'; fb.className='feedback incorrect';
-  }
+
+function storageAvailable(){
+  try{
+    const k = '__test__' + STORAGE_PREFIX;
+    localStorage.setItem(k, '1');
+    localStorage.removeItem(k);
+    return true;
+  } catch(e){ return false; }
 }
-function checkCircuit(btn){
-  var block = btn.closest('.circuit-block');
-  var inputs = block.querySelectorAll('.reading-input');
-  var correct = 0;
-  inputs.forEach(function(inp){
-    var ans = parseFloat(inp.getAttribute('data-answer'));
-    var tol = parseFloat(inp.getAttribute('data-tol'))||0.02;
-    var val = parseFloat(inp.value);
-    if(withinTol(val, ans, tol)){ inp.style.borderColor='#1a8a4a'; correct++; }
-    else { inp.style.borderColor='#c0392b'; }
-  });
-  var fb = block.querySelector('.feedback');
-  fb.textContent = correct + ' / ' + inputs.length + ' correct';
-  fb.className = 'feedback ' + (correct===inputs.length ? 'correct':'incorrect');
+const canStore = storageAvailable();
+
+function autosize(el){
+  if(el.tagName !== 'TEXTAREA') return;
+  el.style.height = 'auto';
+  el.style.height = Math.max(el.scrollHeight, el.offsetHeight) + 'px';
 }
-function checkExamQ(inputId, ans, tol){
-  var input = document.getElementById(inputId);
-  var fb = document.getElementById(inputId + '-fb');
-  var val = parseFloat(input.value);
-  if(withinTol(val, ans, tol)){
-    fb.textContent = 'Correct'; fb.className='feedback correct'; input.style.borderColor='#1a8a4a';
-  } else {
-    fb.textContent = 'Not quite'; fb.className='feedback incorrect'; input.style.borderColor='#c0392b';
-  }
-}
-function computeAll(){
-  var total=0, correct=0, missing=[];
-  document.querySelectorAll('.q[data-type="numeric"]').forEach(function(q){
-    total++;
-    var input=q.querySelector('.qinput');
-    var ans=parseFloat(q.getAttribute('data-answer'));
-    var tol=parseFloat(q.getAttribute('data-tol'))||0.02;
-    var val=parseFloat(input.value);
-    if(withinTol(val,ans,tol)) correct++; else missing.push(q.getAttribute('data-qname')||'question');
-  });
-  document.querySelectorAll('.q[data-type="mcq"]').forEach(function(q){
-    total++;
-    var sel=q.querySelector('.mcq-select');
-    var ans=q.getAttribute('data-answer');
-    if(sel.value===ans) correct++; else missing.push(q.getAttribute('data-qname')||'question');
-  });
-  document.querySelectorAll('.circuit-block').forEach(function(block, idx){
-    var title = block.querySelector('.sub-title') ? block.querySelector('.sub-title').textContent : ('Circuit '+(idx+1));
-    block.querySelectorAll('.reading-input').forEach(function(inp, j){
-      total++;
-      var ans=parseFloat(inp.getAttribute('data-answer'));
-      var tol=parseFloat(inp.getAttribute('data-tol'))||0.02;
-      var val=parseFloat(inp.value);
-      if(withinTol(val,ans,tol)) correct++; else missing.push(title+' (blank '+(j+1)+')');
+
+function initFillables(){
+  fillableEls = Array.prototype.slice.call(document.querySelectorAll('.answer-lines, .name-box .fill, .reading-input'));
+  fillableEls.forEach(function(el, i){
+    const key = STORAGE_PREFIX + i;
+    el.dataset.storeKey = key;
+    if(canStore){
+      const saved = localStorage.getItem(key);
+      if(saved !== null){ el.value = saved; }
+    }
+    autosize(el);
+    el.addEventListener('input', function(){
+      autosize(el);
+      if(canStore){
+        try{ localStorage.setItem(el.dataset.storeKey, el.value); } catch(e){}
+      }
+      scheduleFileWrite();
     });
   });
-  window._score = {total:total, correct:correct, missing:missing};
-  document.getElementById('scoreLine').textContent = 'Score: ' + correct + ' / ' + total + ' (' + Math.round(100*correct/total) + '%)';
 }
-function preparePrint(){
-  document.querySelectorAll('.hint, .solution, .hint-box').forEach(function(el){
-    el.classList.add('show');
-    el.classList.add('visible');
+
+function getAnswersArray(){ return fillableEls.map(function(el){ return el.value; }); }
+function applyAnswersArray(arr){
+  fillableEls.forEach(function(el, i){
+    if(arr && arr[i] !== undefined){ el.value = arr[i]; autosize(el); }
   });
-  setTimeout(function(){ window.print(); }, 60);
 }
+
+function getExtraState(){
+  const sm = {};
+  document.querySelectorAll('.sm-question, .reading-row[data-answer], .match-row').forEach(function(el, i){
+    if(el.dataset.correct !== undefined || el.dataset.state !== undefined){
+      sm[el.id || ('sm-' + i)] = {state: el.dataset.state || '', correct: el.dataset.correct || ''};
+    }
+  });
+  return { smState: sm };
+}
+function applyExtraState(data){
+  if(!data || !data.smState) return;
+  document.querySelectorAll('.sm-question, .reading-row[data-answer], .match-row').forEach(function(el, i){
+    const key = el.id || ('sm-' + i);
+    const rec = data.smState[key];
+    if(!rec) return;
+    el.dataset.state = rec.state || '';
+    el.dataset.correct = rec.correct || '';
+    const fb = el.querySelector('.sm-feedback');
+    if(fb && rec.state === 'correct'){ fb.textContent = 'Correct'; fb.className = 'sm-feedback correct'; }
+    else if(fb && rec.state === 'incorrect'){ fb.textContent = 'Not quite'; fb.className = 'sm-feedback incorrect'; }
+  });
+  updateProgress();
+}
+
+function buildPayload(){
+  const payload = {
+    workbook: WORKBOOK_ID,
+    savedAt: new Date().toISOString(),
+    studentName: document.getElementById('studentName') ? document.getElementById('studentName').value : '',
+    answers: getAnswersArray()
+  };
+  if(typeof getExtraState === 'function') Object.assign(payload, getExtraState());
+  return payload;
+}
+
+function clearMyAnswers(){
+  if(!confirm('Clear everything you have typed? This cannot be undone.')) return;
+  fillableEls.forEach(function(el){
+    el.value = '';
+    autosize(el);
+    if(canStore){ try{ localStorage.removeItem(el.dataset.storeKey); } catch(e){} }
+  });
+  document.querySelectorAll('.sm-question, .reading-row[data-answer], .match-row').forEach(function(el){
+    delete el.dataset.state; delete el.dataset.correct;
+    const fb = el.querySelector('.sm-feedback'); if(fb){ fb.textContent=''; fb.className='sm-feedback'; }
+  });
+  updateProgress();
+  scheduleFileWrite();
+}
+
+function downloadJSON(obj, filename){
+  const blob = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+}
+
+function saveAnswersToFile(){
+  const nameEl = document.getElementById('studentName');
+  const name = (nameEl ? nameEl.value : '').trim();
+  const safe = name ? name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : 'my';
+  downloadJSON(buildPayload(), WORKBOOK_ID + '-answers-' + safe + '.json');
+}
+
+function triggerLoadAnswers(){ document.getElementById('loadFileInput').click(); }
+
+function handleLoadFile(evt){
+  const file = evt.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(){
+    try{
+      const data = JSON.parse(reader.result);
+      applyAnswersArray(data.answers || []);
+      if(typeof applyExtraState === 'function') applyExtraState(data);
+      if(canStore){
+        fillableEls.forEach(function(el){ try{ localStorage.setItem(el.dataset.storeKey, el.value); } catch(e){} });
+      }
+      alert('Loaded your saved answers from "' + file.name + '".');
+    } catch(e){
+      alert('Sorry, that file could not be read as a saved-answers file.');
+    }
+  };
+  reader.readAsText(file);
+  evt.target.value = '';
+}
+
+let fileHandle = null;
+let pendingHandle = null;
+const fsaSupported = ('showSaveFilePicker' in window);
+let fileWriteTimer = null;
+
+function idbOpen(){
+  return new Promise(function(resolve, reject){
+    const rq = indexedDB.open('ib-workbook-fs', 1);
+    rq.onupgradeneeded = function(){ if(!rq.result.objectStoreNames.contains('handles')) rq.result.createObjectStore('handles'); };
+    rq.onsuccess = function(){ resolve(rq.result); };
+    rq.onerror = function(){ reject(rq.error); };
+  });
+}
+function idbGetHandle(){
+  return idbOpen().then(function(db){
+    return new Promise(function(resolve){
+      const tx = db.transaction('handles', 'readonly');
+      const rq = tx.objectStore('handles').get(WORKBOOK_ID);
+      rq.onsuccess = function(){ resolve(rq.result || null); };
+      rq.onerror = function(){ resolve(null); };
+    });
+  }).catch(function(){ return null; });
+}
+function idbSetHandle(handle){
+  return idbOpen().then(function(db){
+    const tx = db.transaction('handles', 'readwrite');
+    tx.objectStore('handles').put(handle, WORKBOOK_ID);
+  }).catch(function(){});
+}
+
+function updateLinkButton(){
+  const btn = document.getElementById('btnLinkFile');
+  if(!btn) return;
+  btn.textContent = fileHandle ? '\u{1F517} Save file linked' : (pendingHandle ? '\u{1F517} Reconnect save file' : '\u{1F517} Link a save file');
+}
+
+function updateSaveStatus(){
+  const status = document.getElementById('saveStatus');
+  if(!status) return;
+  if(fileHandle){
+    status.textContent = 'Autosaving to your linked file';
+  } else if(canStore){
+    status.textContent = 'Autosaving in this browser — click \u{1F4BE} Save often as a backup';
+  } else {
+    status.textContent = 'Autosave unavailable here — use \u{1F4BE} Save / \u{1F4C2} Load to keep your work';
+  }
+}
+
+function tryRestoreLinkedFile(){
+  if(!fsaSupported) return Promise.resolve();
+  return idbGetHandle().then(function(handle){
+    if(!handle) return;
+    return handle.queryPermission({mode:'readwrite'}).then(function(perm){
+      if(perm === 'granted'){ fileHandle = handle; } else { pendingHandle = handle; }
+    }).catch(function(){});
+  }).then(function(){
+    updateLinkButton();
+    updateSaveStatus();
+  });
+}
+
+function linkSaveFile(){
+  if(!fsaSupported) return;
+  const proceed = pendingHandle
+    ? pendingHandle.requestPermission({mode:'readwrite'}).then(function(req){
+        if(req === 'granted'){ fileHandle = pendingHandle; pendingHandle = null; }
+      })
+    : window.showSaveFilePicker({
+        suggestedName: WORKBOOK_ID + '-answers.json',
+        types: [{ description: 'Workbook answers', accept: {'application/json': ['.json']} }]
+      }).then(function(handle){
+        fileHandle = handle;
+        return idbSetHandle(handle);
+      });
+  proceed.then(function(){
+    updateLinkButton();
+    updateSaveStatus();
+    return writeToLinkedFile();
+  }).catch(function(){ /* user cancelled the picker */ });
+}
+
+function scheduleFileWrite(){
+  if(!fileHandle) return;
+  clearTimeout(fileWriteTimer);
+  fileWriteTimer = setTimeout(writeToLinkedFile, 800);
+}
+
+function writeToLinkedFile(){
+  if(!fileHandle) return Promise.resolve();
+  return fileHandle.createWritable().then(function(writable){
+    return writable.write(JSON.stringify(buildPayload(), null, 2)).then(function(){
+      return writable.close();
+    });
+  }).catch(function(e){ console.warn('Could not write to linked save file', e); });
+}
+
+/* ---------- self-marking (auto-checked) engine ---------- */
+function parseNumber(str){
+  if(str === null || str === undefined) return NaN;
+  str = String(str).trim().replace(/,/g, '');
+  return parseFloat(str);
+}
+const SCI_RE = /^\s*(-?\d+(?:\.\d+)?)\s*[×xX*]\s*10\s*(?:\^\s*\(?\s*(-?\d+)\s*\)?|\(\s*(-?\d+)\s*\))\s*$/;
+function parseSciNotation(str){
+  if(!str) return NaN;
+  const m = String(str).trim().replace(/\s+/g, ' ').match(SCI_RE);
+  if(!m) return NaN;
+  const coeff = parseFloat(m[1]);
+  const exp = parseFloat(m[2] !== undefined ? m[2] : m[3]);
+  if(isNaN(coeff) || isNaN(exp)) return NaN;
+  return coeff * Math.pow(10, exp);
+}
+function nearlyEqual(a, b, tol){
+  if(isNaN(a) || isNaN(b)) return false;
+  if(b === 0) return Math.abs(a - b) <= tol;
+  return Math.abs(a - b) / Math.abs(b) <= tol;
+}
+
+function checkAnswer(btn){
+  const q = btn.closest('.sm-question, .reading-row');
+  const fb = q.querySelector('.sm-feedback');
+  const type = q.dataset.qtype || 'number';
+  let correct = false, attempted = true;
+  if(type === 'number'){
+    const input = q.querySelector('.sm-input');
+    const val = parseNumber(input.value);
+    if(isNaN(val)){ attempted = false; }
+    else if(q.dataset.min !== undefined && q.dataset.max !== undefined){
+      correct = val >= parseFloat(q.dataset.min) && val <= parseFloat(q.dataset.max);
+    } else {
+      const target = parseFloat(q.dataset.answer);
+      const tol = parseFloat(q.dataset.tol || '0.03');
+      correct = nearlyEqual(val, target, tol);
+    }
+  } else if(type === 'sci'){
+    const input = q.querySelector('.sm-input');
+    const val = parseSciNotation(input.value);
+    if(isNaN(val)){ attempted = false; }
+    else {
+      const target = parseFloat(q.dataset.answer);
+      correct = nearlyEqual(val, target, 0.005);
+    }
+  } else if(type === 'mcq'){
+    const sel = q.querySelector('.sm-select');
+    if(!sel.value){ attempted = false; }
+    else { correct = sel.value === q.dataset.answer; }
+  } else if(type === 'keyword'){
+    const input = q.querySelector('input.sm-input');
+    const val = input.value.trim().toLowerCase();
+    if(val.length === 0){ attempted = false; }
+    else {
+      const groups = (q.dataset.keywords || '').split(',').filter(Boolean);
+      correct = groups.some(function(k){ return val.includes(k.trim()); });
+    }
+  } else if(type === 'text'){
+    const ta = q.querySelector('textarea.sm-input');
+    const val = ta.value.trim().toLowerCase();
+    if(val.length < 5){ attempted = false; }
+    else {
+      const groups = (q.dataset.keywords || '').split('|').filter(Boolean);
+      correct = groups.length === 0 || groups.every(function(g){
+        return g.split(',').some(function(k){ return val.includes(k.trim()); });
+      });
+      if(val.length < parseInt(q.dataset.minlen || '30', 10)) correct = false;
+    }
+  }
+  if(!attempted){
+    fb.textContent = 'Enter an answer';
+    fb.className = 'sm-feedback incorrect';
+    return;
+  }
+  q.dataset.attempted = 'true';
+  q.dataset.state = correct ? 'correct' : 'incorrect';
+  if(type === 'text' && (q.dataset.correctB64 || q.dataset.wrongB64)){
+    const b64 = correct ? q.dataset.correctB64 : q.dataset.wrongB64;
+    fb.innerHTML = b64 ? decodeURIComponent(escape(atob(b64))) : (correct ? 'Correct' : 'Not quite — try again');
+    fb.className = 'sm-feedback long ' + (correct ? 'correct' : 'incorrect');
+    updateProgress();
+    scheduleFileWrite();
+    return;
+  }
+  fb.textContent = correct ? 'Correct' : (q.dataset.notype === 'true' ? 'Not quite — try again, or use the hint' : 'Not quite — try again');
+  fb.className = 'sm-feedback ' + (correct ? 'correct' : 'incorrect');
+  updateProgress();
+  scheduleFileWrite();
+}
+
+function updateProgress(){
+  const els = document.querySelectorAll('.sm-question, .reading-row[data-answer]');
+  if(!els.length) return;
+  let checked = 0, correct = 0;
+  els.forEach(function(el){
+    if(el.dataset.state){ checked++; if(el.dataset.state === 'correct') correct++; }
+  });
+  const status = document.getElementById('progressStatus');
+  if(status) status.textContent = 'Checked ' + checked + '/' + els.length + ' · ' + correct + ' correct';
+}
+
+window.addEventListener('beforeprint', function(){
+  fillableEls.forEach(autosize);
+});
+
+document.addEventListener('DOMContentLoaded', function(){
+  initFillables();
+  if(fsaSupported){
+    document.getElementById('btnLinkFile').style.display = '';
+    tryRestoreLinkedFile();
+  }
+  updateSaveStatus();
+  updateProgress();
+});
+
+
 </script>
 </body>
 </html>
-

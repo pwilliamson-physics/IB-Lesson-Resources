@@ -2,90 +2,212 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Basic Circuits Concept Check</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basic Circuits Concept Check — Student Workbook</title>
 <style>
-  :root{--navy:#1b2a4a;--blue:#2563eb;--green:#1a1f2e;--red:#b91c1c;--bg:#f7f8fb;--card:#fff;--border:#dbe1ea;--amber:#d97706;}
-  *{box-sizing:border-box;}
-  body{font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:var(--bg);color:#1a1a1a;margin:0;padding:24px;line-height:1.5;}
-  .wb{max-width:900px;margin:0 auto;}
-  h1{color:var(--navy);font-size:1.5em;margin-bottom:4px;}
-  .namebox{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:22px 26px;margin-bottom:20px;}
-  .namebox label{font-size:1.15em;}
-  .namebox input{padding:12px 16px;border:1px solid var(--border);border-radius:8px;width:100%;max-width:480px;font-size:1.15em;margin-top:8px;display:block;}
-  .titleslide{background:linear-gradient(#1b2a4a,#243a63);color:#fff;border-radius:12px;padding:26px 30px;margin-bottom:20px;}
-  .titleslide h2{font-size:1.3em;margin:0 0 6px;}
-  .titleslide .ts-sub{opacity:0.85;font-size:0.98em;margin-bottom:18px;}
-  .titleslide .ts-laws{display:flex;gap:20px;flex-wrap:wrap;}
-  .titleslide .ts-law{flex:1;min-width:240px;background:rgba(255,255,255,0.08);border-radius:8px;padding:14px 16px;}
-  .titleslide .ts-eq{font-size:1.3em;font-family:'Cambria','Georgia',serif;margin-bottom:6px;}
-  .formulabox{background:#eef2ff;border-left:4px solid var(--blue);padding:12px 16px;border-radius:0 8px 8px 0;margin-bottom:20px;font-size:0.95em;}
-  .section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:18px;}
-  .section h2{color:var(--navy);font-size:1.1em;margin-top:0;}
-  .circuit-row{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;}
-  .diagram{flex:0 0 320px;background:#fafbfc;border:1px solid var(--border);border-radius:8px;padding:8px;}
-  .readings{flex:1;min-width:240px;}
-  .reading-row{display:flex;align-items:center;gap:8px;margin:6px 0;flex-wrap:wrap;}
-  .reading-row .lbl{min-width:34px;font-weight:600;}
-  .given{background:#f1f5f9;border-radius:6px;padding:5px 10px;font-family:Menlo,Consolas,monospace;font-size:0.9em;}
-  input[type=text]{padding:6px 9px;border:1px solid var(--border);border-radius:6px;font-size:0.92em;width:100px;}
-  button{background:var(--blue);color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:0.85em;}
-  button:hover{opacity:0.9;}
-  button.secondary{background:#6b7280;}
-  button.hint-btn{background:var(--amber);}
-  .feedback{font-weight:600;margin-left:2px;font-size:0.9em;}
-  .feedback.correct{color:var(--green);}
-  .feedback.incorrect{color:var(--red);}
-  .hint,.solution{display:none;padding:8px 14px;margin-top:8px;border-radius:0 8px 8px 0;font-size:0.88em;}
-  .hint{background:#fffbeb;border-left:4px solid var(--amber);}
-  .solution{background:#ecfdf5;border-left:4px solid var(--green);}
-  .hint.show,.solution.show{display:block;}
-  .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
-  .summary{background:var(--card);border:2px solid var(--blue);border-radius:12px;padding:20px 24px;}
-  #summaryBox{white-space:pre-wrap;background:#f1f5f9;border-radius:8px;padding:14px;margin-top:12px;font-family:Menlo,Consolas,monospace;font-size:0.85em;display:none;}
-  .note{font-size:0.85em;color:#666;font-style:italic;}
-  svg{width:100%;height:auto;display:block;}
-  .lbl-svg{font-size:13px;font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;fill:#1b2a4a;}
-  .print-btn-row{text-align:center;margin:30px 0 8px;}
-  .print-btn{background:var(--navy);color:#fff;border:none;padding:12px 30px;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;font-family:inherit;}
-  .print-btn:hover{opacity:0.9;}
-  @media print{
-    .print-btn-row{display:none !important;}
-    .check-btn,.reveal-btn,.hint-btn{display:none !important;}
-    .hint,.solution{display:block !important;}
-    body{background:#fff;padding:6px;}
-    .section{page-break-inside:avoid;break-inside:avoid;}
+
+  :root{
+    --navy:#173a5e; --teal:#0e7c86; --teal-dark:#0a5b62; --amber:#d98324;
+    --soft-blue:#eaf3fb; --soft-amber:#fdf1e2; --soft-green:#eaf7ee; --soft-grey:#f4f6f8;
+    --line:#b9c6d3; --ink:#1f2933; --border:#d7e0e8;
+    --purple:#6b4c9a; --soft-purple:#f1ebf9;
+    --good:#2f8f4e; --bad:#c0392b; --soft-bad:#fbebea;
+    /* circuit-diagram accents, carried over from the v1 electricity set for
+       consistency across this worksheet family (style-guide.md: "the v1
+       ammeter/voltmeter/... conventions below are still good practice and
+       worth reusing for consistency with the Electricity set") */
+    --diagram-ammeter:#e8533a; --diagram-ammeter-bg:#fff3f1;
+    --diagram-voltmeter:#3a7bd5; --diagram-voltmeter-bg:#e8f1ff;
   }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; color:var(--ink); background:#f7f9fb; line-height:1.55; font-size:16.5px; padding-top:56px;}
+  main{max-width:920px; margin:0 auto; padding:2rem 2.5rem 5rem 2.5rem;}
+  .cover{background:linear-gradient(135deg,var(--navy),var(--teal-dark)); color:#fff; border-radius:14px; padding:2.5rem 2.5rem; margin-bottom:2rem;}
+  .cover h1{margin:0 0 0.4rem 0; font-size:1.9rem;}
+  .cover p.sub{margin:0; font-size:1.05rem; color:#dceaf0;}
+  .cover .meta{margin-top:1.2rem; font-size:0.9rem; color:#cfe3ee;}
+  .name-box{margin-top:1.4rem; background:rgba(255,255,255,0.1); border:1px dashed rgba(255,255,255,0.5); border-radius:8px; padding:0.9rem 1.1rem;}
+  .name-box label{display:block; font-size:0.8rem; color:#dceaf0; margin-bottom:0.2rem;}
+  .name-box .fill{display:block; width:100%; border:none; border-bottom:1px solid #dceaf0; height:1.6rem; background:transparent; color:#fff; font-size:1rem; font-family:inherit; padding:0; outline:none;}
+  .name-box .fill::placeholder{color:rgba(255,255,255,0.5);}
+  .goals{background:rgba(255,255,255,0.12); border-left:4px solid #fff; border-radius:6px; padding:0.9rem 1.1rem; font-size:0.92rem; color:#fff;}
+  .goals ul{margin:0.4rem 0 0 0; padding-left:1.2rem;}
+
+  section.topic{background:#fff; border:1px solid var(--border); border-radius:12px; padding:1.8rem 2rem; margin-bottom:1.6rem;}
+  section.topic h2{color:var(--navy); font-size:1.4rem; margin-top:0; border-bottom:3px solid var(--amber); padding-bottom:0.4rem;}
+  section.topic h3{color:var(--teal-dark); font-size:1.08rem; margin-top:1.6rem;}
+
+  .keybox{background:var(--soft-blue); border:1px solid #c7ddef; border-radius:8px; padding:0.9rem 1.1rem; margin:0.9rem 0; font-size:0.98rem;}
+  .keybox strong{color:var(--navy);}
+  .eqn{background:#fff; border:1px solid #c7ddef; border-radius:6px; padding:0.6rem 1rem; margin:0.6rem 0; font-size:1.08rem; text-align:center; font-family:"Cambria Math",Cambria,Georgia,serif;}
+  .keyword{background:var(--soft-amber); border-left:4px solid var(--amber); border-radius:6px; padding:0.7rem 1rem; margin:0.9rem 0; font-size:0.92rem;}
+  .keyword b{color:var(--amber);}
+  .example{background:var(--soft-green); border:1px solid #bfe3cc; border-radius:8px; padding:0.9rem 1.1rem; margin:1rem 0;}
+  .example .tag{display:inline-block; background:#3f9a5c; color:#fff; font-size:0.72rem; font-weight:600; letter-spacing:0.03em; padding:0.15rem 0.5rem; border-radius:4px; margin-bottom:0.5rem; text-transform:uppercase;}
+  .stretch-box{background:var(--soft-purple); border:1px solid #d9c9ec; border-radius:8px; padding:0.9rem 1.1rem; margin:1rem 0;}
+  .stretch-box .tag{display:inline-block; background:var(--purple); color:#fff; font-size:0.72rem; font-weight:600; letter-spacing:0.03em; padding:0.15rem 0.5rem; border-radius:4px; margin-bottom:0.5rem; text-transform:uppercase;}
+  .stretch-box strong{color:var(--purple);}
+  .practical-box{background:var(--soft-amber); border:1.5px dashed var(--amber); border-radius:8px; padding:0.9rem 1.1rem; margin:1rem 0;}
+  .practical-box .tag{display:inline-block; background:var(--amber); color:#fff; font-size:0.72rem; font-weight:600; letter-spacing:0.03em; padding:0.15rem 0.5rem; border-radius:4px; margin-bottom:0.5rem; text-transform:uppercase;}
+
+  .question{background:var(--soft-grey); border:1px solid var(--border); border-radius:8px; padding:1rem 1.2rem; margin:1.1rem 0;}
+  .question .qnum{display:inline-block; background:var(--navy); color:#fff; font-weight:700; font-size:0.82rem; width:1.9rem; height:1.9rem; line-height:1.9rem; text-align:center; border-radius:50%; margin-right:0.5rem;}
+  .answer-lines{
+    display:block; width:100%; box-sizing:border-box;
+    background-image:repeating-linear-gradient(to bottom, transparent, transparent 1.65em, var(--line) 1.7em);
+    background-color:transparent;
+    min-height:5.1em; margin:0.6rem 0 0.2rem 0;
+    border:1px solid transparent; border-radius:6px;
+    outline:none; resize:none; overflow:hidden;
+    font:inherit; color:inherit; line-height:1.7em;
+    padding:0.05em 0.4em 0 0.2em;
+  }
+  .answer-lines:focus{
+    border:1px solid var(--teal); background-color:#fbfdff;
+    box-shadow:0 0 0 3px rgba(14,124,134,0.12);
+  }
+  .answer-lines::placeholder{color:#9aa8b4; font-style:italic;}
+  .answer-lines.short{min-height:1.7em;}
+  .answer-lines.long{min-height:8.5em;}
+  .reveal-btn{background:var(--teal); color:#fff; border:none; border-radius:6px; padding:0.35rem 0.8rem; font-size:0.82rem; cursor:pointer; margin-top:0.5rem; margin-right:0.5rem;}
+  .reveal-btn:hover{background:var(--teal-dark);}
+  .answer-panel{display:none; background:#fff; border:1px dashed #3f9a5c; border-radius:6px; padding:0.7rem 1rem; margin-top:0.6rem; font-size:0.92rem;}
+  .answer-panel.shown{display:block;}
+
+  /* ---------- self-marking (auto-checked) question type ---------- */
+  .sm-row{display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; margin-top:0.6rem;}
+  input.sm-input.answer-lines{
+    background:#fff !important; border:1.5px solid var(--line) !important;
+    min-height:0; width:auto; max-width:220px; padding:0.4rem 0.6rem; font-size:0.98rem;
+    background-image:none !important; line-height:normal;
+  }
+  input.sm-input.answer-lines:focus{border-color:var(--teal) !important;}
+  .sm-input.short{max-width:130px;}
+  .sm-unit{color:#5b6b78; font-size:0.92rem;}
+  .check-btn{background:var(--navy); color:#fff; border:none; border-radius:6px; padding:0.35rem 0.8rem; font-size:0.82rem; cursor:pointer;}
+  .check-btn:hover{background:#0f2540;}
+  .hint-btn{background:#fff; color:var(--amber); border:1.5px solid var(--amber); border-radius:6px; padding:0.35rem 0.8rem; font-size:0.82rem; cursor:pointer; margin-top:0.5rem; margin-right:0.5rem;}
+  .hint-btn:hover{background:var(--soft-amber);}
+  .hint-panel{display:none; background:var(--soft-amber); border-left:4px solid var(--amber); border-radius:0 6px 6px 0; padding:0.6rem 1rem; margin-top:0.6rem; font-size:0.9rem;}
+  .hint-panel.shown{display:block;}
+  .sm-feedback{font-weight:700; font-size:0.92rem;}
+  .sm-feedback.correct{color:var(--good);}
+  .sm-feedback.incorrect{color:var(--bad);}
+  .sm-feedback.long{display:block; font-weight:400; margin-top:0.6rem; padding:0.7rem 1rem; border-radius:6px; line-height:1.5;}
+  .sm-feedback.long.correct{background:var(--soft-green); border-left:4px solid var(--good); color:#145233;}
+  .sm-feedback.long.incorrect{background:var(--soft-bad); border-left:4px solid var(--bad); color:#7a1a14;}
+  .reading-input{border:1.5px solid var(--line); border-radius:6px; padding:0.4rem 0.6rem; font-size:0.95rem; font:inherit; color:inherit; width:130px; background:#fff;}
+  .reading-input:focus{outline:none; border-color:var(--teal); box-shadow:0 0 0 3px rgba(14,124,134,0.12);}
+  .progress-status{font-size:0.72rem; color:#5b6b78; white-space:nowrap; flex-shrink:0;}
+
+  .reading-row{display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; margin:0.5rem 0;}
+  .reading-row .lbl{min-width:2.4rem; font-weight:700; color:var(--navy);}
+
+  figure{margin:1.2rem auto; text-align:center; max-width:560px;}
+  figure.wide{max-width:none;}
+  figure svg{max-width:100%; height:auto; max-height:340px;}
+  figcaption{font-size:0.85rem; color:#5b6b78; margin-top:0.4rem;}
+
+  table.eqtable{width:100%; border-collapse:collapse; font-size:0.92rem; margin-top:0.7rem;}
+  table.eqtable th, table.eqtable td{border:1px solid var(--border); padding:0.5rem 0.7rem; text-align:left;}
+  table.eqtable th{background:var(--soft-blue); color:var(--navy);}
+
+  dl.glossary dt{font-weight:700; color:var(--navy); margin-top:0.7rem;}
+  dl.glossary dd{margin-left:0; margin-bottom:0.2rem;}
+
+  .topbar{
+    position:fixed; top:0; left:0; right:0; height:56px; z-index:200;
+    background:#fff; border-bottom:1px solid var(--border); box-shadow:0 2px 8px rgba(0,0,0,0.06);
+    display:flex; align-items:center; gap:0.6rem; padding:0 1rem;
+  }
+  .topbar-actions{
+    display:flex; align-items:center; gap:0.6rem; overflow-x:auto;
+    flex:1 1 auto; min-width:0; height:100%; padding-right:0.4rem;
+  }
+  .topbar .topbar-title{font-weight:700; color:var(--navy); font-size:0.92rem; white-space:nowrap; flex-shrink:0; margin-right:0.4rem;}
+  .topbar button{background:#fff; color:var(--navy); border:1px solid var(--border); border-radius:50px; padding:0.5rem 1rem; font-size:0.82rem; cursor:pointer; white-space:nowrap; flex-shrink:0;}
+  .topbar button:hover{background:var(--soft-blue);}
+  .topbar button.primary{background:var(--amber); color:#fff; border-color:var(--amber); font-weight:600; flex-shrink:0;}
+  .topbar button.primary:hover{background:#c0721c;}
+  .topbar .save-status{font-size:0.72rem; color:#5b6b78; white-space:nowrap; flex-shrink:0;}
+  @media (max-width: 900px){ .topbar .save-status{display:none;} }
+  @media (max-width: 620px){ .topbar .topbar-title{display:none;} }
+  footer.page{font-size:0.8rem; color:#7c8b98; text-align:center; margin-top:2rem;}
+
+  .sim-embed{background:#fff; border:1px solid var(--border); border-radius:10px; padding:1rem 1.2rem; margin:1rem 0;}
+  .sim-embed p.instructions{margin:0 0 0.6rem 0; font-size:0.92rem; color:#3a4753;}
+  .sim-frame{width:100%; border:none; display:block; border-radius:8px; height:560px;}
+  .sim-embed-credit{text-align:center; font-size:0.82rem; color:#7c8b98; margin-top:0.6rem;}
+  .sim-print-note{display:none;}
+
+  @media print{
+    .topbar, .reveal-btn, .check-btn, .hint-btn{display:none !important;}
+    main{max-width:100%; padding:0; margin:0;}
+    body{background:#fff; font-size:11.5pt; padding-top:0;}
+    section.topic{border:none; box-shadow:none; padding:0; margin:0 0 1.2rem 0; page-break-inside:avoid;}
+    .cover{page-break-after:always; border-radius:0;}
+    .answer-panel{display:block !important; border-style:solid;}
+    .hint-panel{display:block !important;}
+    a{color:inherit; text-decoration:none;}
+    .page-break{page-break-before:always;}
+    .answer-lines{border-color:transparent !important; box-shadow:none !important; color:#000;}
+    .answer-lines::placeholder{color:transparent;}
+    .sm-input.answer-lines{border-bottom:1.5px solid #5b6b78 !important; border-top:none !important; border-left:none !important; border-right:none !important; border-radius:0 !important;}
+    .sm-feedback, .progress-status{display:none !important;}
+    .name-box .fill{color:#000; border-bottom-color:#5b6b78;}
+    .name-box .fill::placeholder{color:transparent;}
+    .sim-frame, .sim-embed-credit, .sim-embed p.instructions{display:none !important;}
+    .sim-print-note{display:block !important; text-align:center; font-size:0.85rem; color:#5b6b78; padding:0.9rem; border:1px dashed #b9c6d3; border-radius:8px; margin:0.6rem 0;}
+  }
+
+
 </style>
 </head>
 <body>
-<div class="wb">
-  <h1>Basic Circuits Concept Check</h1>
+<div class="topbar no-print">
+  <div class="topbar-actions">
+    <span class="topbar-title">Basic Circuits Concept Check</span>
+    <button onclick="revealAll()">Show all answers</button>
+    <button onclick="hideAll()">Hide all answers</button>
+    <button onclick="clearMyAnswers()">Clear my answers</button>
+    <button onclick="saveAnswersToFile()">💾 Save answers</button>
+    <button onclick="triggerLoadAnswers()">📂 Load answers</button>
+    <input type="file" id="loadFileInput" accept="application/json" style="display:none" onchange="handleLoadFile(event)">
+    <button id="btnLinkFile" style="display:none;" onclick="linkSaveFile()">🔗 Link a save file</button>
+    <span class="progress-status" id="progressStatus"></span>
+    <span class="save-status" id="saveStatus">Checking autosave…</span>
+  </div>
+  <button class="primary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+</div>
 
-  <div class="titleslide">
-    <h2>Basic circuits concept check</h2>
-    <p class="ts-sub">A focus on potential difference and current using Kirchhoff's Laws.</p>
-    <div class="ts-laws">
-      <div class="ts-law">
-        <div class="ts-eq">Σ V<sub>loop</sub> = 0</div>
-        <div>For any loop an electron can travel</div>
-      </div>
-      <div class="ts-law">
-        <div class="ts-eq">Σ I<sub>point</sub> = 0</div>
-        <div>For any point in a circuit the current in is equal to the current out</div>
-      </div>
+<main>
+  <section class="cover" id="cover">
+    <h1>Basic Circuits Concept Check</h1>
+    <div class="goals" style="margin-top:1.3rem;">
+      <strong style="color:#fff;">By the end of this workbook you should be able to:</strong>
+      <ul>
+        <li>read ammeter and voltmeter values from a labelled circuit diagram, given some readings and a circuit's structure</li>
+        <li>apply Kirchhoff's current law and Kirchhoff's potential difference law to series, parallel, and combined circuits</li>
+        <li>use the fact that identical bulbs share current or potential difference equally to work out unknown readings</li>
+        <li>combine Ohm's law with Kirchhoff's laws to solve a multi-step combined-circuit problem</li>
+      </ul>
     </div>
-  </div>
+    <div class="name-box">
+      <label>Name</label><input type="text" class="fill" id="studentName" autocomplete="name">
+    </div>
+  </section>
 
-  <div class="formulabox">
-    Assume all bulbs shown are identical, and batteries/wires have no resistance.
-  </div>
-
-  <!-- CIRCUIT 1 -->
-  <div class="section" data-circuit="1">
+  <section class="topic" id="s0">
+    <h2>Basic circuits concept check</h2>
+    <p>A focus on potential difference and current using Kirchhoff's Laws.</p>
+    <div class="keybox"><strong>Σ V<sub>loop</sub> = 0</strong> — for any loop an electron can travel.<br><strong>Σ I<sub>point</sub> = 0</strong> — for any point in a circuit, the current in is equal to the current out.</div>
+    <div class="keyword"><b>Assume</b> all bulbs shown are identical, and batteries/wires have no resistance, unless stated otherwise.</div>
+  </section>
+  <section class="topic" id="s1">
     <h2>Circuit 1</h2>
-    <div class="circuit-row">
-      <div class="diagram">
-        <svg viewBox="0 0 320 160">
+    <div class="question" id="circuit1">
+    <figure>
+      <svg viewBox="0 0 320 160">
           <line x1="45" y1="20" x2="145" y2="20" stroke="#1b2a4a" stroke-width="2"/>
           <line x1="165" y1="20" x2="275" y2="20" stroke="#1b2a4a" stroke-width="2"/>
           <line x1="45" y1="20" x2="45" y2="140" stroke="#1b2a4a" stroke-width="2"/>
@@ -106,23 +228,24 @@
           <line x1="145" y1="128" x2="175" y2="152" stroke="#1a1f2e" stroke-width="2"/>
           <line x1="175" y1="128" x2="145" y2="152" stroke="#1a1f2e" stroke-width="2"/>
         </svg>
-      </div>
-      <div class="readings">
-        <div class="reading-row"><span class="lbl">A1</span><span class="given">3 A (given)</span></div>
-        <div class="reading-row" data-answer="3" data-tol="0.02"><span class="lbl">A2</span><input type="text" class="ans-input"><span class="unit">A</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="btnrow"><button class="hint-btn">Hint</button></div>
-        <div class="hint">It's a single series loop — current is the same everywhere.</div>
-        <div class="solution">Series circuit: A2 = A1 = <strong>3 A</strong></div>
-      </div>
-    </div>
-  </div>
+      <figcaption>Fig. 1 Circuit 1</figcaption>
+    </figure>
 
-  <!-- CIRCUIT 2 -->
-  <div class="section" data-circuit="2">
+      <div class="reading-row"><span class="lbl">A1</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">3 A (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="3" data-tol="0.02" data-notype="true"><span class="lbl">A2</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A2 reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+        
+      </div>
+      <div class="hint-panel">It's a single series loop — current is the same everywhere.</div>
+    </div>
+  </section>
+
+  <section class="topic" id="s2">
     <h2>Circuit 2</h2>
-    <div class="circuit-row">
-      <div class="diagram">
-        <svg viewBox="0 0 320 160">
+    <div class="question" id="circuit2">
+    <figure>
+      <svg viewBox="0 0 320 160">
           <line x1="45" y1="20" x2="145" y2="20" stroke="#1b2a4a" stroke-width="2"/>
           <line x1="165" y1="20" x2="275" y2="20" stroke="#1b2a4a" stroke-width="2"/>
           <line x1="45" y1="20" x2="45" y2="140" stroke="#1b2a4a" stroke-width="2"/>
@@ -148,25 +271,26 @@
           <line x1="198" y1="129" x2="222" y2="151" stroke="#1a1f2e" stroke-width="2"/>
           <line x1="222" y1="129" x2="198" y2="151" stroke="#1a1f2e" stroke-width="2"/>
         </svg>
-      </div>
-      <div class="readings">
-        <p class="note">The bulbs are identical.</p>
-        <div class="reading-row" data-answer="0.7" data-tol="0.02"><span class="lbl">A1</span><input type="text" class="ans-input"><span class="unit">A</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row"><span class="lbl">A2</span><span class="given">0.7 A (given)</span></div>
-        <div class="reading-row" data-answer="0.7" data-tol="0.02"><span class="lbl">A3</span><input type="text" class="ans-input"><span class="unit">A</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="btnrow"><button class="hint-btn">Hint</button></div>
-        <div class="hint">Still one series loop — every ammeter reads the same current.</div>
-        <div class="solution">A1 = A2 = A3 = <strong>0.7 A</strong> (series circuit)</div>
-      </div>
-    </div>
-  </div>
+      <figcaption>Fig. 2 Circuit 2</figcaption>
+    </figure>
 
-  <!-- CIRCUIT 3 -->
-  <div class="section" data-circuit="3">
+      <p class="note" style="font-size:0.88rem;color:#5b6b78;font-style:italic;margin-bottom:0.6rem;">The bulbs are identical.</p>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="0.7" data-tol="0.02" data-notype="true"><span class="lbl">A1</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A1 reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">A2</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">0.7 A (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="0.7" data-tol="0.02" data-notype="true"><span class="lbl">A3</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A3 reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+        
+      </div>
+      <div class="hint-panel">Still one series loop — every ammeter reads the same current.</div>
+    </div>
+  </section>
+
+  <section class="topic" id="s3">
     <h2>Circuit 3</h2>
-    <div class="circuit-row">
-      <div class="diagram">
-        <svg viewBox="0 0 320 210">
+    <div class="question" id="circuit3">
+    <figure>
+      <svg viewBox="0 0 320 210">
           <line x1="20" y1="50" x2="145" y2="50" stroke="#1b2a4a" stroke-width="2"/>
           <line x1="165" y1="50" x2="300" y2="50" stroke="#1b2a4a" stroke-width="2"/>
           <line x1="20" y1="50" x2="20" y2="150" stroke="#1b2a4a" stroke-width="2"/>
@@ -195,23 +319,24 @@
           <circle cx="160" cy="185" r="18" fill="#e8f1ff" stroke="#3a7bd5" stroke-width="2"/>
           <text x="160" y="189" text-anchor="middle" class="lbl-svg" fill="#3a7bd5" font-weight="bold">V2</text>
         </svg>
-      </div>
-      <div class="readings">
-        <div class="reading-row" data-answer="6" data-tol="0.02"><span class="lbl">V1</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row"><span class="lbl">V2</span><span class="given">6 V (given)</span></div>
-        <div class="btnrow"><button class="hint-btn">Hint</button></div>
-        <div class="hint">Kirchhoff's voltage law: with only one component in the loop, the pd across it equals the battery pd.</div>
-        <div class="solution">V1 = V2 = <strong>6 V</strong></div>
-      </div>
-    </div>
-  </div>
+      <figcaption>Fig. 3 Circuit 3</figcaption>
+    </figure>
 
-  <!-- CIRCUIT 4 -->
-  <div class="section" data-circuit="4">
+      <div class="reading-row sm-question" data-qtype="number" data-answer="6" data-tol="0.02" data-notype="true"><span class="lbl">V1</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V1 reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">V2</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">6 V (given)</span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+        
+      </div>
+      <div class="hint-panel">Kirchhoff's voltage law: with only one component in the loop, the pd across it equals the battery pd.</div>
+    </div>
+  </section>
+
+  <section class="topic" id="s4">
     <h2>Circuit 4</h2>
-    <div class="circuit-row">
-      <div class="diagram">
-        <svg viewBox="0 0 320 210">
+    <div class="question" id="circuit4">
+    <figure>
+      <svg viewBox="0 0 320 210">
           <line x1="20" y1="50" x2="145" y2="50" stroke="#1b2a4a" stroke-width="2"/>
           <line x1="165" y1="50" x2="300" y2="50" stroke="#1b2a4a" stroke-width="2"/>
           <line x1="20" y1="50" x2="20" y2="150" stroke="#1b2a4a" stroke-width="2"/>
@@ -251,25 +376,26 @@
           <circle cx="210" cy="185" r="16" fill="#e8f1ff" stroke="#3a7bd5" stroke-width="2"/>
           <text x="210" y="189" text-anchor="middle" class="lbl-svg" fill="#3a7bd5" font-weight="bold" font-size="12">V3</text>
         </svg>
-      </div>
-      <div class="readings">
-        <p class="note">The bulbs are identical.</p>
-        <div class="reading-row" data-answer="6" data-tol="0.02"><span class="lbl">V1</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row"><span class="lbl">V2</span><span class="given">3 V (given)</span></div>
-        <div class="reading-row" data-answer="3" data-tol="0.02"><span class="lbl">V3</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="btnrow"><button class="hint-btn">Hint</button></div>
-        <div class="hint">Identical bulbs in series share the total pd equally.</div>
-        <div class="solution">V3 = V2 = 3 V (identical bulbs share pd equally). V1 = V2 + V3 = 3 + 3 = <strong>6 V</strong></div>
-      </div>
-    </div>
-  </div>
+      <figcaption>Fig. 4 Circuit 4</figcaption>
+    </figure>
 
-  <!-- CIRCUIT 5 -->
-  <div class="section" data-circuit="5">
+      <p class="note" style="font-size:0.88rem;color:#5b6b78;font-style:italic;margin-bottom:0.6rem;">The bulbs are identical.</p>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="6" data-tol="0.02" data-notype="true"><span class="lbl">V1</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V1 reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">V2</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">3 V (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="3" data-tol="0.02" data-notype="true"><span class="lbl">V3</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V3 reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+        
+      </div>
+      <div class="hint-panel">Identical bulbs in series share the total pd equally.</div>
+    </div>
+  </section>
+
+  <section class="topic" id="s5">
     <h2>Circuit 5</h2>
-    <div class="circuit-row">
-      <div class="diagram">
-        <svg viewBox="0 0 300 220">
+    <div class="question" id="circuit5">
+    <figure>
+      <svg viewBox="0 0 300 220">
           <line x1="20" y1="50" x2="20" y2="190" stroke="#1b2a4a" stroke-width="2"/>
           <line x1="280" y1="50" x2="280" y2="190" stroke="#1b2a4a" stroke-width="2"/>
           <!-- rung 1: battery then A1, in series -->
@@ -301,25 +427,26 @@
           <text x="170" y="195" text-anchor="middle" class="lbl-svg" fill="#e8533a" font-weight="bold" font-size="12">A3</text>
           <line x1="187" y1="190" x2="280" y2="190" stroke="#1b2a4a" stroke-width="2"/>
         </svg>
-      </div>
-      <div class="readings">
-        <p class="note">The bulbs are identical.</p>
-        <div class="reading-row" data-answer="0.4" data-tol="0.02"><span class="lbl">A1</span><input type="text" class="ans-input"><span class="unit">A</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row" data-answer="0.2" data-tol="0.02"><span class="lbl">A2</span><input type="text" class="ans-input"><span class="unit">A</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row"><span class="lbl">A3</span><span class="given">0.2 A (given)</span></div>
-        <div class="btnrow"><button class="hint-btn">Hint</button></div>
-        <div class="hint">Identical bulbs in parallel share the current equally; A1 = A2 + A3.</div>
-        <div class="solution">A2 = A3 = <strong>0.2 A</strong> (identical parallel branches). A1 = A2 + A3 = <strong>0.4 A</strong></div>
-      </div>
-    </div>
-  </div>
+      <figcaption>Fig. 5 Circuit 5</figcaption>
+    </figure>
 
-  <!-- CIRCUIT 6 -->
-  <div class="section" data-circuit="6">
+      <p class="note" style="font-size:0.88rem;color:#5b6b78;font-style:italic;margin-bottom:0.6rem;">The bulbs are identical.</p>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="0.4" data-tol="0.02" data-notype="true"><span class="lbl">A1</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A1 reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="0.2" data-tol="0.02" data-notype="true"><span class="lbl">A2</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A2 reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">A3</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">0.2 A (given)</span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+        
+      </div>
+      <div class="hint-panel">Identical bulbs in parallel share the current equally; A1 = A2 + A3.</div>
+    </div>
+  </section>
+
+  <section class="topic" id="s6">
     <h2>Circuit 6</h2>
-    <div class="circuit-row">
-      <div class="diagram">
-        <svg viewBox="0 0 300 220">
+    <div class="question" id="circuit6">
+    <figure>
+      <svg viewBox="0 0 300 220">
           <line x1="20" y1="50" x2="20" y2="190" stroke="#1b2a4a" stroke-width="2"/>
           <line x1="280" y1="50" x2="280" y2="190" stroke="#1b2a4a" stroke-width="2"/>
           <!-- rung 1: battery then A1, in series -->
@@ -355,25 +482,26 @@
           <text x="175" y="195" text-anchor="middle" class="lbl-svg" fill="#e8533a" font-weight="bold" font-size="12">A3</text>
           <line x1="192" y1="190" x2="280" y2="190" stroke="#1b2a4a" stroke-width="2"/>
         </svg>
-      </div>
-      <div class="readings">
-        <p class="note">The bulbs are identical.</p>
-        <div class="reading-row"><span class="lbl">A1</span><span class="given">0.6 A (given)</span></div>
-        <div class="reading-row" data-answer="0.4" data-tol="0.02"><span class="lbl">A2</span><input type="text" class="ans-input"><span class="unit">A</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row"><span class="lbl">A3</span><span class="given">0.2 A (given)</span></div>
-        <div class="btnrow"><button class="hint-btn">Hint</button></div>
-        <div class="hint">Branch 2 has twice the resistance of branch 1 (two bulbs, not one), so it carries half the current. A1 = A2 + A3.</div>
-        <div class="solution">A1 = A2 + A3, so A2 = 0.6 − 0.2 = <strong>0.4 A</strong> (double-checks: branch 2's resistance is double branch 1's, so its current, 0.2 A, is half of 0.4 A ✓)</div>
-      </div>
-    </div>
-  </div>
+      <figcaption>Fig. 6 Circuit 6</figcaption>
+    </figure>
 
-  <!-- CIRCUIT 7 -->
-  <div class="section" data-circuit="7">
+      <p class="note" style="font-size:0.88rem;color:#5b6b78;font-style:italic;margin-bottom:0.6rem;">The bulbs are identical.</p>
+      <div class="reading-row"><span class="lbl">A1</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">0.6 A (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="0.4" data-tol="0.02" data-notype="true"><span class="lbl">A2</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A2 reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">A3</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">0.2 A (given)</span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+        
+      </div>
+      <div class="hint-panel">Branch 2 has twice the resistance of branch 1 (two bulbs, not one), so it carries half the current. A1 = A2 + A3.</div>
+    </div>
+  </section>
+
+  <section class="topic" id="s7">
     <h2>Circuit 7</h2>
-    <div class="circuit-row">
-      <div class="diagram">
-        <svg viewBox="0 0 280 230">
+    <div class="question" id="circuit7">
+    <figure>
+      <svg viewBox="0 0 280 230">
           <line x1="30" y1="30" x2="30" y2="170" stroke="#1a1f2e" stroke-width="2"/>
           <line x1="250" y1="30" x2="250" y2="170" stroke="#1a1f2e" stroke-width="2"/>
           <!-- rung 1: battery -->
@@ -415,25 +543,26 @@
           <circle cx="140" cy="202" r="14" fill="#e8f1ff" stroke="#3a7bd5" stroke-width="2"/>
           <text x="140" y="206" text-anchor="middle" class="lbl-svg" fill="#3a7bd5" font-weight="bold" font-size="12">V3</text>
         </svg>
-      </div>
-      <div class="readings">
-        <p class="note">The bulbs are identical.</p>
-        <div class="reading-row" data-answer="12" data-tol="0.02"><span class="lbl">V1</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row"><span class="lbl">V2</span><span class="given">12 V (given)</span></div>
-        <div class="reading-row" data-answer="12" data-tol="0.02"><span class="lbl">V3</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="btnrow"><button class="hint-btn">Hint</button></div>
-        <div class="hint">Everything is directly in parallel — every branch sees the same pd.</div>
-        <div class="solution">All three branches share the same two nodes, so V1 = V2 = V3 = <strong>12 V</strong></div>
-      </div>
-    </div>
-  </div>
+      <figcaption>Fig. 7 Circuit 7</figcaption>
+    </figure>
 
-  <!-- CIRCUIT 8 -->
-  <div class="section" data-circuit="8">
+      <p class="note" style="font-size:0.88rem;color:#5b6b78;font-style:italic;margin-bottom:0.6rem;">The bulbs are identical.</p>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="12" data-tol="0.02" data-notype="true"><span class="lbl">V1</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V1 reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">V2</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">12 V (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="12" data-tol="0.02" data-notype="true"><span class="lbl">V3</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V3 reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+        
+      </div>
+      <div class="hint-panel">Everything is directly in parallel — every branch sees the same pd.</div>
+    </div>
+  </section>
+
+  <section class="topic" id="s8">
     <h2>Circuit 8</h2>
-    <div class="circuit-row">
-      <div class="diagram">
-        <svg viewBox="0 0 280 230">
+    <div class="question" id="circuit8">
+    <figure>
+      <svg viewBox="0 0 280 230">
           <line x1="30" y1="30" x2="30" y2="170" stroke="#1a1f2e" stroke-width="2"/>
           <line x1="250" y1="30" x2="250" y2="170" stroke="#1a1f2e" stroke-width="2"/>
           <!-- rung 1: battery -->
@@ -485,26 +614,27 @@
           <circle cx="180" cy="202" r="13" fill="#e8f1ff" stroke="#3a7bd5" stroke-width="2"/>
           <text x="180" y="206" text-anchor="middle" class="lbl-svg" fill="#3a7bd5" font-weight="bold" font-size="11">V4</text>
         </svg>
-      </div>
-      <div class="readings">
-        <p class="note">The bulbs are identical.</p>
-        <div class="reading-row" data-answer="10" data-tol="0.02"><span class="lbl">V1</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row"><span class="lbl">V2</span><span class="given">10 V (given)</span></div>
-        <div class="reading-row" data-answer="5" data-tol="0.02"><span class="lbl">V3</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row" data-answer="5" data-tol="0.02"><span class="lbl">V4</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="btnrow"><button class="hint-btn">Hint</button></div>
-        <div class="hint">All three branches are parallel (same total pd, 10 V). The two-bulb branch splits that 10 V equally.</div>
-        <div class="solution">V1 = V2 = <strong>10 V</strong> (parallel branches). The two-bulb branch also totals 10 V, split equally: V3 = V4 = <strong>5 V</strong></div>
-      </div>
-    </div>
-  </div>
+      <figcaption>Fig. 8 Circuit 8</figcaption>
+    </figure>
 
-  <!-- CIRCUIT 9 -->
-  <div class="section" data-circuit="9">
+      <p class="note" style="font-size:0.88rem;color:#5b6b78;font-style:italic;margin-bottom:0.6rem;">The bulbs are identical.</p>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="10" data-tol="0.02" data-notype="true"><span class="lbl">V1</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V1 reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">V2</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">10 V (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="5" data-tol="0.02" data-notype="true"><span class="lbl">V3</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V3 reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="5" data-tol="0.02" data-notype="true"><span class="lbl">V4</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V4 reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+        
+      </div>
+      <div class="hint-panel">All three branches are parallel (same total pd, 10 V). The two-bulb branch splits that 10 V equally.</div>
+    </div>
+  </section>
+
+  <section class="topic" id="s9">
     <h2>Circuit 9</h2>
-    <div class="circuit-row">
-      <div class="diagram">
-        <svg viewBox="0 0 300 230">
+    <div class="question" id="circuit9">
+    <figure>
+      <svg viewBox="0 0 300 230">
           <line x1="20" y1="50" x2="20" y2="140" stroke="#1b2a4a" stroke-width="2"/>
           <line x1="280" y1="50" x2="280" y2="140" stroke="#1b2a4a" stroke-width="2"/>
           <!-- top rung: double-cell battery, then A1 -->
@@ -548,27 +678,28 @@
           <circle cx="210" cy="175" r="15" fill="#e8f1ff" stroke="#3a7bd5" stroke-width="2"/>
           <text x="210" y="179" text-anchor="middle" class="lbl-svg" fill="#3a7bd5" font-weight="bold" font-size="11">V3</text>
         </svg>
-      </div>
-      <div class="readings">
-        <p class="note">The bulbs are identical.</p>
-        <div class="reading-row" data-answer="0.3" data-tol="0.02"><span class="lbl">A1</span><input type="text" class="ans-input"><span class="unit">A</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row"><span class="lbl">V2</span><span class="given">5 V (given)</span></div>
-        <div class="reading-row"><span class="lbl">A2</span><span class="given">0.3 A (given)</span></div>
-        <div class="reading-row" data-answer="10" data-tol="0.02"><span class="lbl">V1</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row" data-answer="5" data-tol="0.02"><span class="lbl">V3</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="btnrow"><button class="hint-btn">Hint</button></div>
-        <div class="hint">Series loop: all ammeters read the same. Identical bulbs share the total pd equally.</div>
-        <div class="solution">A1 = A2 = <strong>0.3 A</strong> (series). V3 = V2 = <strong>5 V</strong> (identical bulbs). V1 = V2 + V3 = <strong>10 V</strong></div>
-      </div>
-    </div>
-  </div>
+      <figcaption>Fig. 9 Circuit 9</figcaption>
+    </figure>
 
-  <!-- CIRCUIT 10 -->
-  <div class="section" data-circuit="10">
+      <p class="note" style="font-size:0.88rem;color:#5b6b78;font-style:italic;margin-bottom:0.6rem;">The bulbs are identical.</p>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="0.3" data-tol="0.02" data-notype="true"><span class="lbl">A1</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A1 reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">V2</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">5 V (given)</span></div>
+      <div class="reading-row"><span class="lbl">A2</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">0.3 A (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="10" data-tol="0.02" data-notype="true"><span class="lbl">V1</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V1 reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="5" data-tol="0.02" data-notype="true"><span class="lbl">V3</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V3 reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+        
+      </div>
+      <div class="hint-panel">Series loop: all ammeters read the same. Identical bulbs share the total pd equally.</div>
+    </div>
+  </section>
+
+  <section class="topic" id="s10">
     <h2>Circuit 10</h2>
-    <div class="circuit-row">
-      <div class="diagram">
-        <svg viewBox="0 0 300 300">
+    <div class="question" id="circuit10">
+    <figure>
+      <svg viewBox="0 0 300 300">
           <line x1="20" y1="20" x2="20" y2="230" stroke="#1a1f2e" stroke-width="2"/>
           <line x1="280" y1="20" x2="280" y2="230" stroke="#1a1f2e" stroke-width="2"/>
           <!-- top rung: battery, with A1/A2 centred between the edge and the battery -->
@@ -617,27 +748,28 @@
           <circle cx="150" cy="270" r="13" fill="#e8f1ff" stroke="#3a7bd5" stroke-width="2"/>
           <text x="150" y="274" text-anchor="middle" class="lbl-svg" fill="#3a7bd5" font-weight="bold" font-size="11">V3</text>
         </svg>
-      </div>
-      <div class="readings">
-        <p class="note">The bulbs are identical.</p>
-        <div class="reading-row" data-answer="2" data-tol="0.02"><span class="lbl">V1</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row"><span class="lbl">A1</span><span class="given">3 A (given)</span></div>
-        <div class="reading-row" data-answer="3" data-tol="0.02"><span class="lbl">A2</span><input type="text" class="ans-input"><span class="unit">A</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row"><span class="lbl">V2</span><span class="given">2 V (given)</span></div>
-        <div class="reading-row" data-answer="2" data-tol="0.02"><span class="lbl">V3</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="btnrow"><button class="hint-btn">Hint</button></div>
-        <div class="hint">A1 and A2 sit on either side of the same parallel network, so they read the same total current. Parallel branches share the same pd.</div>
-        <div class="solution">A2 = A1 = <strong>3 A</strong> (same main current). V1 = V3 = V2 = <strong>2 V</strong> (parallel)</div>
-      </div>
-    </div>
-  </div>
+      <figcaption>Fig. 10 Circuit 10</figcaption>
+    </figure>
 
-  <!-- CIRCUIT 11 -->
-  <div class="section" data-circuit="11">
+      <p class="note" style="font-size:0.88rem;color:#5b6b78;font-style:italic;margin-bottom:0.6rem;">The bulbs are identical.</p>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="2" data-tol="0.02" data-notype="true"><span class="lbl">V1</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V1 reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">A1</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">3 A (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="3" data-tol="0.02" data-notype="true"><span class="lbl">A2</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A2 reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">V2</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">2 V (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="2" data-tol="0.02" data-notype="true"><span class="lbl">V3</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V3 reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+        
+      </div>
+      <div class="hint-panel">A1 and A2 sit on either side of the same parallel network, so they read the same total current. Parallel branches share the same pd.</div>
+    </div>
+  </section>
+
+  <section class="topic" id="s11">
     <h2>Circuit 11</h2>
-    <div class="circuit-row">
-      <div class="diagram">
-        <svg viewBox="0 0 300 250">
+    <div class="question" id="circuit11">
+    <figure>
+      <svg viewBox="0 0 300 250">
           <line x1="20" y1="50" x2="20" y2="190" stroke="#1b2a4a" stroke-width="2"/>
           <line x1="280" y1="50" x2="280" y2="190" stroke="#1b2a4a" stroke-width="2"/>
           <!-- top rung: A1, battery, A4 (ammeters centred between the rail edges and the battery) -->
@@ -691,29 +823,30 @@
           <circle cx="90" cy="225" r="15" fill="#e8f1ff" stroke="#3a7bd5" stroke-width="2"/>
           <text x="90" y="229" text-anchor="middle" class="lbl-svg" fill="#3a7bd5" font-weight="bold" font-size="11">V3</text>
         </svg>
-      </div>
-      <div class="readings">
-        <p class="note">The bulbs are identical.</p>
-        <div class="reading-row"><span class="lbl">V1</span><span class="given">12 V (given)</span></div>
-        <div class="reading-row"><span class="lbl">A1</span><span class="given">2 A (given)</span></div>
-        <div class="reading-row" data-answer="12" data-tol="0.02"><span class="lbl">V2</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row" data-answer="1" data-tol="0.02"><span class="lbl">A2</span><input type="text" class="ans-input"><span class="unit">A</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row" data-answer="12" data-tol="0.02"><span class="lbl">V3</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row" data-answer="1" data-tol="0.02"><span class="lbl">A3</span><input type="text" class="ans-input"><span class="unit">A</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row" data-answer="2" data-tol="0.02"><span class="lbl">A4</span><input type="text" class="ans-input"><span class="unit">A</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="btnrow"><button class="hint-btn">Hint</button></div>
-        <div class="hint">Both bulb branches are parallel with the battery (same pd). Identical bulbs split the total current equally. A1 and A4 are both in the main line, so they read the same current.</div>
-        <div class="solution">V2 = V3 = V1 = <strong>12 V</strong>. A2 = A3 = A1 ÷ 2 = <strong>1 A</strong> each. A4 = A1 = <strong>2 A</strong> (same main-line current)</div>
-      </div>
-    </div>
-  </div>
+      <figcaption>Fig. 11 Circuit 11</figcaption>
+    </figure>
 
-  <!-- CIRCUIT 12 -->
-  <div class="section" data-circuit="12">
+      <p class="note" style="font-size:0.88rem;color:#5b6b78;font-style:italic;margin-bottom:0.6rem;">The bulbs are identical.</p>
+      <div class="reading-row"><span class="lbl">V1</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">12 V (given)</span></div>
+      <div class="reading-row"><span class="lbl">A1</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">2 A (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="12" data-tol="0.02" data-notype="true"><span class="lbl">V2</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V2 reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="1" data-tol="0.02" data-notype="true"><span class="lbl">A2</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A2 reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="12" data-tol="0.02" data-notype="true"><span class="lbl">V3</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V3 reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="1" data-tol="0.02" data-notype="true"><span class="lbl">A3</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A3 reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="2" data-tol="0.02" data-notype="true"><span class="lbl">A4</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A4 reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+        
+      </div>
+      <div class="hint-panel">Both bulb branches are parallel with the battery (same pd). Identical bulbs split the total current equally. A1 and A4 are both in the main line, so they read the same current.</div>
+    </div>
+  </section>
+
+  <section class="topic" id="s12">
     <h2>Circuit 12</h2>
-    <div class="circuit-row">
-      <div class="diagram">
-        <svg viewBox="0 0 320 300">
+    <div class="question" id="circuit12">
+    <figure>
+      <svg viewBox="0 0 320 300">
           <!-- left rail: battery corner down to row 3 -->
           <line x1="20" y1="50" x2="20" y2="220" stroke="#1b2a4a" stroke-width="2"/>
           <!-- right rail: full height -->
@@ -778,29 +911,30 @@
           <circle cx="140" cy="255" r="13" fill="#e8f1ff" stroke="#3a7bd5" stroke-width="2"/>
           <text x="140" y="259" text-anchor="middle" class="lbl-svg" fill="#3a7bd5" font-weight="bold" font-size="11">V4</text>
         </svg>
-      </div>
-      <div class="readings">
-        <p class="note">The bulbs are identical.</p>
-        <div class="reading-row" data-answer="6" data-tol="0.02"><span class="lbl">V1</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row" data-answer="0.15" data-tol="0.03"><span class="lbl">A1</span><input type="text" class="ans-input"><span class="unit">A</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row" data-answer="6" data-tol="0.02"><span class="lbl">V2</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row"><span class="lbl">A2</span><span class="given">0.1 A (given)</span></div>
-        <div class="reading-row" data-answer="3" data-tol="0.02"><span class="lbl">V3</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row"><span class="lbl">A3</span><span class="given">0.05 A (given)</span></div>
-        <div class="reading-row"><span class="lbl">V4</span><span class="given">3 V (given)</span></div>
-        <div class="btnrow"><button class="hint-btn">Hint</button></div>
-        <div class="hint">Branch 1 (bulb + A2) is directly across the battery, so V2 = V1. Branch 2's two identical bulbs are in series, so they share V4's pd equally, meaning V3 = V4 and the branch 2 total (= V1) is twice V4. A1 = A2 + A3.</div>
-        <div class="solution">Branch 2: V3 = V4 = <strong>3 V</strong> (identical bulbs in series share the pd equally), so the branch 2 total pd = 3 + 3 = 6 V. Since branch 1 and branch 2 are both directly across the battery, V1 = V2 = <strong>6 V</strong>. A1 = A2 + A3 = 0.1 + 0.05 = <strong>0.15 A</strong></div>
-      </div>
-    </div>
-  </div>
+      <figcaption>Fig. 12 Circuit 12</figcaption>
+    </figure>
 
-  <!-- CIRCUIT 13 -->
-  <div class="section" data-circuit="13">
+      <p class="note" style="font-size:0.88rem;color:#5b6b78;font-style:italic;margin-bottom:0.6rem;">The bulbs are identical.</p>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="6" data-tol="0.02" data-notype="true"><span class="lbl">V1</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V1 reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="0.15" data-tol="0.03" data-notype="true"><span class="lbl">A1</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A1 reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="6" data-tol="0.02" data-notype="true"><span class="lbl">V2</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V2 reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">A2</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">0.1 A (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="3" data-tol="0.02" data-notype="true"><span class="lbl">V3</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V3 reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">A3</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">0.05 A (given)</span></div>
+      <div class="reading-row"><span class="lbl">V4</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">3 V (given)</span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+        
+      </div>
+      <div class="hint-panel">Branch 1 (bulb + A2) is directly across the battery, so V2 = V1. Branch 2's two identical bulbs are in series, so they share V4's pd equally, meaning V3 = V4 and the branch 2 total (= V1) is twice V4. A1 = A2 + A3.</div>
+    </div>
+  </section>
+
+  <section class="topic" id="s13">
     <h2>Circuit 13</h2>
-    <div class="circuit-row">
-      <div class="diagram">
-        <svg viewBox="0 -45 320 325">
+    <div class="question" id="circuit13">
+    <figure>
+      <svg viewBox="0 -45 320 325">
           <line x1="30" y1="30" x2="30" y2="190" stroke="#1b2a4a" stroke-width="2"/>
           <line x1="250" y1="30" x2="250" y2="190" stroke="#1b2a4a" stroke-width="2"/>
           <line x1="30" y1="190" x2="250" y2="190" stroke="#1b2a4a" stroke-width="2"/>
@@ -845,23 +979,24 @@
           <circle cx="140" cy="250" r="15" fill="#e8f1ff" stroke="#3a7bd5" stroke-width="2"/>
           <text x="140" y="254" text-anchor="middle" class="lbl-svg" fill="#3a7bd5" font-weight="bold" font-size="10">V</text>
         </svg>
-      </div>
-      <div class="readings">
-        <div class="reading-row" data-answer="2" data-tol="0.03"><span class="lbl">V(bulb)</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row" data-answer="0.08" data-tol="0.03"><span class="lbl">A(bottom)</span><input type="text" class="ans-input"><span class="unit">A</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="btnrow"><button class="hint-btn">Hint</button></div>
-        <div class="hint">Series loop: same current throughout. The battery's 6 V splits between the resistor and the bulb.</div>
-        <div class="solution">Bottom ammeter = 0.08 A (series, same current). V(bulb) = 6 − 4 = <strong>2 V</strong></div>
-      </div>
-    </div>
-  </div>
+      <figcaption>Fig. 13 Circuit 13</figcaption>
+    </figure>
 
-  <!-- CIRCUIT 14 -->
-  <div class="section" data-circuit="14">
+      <div class="reading-row sm-question" data-qtype="number" data-answer="2" data-tol="0.03" data-notype="true"><span class="lbl">V(bulb)</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V(bulb) reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="0.08" data-tol="0.03" data-notype="true"><span class="lbl">A(bottom)</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A(bottom) reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+        
+      </div>
+      <div class="hint-panel">Series loop: same current throughout. The battery's 6 V splits between the resistor and the bulb.</div>
+    </div>
+  </section>
+
+  <section class="topic" id="s14">
     <h2>Circuit 14</h2>
-    <div class="circuit-row">
-      <div class="diagram">
-        <svg viewBox="0 0 300 250">
+    <div class="question" id="circuit14">
+    <figure>
+      <svg viewBox="0 0 300 250">
           <line x1="20" y1="50" x2="20" y2="180" stroke="#1b2a4a" stroke-width="2"/>
           <line x1="280" y1="50" x2="280" y2="180" stroke="#1b2a4a" stroke-width="2"/>
           <!-- top rung: double-cell battery -->
@@ -908,24 +1043,25 @@
           <circle cx="150" cy="220" r="15" fill="#e8f1ff" stroke="#3a7bd5" stroke-width="2"/>
           <text x="150" y="224" text-anchor="middle" class="lbl-svg" fill="#3a7bd5" font-weight="bold" font-size="10">V</text>
         </svg>
-      </div>
-      <div class="readings">
-        <div class="reading-row" data-answer="1.5" data-tol="0.03"><span class="lbl">A (total)</span><input type="text" class="ans-input"><span class="unit">A</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row" data-answer="6" data-tol="0.02"><span class="lbl">V (bulb)</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row" data-answer="6" data-tol="0.02"><span class="lbl">V (resistor)</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="btnrow"><button class="hint-btn">Hint</button></div>
-        <div class="hint">Both branches are parallel with the 6 V battery, so both see the full 6 V. Total current = sum of both branch currents.</div>
-        <div class="solution">Both branches: full battery pd, so V(bulb) = V(resistor) = <strong>6 V</strong>. Total current = 0.5 + 1 = <strong>1.5 A</strong></div>
-      </div>
-    </div>
-  </div>
+      <figcaption>Fig. 14 Circuit 14</figcaption>
+    </figure>
 
-  <!-- CIRCUIT 15 -->
-  <div class="section" data-circuit="15">
+      <div class="reading-row sm-question" data-qtype="number" data-answer="1.5" data-tol="0.03" data-notype="true"><span class="lbl">A (total)</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A (total) reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="6" data-tol="0.02" data-notype="true"><span class="lbl">V (bulb)</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V (bulb) reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="6" data-tol="0.02" data-notype="true"><span class="lbl">V (resistor)</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V (resistor) reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+        
+      </div>
+      <div class="hint-panel">Both branches are parallel with the 6 V battery, so both see the full 6 V. Total current = sum of both branch currents.</div>
+    </div>
+  </section>
+
+  <section class="topic" id="s15">
     <h2>Circuit 15</h2>
-    <div class="circuit-row">
-      <div class="diagram">
-        <svg viewBox="0 0 340 365">
+    <div class="question" id="circuit15">
+    <figure>
+      <svg viewBox="0 0 340 365">
           <line x1="20" y1="65" x2="20" y2="265" stroke="#1b2a4a" stroke-width="2"/>
           <line x1="320" y1="65" x2="320" y2="265" stroke="#1b2a4a" stroke-width="2"/>
           <!-- top rung: double-cell battery, then ammeter g (centred between the battery and the right edge), pd = d (unknown) -->
@@ -985,80 +1121,397 @@
           <circle cx="102" cy="320" r="15" fill="#e8f1ff" stroke="#3a7bd5" stroke-width="2"/>
           <text x="102" y="324" text-anchor="middle" class="lbl-svg" fill="#3a7bd5" font-weight="bold" font-size="11">c</text>
         </svg>
-      </div>
-      <div class="readings">
-        <p class="note"><strong>Work out c, d, e, f, g in that order.</strong></p>
-        <div class="reading-row" data-answer="12" data-tol="0.03"><span class="lbl">c</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row" data-answer="12" data-tol="0.03"><span class="lbl">d</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row" data-answer="4" data-tol="0.03"><span class="lbl">e</span><input type="text" class="ans-input"><span class="unit">V</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row" data-answer="0.5" data-tol="0.03"><span class="lbl">f</span><input type="text" class="ans-input"><span class="unit">A</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="reading-row" data-answer="1.3" data-tol="0.03"><span class="lbl">g</span><input type="text" class="ans-input"><span class="unit">A</span><button class="check-btn">Check</button><span class="feedback"></span></div>
-        <div class="btnrow"><button class="hint-btn">Hint 1</button><button class="hint-btn hint2">Hint 2</button><button class="reveal-btn secondary">Show full working</button></div>
-        <div class="hint">Hint 1: find c directly from V=IR on the 15 Ω branch. Then the whole bottom branch's pd (=c) equals d, the battery pd, since it's the only resistor in that branch.</div>
-        <div class="hint hint2-box">Hint 2: once you have d, use Kirchhoff's voltage law on the top branch to find e (d − 8 V), then Ohm's law on the 8 Ω resistor to find f. Finally g = f + 0.8 A.</div>
-        <div class="solution">
-          c = I×R = 0.8 × 15 = <strong>12 V</strong><br>
+      <figcaption>Fig. 15 Circuit 15</figcaption>
+    </figure>
+
+      <p class="note" style="font-size:0.88rem;color:#5b6b78;font-style:italic;margin-bottom:0.6rem;"><strong>Work out c, d, e, f, g in that order.</strong></p>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="12" data-tol="0.03" data-notype="true"><span class="lbl">c</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="c reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="12" data-tol="0.03" data-notype="true"><span class="lbl">d</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="d reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="4" data-tol="0.03" data-notype="true"><span class="lbl">e</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="e reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="0.5" data-tol="0.03" data-notype="true"><span class="lbl">f</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="f reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="1.3" data-tol="0.03" data-notype="true"><span class="lbl">g</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="g reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="hint-btn no-print" onclick="toggleHint(this)">Hint 1</button> <button class="hint-btn no-print" onclick="toggleHint(this)">Hint 2</button>
+        <button class="reveal-btn no-print" onclick="toggleAnswer('circuit15-ans')">Show full working</button>
+      <div class="answer-panel" id="circuit15-ans">c = I×R = 0.8 × 15 = <strong>12 V</strong><br>
           d = pd across the whole bottom branch (just the 15 Ω resistor) = <strong>12 V</strong><br>
           e = d − 8 V = 12 − 8 = <strong>4 V</strong> (Kirchhoff's voltage law on the top branch)<br>
           f = e / 8 Ω = 4/8 = <strong>0.5 A</strong> (Ohm's law, same current through both series resistors)<br>
-          g = f + 0.8 = 0.5 + 0.8 = <strong>1.3 A</strong> (Kirchhoff's current law)
-        </div>
-      </div>
-    </div>
-  </div>
+          g = f + 0.8 = 0.5 + 0.8 = <strong>1.3 A</strong> (Kirchhoff's current law)</div>
 
-  <div class="print-btn-row">
-    <button class="print-btn" onclick="preparePrint()">Print / Save as PDF</button>
-  </div>
-</div>
+      </div>
+      <div class="hint-panel">Hint 1: find c directly from V=IR on the 15 Ω branch. Then the whole bottom branch's pd (=c) equals d, the battery pd, since it's the only resistor in that branch.</div><div class="hint-panel">Hint 2: once you have d, use Kirchhoff's voltage law on the top branch to find e (d − 8 V), then Ohm's law on the 8 Ω resistor to find f. Finally g = f + 0.8 A.</div>
+    </div>
+  </section>
+
+<footer class="page no-print">Basic Circuits Concept Check Workbook · Companion resources: <em>02 – Basic Circuits Workbook</em>, <em>04 – Resistance</em>.</footer>
+</main>
 
 <script>
-function parseNum(str){
-  if(!str) return NaN;
-  str = str.trim().replace(/×10\^?/,'e').replace(/x10\^?/i,'e').replace(/\s/g,'');
+const WORKBOOK_ID = 'basic-circuits-concept-check';
+const STORAGE_PREFIX = 'ib-workbook-' + WORKBOOK_ID + '-v1-';
+let fillableEls = [];
+
+function toggleAnswer(id){ document.getElementById(id).classList.toggle('shown'); }
+function revealAll(){
+  document.querySelectorAll('.answer-panel, .hint-panel').forEach(function(el){ el.classList.add('shown'); });
+  document.body.classList.add('answers-visible');
+}
+function hideAll(){
+  document.querySelectorAll('.answer-panel, .hint-panel').forEach(function(el){ el.classList.remove('shown'); });
+  document.body.classList.remove('answers-visible');
+}
+function toggleHint(btn){
+  const panel = btn.parentElement.querySelector('.hint-panel') || btn.closest('.question, .reading-row, .sm-block').querySelector('.hint-panel');
+  panel.classList.toggle('shown');
+  btn.textContent = panel.classList.contains('shown') ? 'Hide hint' : 'Hint';
+}
+
+function storageAvailable(){
+  try{
+    const k = '__test__' + STORAGE_PREFIX;
+    localStorage.setItem(k, '1');
+    localStorage.removeItem(k);
+    return true;
+  } catch(e){ return false; }
+}
+const canStore = storageAvailable();
+
+function autosize(el){
+  if(el.tagName !== 'TEXTAREA') return;
+  el.style.height = 'auto';
+  el.style.height = Math.max(el.scrollHeight, el.offsetHeight) + 'px';
+}
+
+function initFillables(){
+  fillableEls = Array.prototype.slice.call(document.querySelectorAll('.answer-lines, .name-box .fill, .reading-input'));
+  fillableEls.forEach(function(el, i){
+    const key = STORAGE_PREFIX + i;
+    el.dataset.storeKey = key;
+    if(canStore){
+      const saved = localStorage.getItem(key);
+      if(saved !== null){ el.value = saved; }
+    }
+    autosize(el);
+    el.addEventListener('input', function(){
+      autosize(el);
+      if(canStore){
+        try{ localStorage.setItem(el.dataset.storeKey, el.value); } catch(e){}
+      }
+      scheduleFileWrite();
+    });
+  });
+}
+
+function getAnswersArray(){ return fillableEls.map(function(el){ return el.value; }); }
+function applyAnswersArray(arr){
+  fillableEls.forEach(function(el, i){
+    if(arr && arr[i] !== undefined){ el.value = arr[i]; autosize(el); }
+  });
+}
+
+function getExtraState(){
+  const sm = {};
+  document.querySelectorAll('.sm-question, .reading-row[data-answer], .match-row').forEach(function(el, i){
+    if(el.dataset.correct !== undefined || el.dataset.state !== undefined){
+      sm[el.id || ('sm-' + i)] = {state: el.dataset.state || '', correct: el.dataset.correct || ''};
+    }
+  });
+  return { smState: sm };
+}
+function applyExtraState(data){
+  if(!data || !data.smState) return;
+  document.querySelectorAll('.sm-question, .reading-row[data-answer], .match-row').forEach(function(el, i){
+    const key = el.id || ('sm-' + i);
+    const rec = data.smState[key];
+    if(!rec) return;
+    el.dataset.state = rec.state || '';
+    el.dataset.correct = rec.correct || '';
+    const fb = el.querySelector('.sm-feedback');
+    if(fb && rec.state === 'correct'){ fb.textContent = 'Correct'; fb.className = 'sm-feedback correct'; }
+    else if(fb && rec.state === 'incorrect'){ fb.textContent = 'Not quite'; fb.className = 'sm-feedback incorrect'; }
+  });
+  updateProgress();
+}
+
+function buildPayload(){
+  const payload = {
+    workbook: WORKBOOK_ID,
+    savedAt: new Date().toISOString(),
+    studentName: document.getElementById('studentName') ? document.getElementById('studentName').value : '',
+    answers: getAnswersArray()
+  };
+  if(typeof getExtraState === 'function') Object.assign(payload, getExtraState());
+  return payload;
+}
+
+function clearMyAnswers(){
+  if(!confirm('Clear everything you have typed? This cannot be undone.')) return;
+  fillableEls.forEach(function(el){
+    el.value = '';
+    autosize(el);
+    if(canStore){ try{ localStorage.removeItem(el.dataset.storeKey); } catch(e){} }
+  });
+  document.querySelectorAll('.sm-question, .reading-row[data-answer], .match-row').forEach(function(el){
+    delete el.dataset.state; delete el.dataset.correct;
+    const fb = el.querySelector('.sm-feedback'); if(fb){ fb.textContent=''; fb.className='sm-feedback'; }
+  });
+  updateProgress();
+  scheduleFileWrite();
+}
+
+function downloadJSON(obj, filename){
+  const blob = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+}
+
+function saveAnswersToFile(){
+  const nameEl = document.getElementById('studentName');
+  const name = (nameEl ? nameEl.value : '').trim();
+  const safe = name ? name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : 'my';
+  downloadJSON(buildPayload(), WORKBOOK_ID + '-answers-' + safe + '.json');
+}
+
+function triggerLoadAnswers(){ document.getElementById('loadFileInput').click(); }
+
+function handleLoadFile(evt){
+  const file = evt.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(){
+    try{
+      const data = JSON.parse(reader.result);
+      applyAnswersArray(data.answers || []);
+      if(typeof applyExtraState === 'function') applyExtraState(data);
+      if(canStore){
+        fillableEls.forEach(function(el){ try{ localStorage.setItem(el.dataset.storeKey, el.value); } catch(e){} });
+      }
+      alert('Loaded your saved answers from "' + file.name + '".');
+    } catch(e){
+      alert('Sorry, that file could not be read as a saved-answers file.');
+    }
+  };
+  reader.readAsText(file);
+  evt.target.value = '';
+}
+
+let fileHandle = null;
+let pendingHandle = null;
+const fsaSupported = ('showSaveFilePicker' in window);
+let fileWriteTimer = null;
+
+function idbOpen(){
+  return new Promise(function(resolve, reject){
+    const rq = indexedDB.open('ib-workbook-fs', 1);
+    rq.onupgradeneeded = function(){ if(!rq.result.objectStoreNames.contains('handles')) rq.result.createObjectStore('handles'); };
+    rq.onsuccess = function(){ resolve(rq.result); };
+    rq.onerror = function(){ reject(rq.error); };
+  });
+}
+function idbGetHandle(){
+  return idbOpen().then(function(db){
+    return new Promise(function(resolve){
+      const tx = db.transaction('handles', 'readonly');
+      const rq = tx.objectStore('handles').get(WORKBOOK_ID);
+      rq.onsuccess = function(){ resolve(rq.result || null); };
+      rq.onerror = function(){ resolve(null); };
+    });
+  }).catch(function(){ return null; });
+}
+function idbSetHandle(handle){
+  return idbOpen().then(function(db){
+    const tx = db.transaction('handles', 'readwrite');
+    tx.objectStore('handles').put(handle, WORKBOOK_ID);
+  }).catch(function(){});
+}
+
+function updateLinkButton(){
+  const btn = document.getElementById('btnLinkFile');
+  if(!btn) return;
+  btn.textContent = fileHandle ? '\u{1F517} Save file linked' : (pendingHandle ? '\u{1F517} Reconnect save file' : '\u{1F517} Link a save file');
+}
+
+function updateSaveStatus(){
+  const status = document.getElementById('saveStatus');
+  if(!status) return;
+  if(fileHandle){
+    status.textContent = 'Autosaving to your linked file';
+  } else if(canStore){
+    status.textContent = 'Autosaving in this browser — click \u{1F4BE} Save often as a backup';
+  } else {
+    status.textContent = 'Autosave unavailable here — use \u{1F4BE} Save / \u{1F4C2} Load to keep your work';
+  }
+}
+
+function tryRestoreLinkedFile(){
+  if(!fsaSupported) return Promise.resolve();
+  return idbGetHandle().then(function(handle){
+    if(!handle) return;
+    return handle.queryPermission({mode:'readwrite'}).then(function(perm){
+      if(perm === 'granted'){ fileHandle = handle; } else { pendingHandle = handle; }
+    }).catch(function(){});
+  }).then(function(){
+    updateLinkButton();
+    updateSaveStatus();
+  });
+}
+
+function linkSaveFile(){
+  if(!fsaSupported) return;
+  const proceed = pendingHandle
+    ? pendingHandle.requestPermission({mode:'readwrite'}).then(function(req){
+        if(req === 'granted'){ fileHandle = pendingHandle; pendingHandle = null; }
+      })
+    : window.showSaveFilePicker({
+        suggestedName: WORKBOOK_ID + '-answers.json',
+        types: [{ description: 'Workbook answers', accept: {'application/json': ['.json']} }]
+      }).then(function(handle){
+        fileHandle = handle;
+        return idbSetHandle(handle);
+      });
+  proceed.then(function(){
+    updateLinkButton();
+    updateSaveStatus();
+    return writeToLinkedFile();
+  }).catch(function(){ /* user cancelled the picker */ });
+}
+
+function scheduleFileWrite(){
+  if(!fileHandle) return;
+  clearTimeout(fileWriteTimer);
+  fileWriteTimer = setTimeout(writeToLinkedFile, 800);
+}
+
+function writeToLinkedFile(){
+  if(!fileHandle) return Promise.resolve();
+  return fileHandle.createWritable().then(function(writable){
+    return writable.write(JSON.stringify(buildPayload(), null, 2)).then(function(){
+      return writable.close();
+    });
+  }).catch(function(e){ console.warn('Could not write to linked save file', e); });
+}
+
+/* ---------- self-marking (auto-checked) engine ---------- */
+function parseNumber(str){
+  if(str === null || str === undefined) return NaN;
+  str = String(str).trim().replace(/,/g, '');
   return parseFloat(str);
 }
-document.querySelectorAll('.reading-row[data-answer]').forEach(function(row){
-  const target = parseFloat(row.dataset.answer);
-  const tol = parseFloat(row.dataset.tol || '0.03');
-  const input = row.querySelector('.ans-input');
-  const checkBtn = row.querySelector('.check-btn');
-  const feedback = row.querySelector('.feedback');
-  let attempts = 0;
-  checkBtn.addEventListener('click', function(){
-    attempts++;
-    const val = parseNum(input.value);
-    if(isNaN(val)){ feedback.textContent='Enter a number'; feedback.className='feedback incorrect'; return; }
-    const relErr = Math.abs(val - target) / Math.abs(target);
-    const correct = relErr <= tol;
-    feedback.textContent = correct ? 'Correct' : ('Not quite (attempt ' + attempts + ')');
-    feedback.className = 'feedback ' + (correct ? 'correct' : 'incorrect');
-    row.dataset.state = correct ? 'correct' : 'incorrect';
-  });
-});
-
-document.querySelectorAll('.section[data-circuit]').forEach(function(section){
-  section.querySelectorAll('.hint-btn').forEach(function(btn, idx){
-    const hints = section.querySelectorAll(idx===0 ? '.hint:not(.hint2-box)' : '.hint2-box');
-    btn.addEventListener('click', function(){ hints.forEach(h=>h.classList.toggle('show')); });
-  });
-  const revealBtn = section.querySelector('.reveal-btn');
-  const solution = section.querySelector('.solution');
-  if(revealBtn){
-    revealBtn.addEventListener('click', function(){
-      solution.classList.toggle('show');
-      revealBtn.textContent = solution.classList.contains('show') ? 'Hide full working' : 'Show full working';
-    });
-  }
-});
-
-function preparePrint(){
-  document.querySelectorAll('.hint, .solution, .hint-box').forEach(function(el){
-    el.classList.add('show');
-    el.classList.add('visible');
-  });
-  setTimeout(function(){ window.print(); }, 60);
+const SCI_RE = /^\s*(-?\d+(?:\.\d+)?)\s*[×xX*]\s*10\s*(?:\^\s*\(?\s*(-?\d+)\s*\)?|\(\s*(-?\d+)\s*\))\s*$/;
+function parseSciNotation(str){
+  if(!str) return NaN;
+  const m = String(str).trim().replace(/\s+/g, ' ').match(SCI_RE);
+  if(!m) return NaN;
+  const coeff = parseFloat(m[1]);
+  const exp = parseFloat(m[2] !== undefined ? m[2] : m[3]);
+  if(isNaN(coeff) || isNaN(exp)) return NaN;
+  return coeff * Math.pow(10, exp);
 }
+function nearlyEqual(a, b, tol){
+  if(isNaN(a) || isNaN(b)) return false;
+  if(b === 0) return Math.abs(a - b) <= tol;
+  return Math.abs(a - b) / Math.abs(b) <= tol;
+}
+
+function checkAnswer(btn){
+  const q = btn.closest('.sm-question, .reading-row');
+  const fb = q.querySelector('.sm-feedback');
+  const type = q.dataset.qtype || 'number';
+  let correct = false, attempted = true;
+  if(type === 'number'){
+    const input = q.querySelector('.sm-input');
+    const val = parseNumber(input.value);
+    if(isNaN(val)){ attempted = false; }
+    else if(q.dataset.min !== undefined && q.dataset.max !== undefined){
+      correct = val >= parseFloat(q.dataset.min) && val <= parseFloat(q.dataset.max);
+    } else {
+      const target = parseFloat(q.dataset.answer);
+      const tol = parseFloat(q.dataset.tol || '0.03');
+      correct = nearlyEqual(val, target, tol);
+    }
+  } else if(type === 'sci'){
+    const input = q.querySelector('.sm-input');
+    const val = parseSciNotation(input.value);
+    if(isNaN(val)){ attempted = false; }
+    else {
+      const target = parseFloat(q.dataset.answer);
+      correct = nearlyEqual(val, target, 0.005);
+    }
+  } else if(type === 'mcq'){
+    const sel = q.querySelector('.sm-select');
+    if(!sel.value){ attempted = false; }
+    else { correct = sel.value === q.dataset.answer; }
+  } else if(type === 'keyword'){
+    const input = q.querySelector('input.sm-input');
+    const val = input.value.trim().toLowerCase();
+    if(val.length === 0){ attempted = false; }
+    else {
+      const groups = (q.dataset.keywords || '').split(',').filter(Boolean);
+      correct = groups.some(function(k){ return val.includes(k.trim()); });
+    }
+  } else if(type === 'text'){
+    const ta = q.querySelector('textarea.sm-input');
+    const val = ta.value.trim().toLowerCase();
+    if(val.length < 5){ attempted = false; }
+    else {
+      const groups = (q.dataset.keywords || '').split('|').filter(Boolean);
+      correct = groups.length === 0 || groups.every(function(g){
+        return g.split(',').some(function(k){ return val.includes(k.trim()); });
+      });
+      if(val.length < parseInt(q.dataset.minlen || '30', 10)) correct = false;
+    }
+  }
+  if(!attempted){
+    fb.textContent = 'Enter an answer';
+    fb.className = 'sm-feedback incorrect';
+    return;
+  }
+  q.dataset.attempted = 'true';
+  q.dataset.state = correct ? 'correct' : 'incorrect';
+  if(type === 'text' && (q.dataset.correctB64 || q.dataset.wrongB64)){
+    const b64 = correct ? q.dataset.correctB64 : q.dataset.wrongB64;
+    fb.innerHTML = b64 ? decodeURIComponent(escape(atob(b64))) : (correct ? 'Correct' : 'Not quite — try again');
+    fb.className = 'sm-feedback long ' + (correct ? 'correct' : 'incorrect');
+    updateProgress();
+    scheduleFileWrite();
+    return;
+  }
+  fb.textContent = correct ? 'Correct' : (q.dataset.notype === 'true' ? 'Not quite — try again, or use the hint' : 'Not quite — try again');
+  fb.className = 'sm-feedback ' + (correct ? 'correct' : 'incorrect');
+  updateProgress();
+  scheduleFileWrite();
+}
+
+function updateProgress(){
+  const els = document.querySelectorAll('.sm-question, .reading-row[data-answer]');
+  if(!els.length) return;
+  let checked = 0, correct = 0;
+  els.forEach(function(el){
+    if(el.dataset.state){ checked++; if(el.dataset.state === 'correct') correct++; }
+  });
+  const status = document.getElementById('progressStatus');
+  if(status) status.textContent = 'Checked ' + checked + '/' + els.length + ' · ' + correct + ' correct';
+}
+
+window.addEventListener('beforeprint', function(){
+  fillableEls.forEach(autosize);
+});
+
+document.addEventListener('DOMContentLoaded', function(){
+  initFillables();
+  if(fsaSupported){
+    document.getElementById('btnLinkFile').style.display = '';
+    tryRestoreLinkedFile();
+  }
+  updateSaveStatus();
+  updateProgress();
+});
+
+
 </script>
 </body>
 </html>

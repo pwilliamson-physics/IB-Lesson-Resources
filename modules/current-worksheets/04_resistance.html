@@ -2,121 +2,227 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Resistance</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resistance — Student Workbook</title>
 <style>
-  :root{--navy:#1b2a4a;--blue:#2563eb;--green:#15803d;--red:#b91c1c;--bg:#f7f8fb;--card:#fff;--border:#dbe1ea;--amber:#d97706;}
-  *{box-sizing:border-box;}
-  body{font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:var(--bg);color:#1a1a1a;margin:0;padding:24px;line-height:1.55;}
-  .wb{max-width:880px;margin:0 auto;}
-  h1{color:var(--navy);font-size:1.5em;margin-bottom:4px;}
-  .subtitle{color:#555;margin-top:0;margin-bottom:20px;font-size:0.95em;}
-  .namebox{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:20px;}
-  .namebox input{padding:6px 10px;border:1px solid var(--border);border-radius:6px;width:240px;}
-  .formulabox{background:#eef2ff;border-left:4px solid var(--blue);padding:12px 16px;border-radius:0 8px 8px 0;margin-bottom:20px;font-size:0.95em;}
-  .section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:18px;}
-  .section h2{color:var(--navy);font-size:1.15em;margin-top:0;}
-  .notes{background:#f8fafc;border-radius:8px;padding:12px 16px;font-size:0.92em;margin-bottom:10px;}
-  .notes p{margin:0.6em 0;}
-  .q{margin:18px 0;padding-top:16px;border-top:1px dashed var(--border);}
-  .q:first-of-type{border-top:none;padding-top:0;}
-  .qtext{font-weight:600;margin-bottom:10px;}
-  .answer-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px;}
-  input[type=text]{padding:7px 10px;border:1px solid var(--border);border-radius:6px;font-size:0.95em;width:160px;}
-  select{padding:6px 8px;border:1px solid var(--border);border-radius:6px;}
-  .unit-label{color:#555;font-size:0.9em;}
-  button{background:var(--blue);color:#fff;border:none;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:0.88em;}
-  button:hover{opacity:0.9;}
-  button.secondary{background:#6b7280;}
-  .feedback{font-weight:600;margin-left:4px;}
-  .feedback.correct{color:var(--green);}
-  .feedback.incorrect{color:var(--red);}
-  .solution{display:none;background:#ecfdf5;border-left:4px solid var(--green);padding:10px 14px;margin-top:8px;border-radius:0 8px 8px 0;font-size:0.9em;}
-  .solution.show{display:block;}
-  .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
-  .summary{background:var(--card);border:2px solid var(--blue);border-radius:12px;padding:20px 24px;}
-  #summaryBox{white-space:pre-wrap;background:#f1f5f9;border-radius:8px;padding:14px;margin-top:12px;font-family:Menlo,Consolas,monospace;font-size:0.85em;display:none;}
-  .note{font-size:0.85em;color:#666;font-style:italic;}
-  .tagline{font-size:0.9em;color:var(--amber);font-weight:600;margin:-6px 0 18px 0;}
 
-  .simbox{border-radius:12px;overflow:hidden;border:1px solid var(--border);margin-bottom:14px;}
-  .simbox iframe{width:100%;height:540px;border:0;display:block;background:#0d1117;}
-  .simcaption{font-size:0.85em;color:#555;margin:-4px 0 14px 0;}
-
-  .circuit{border-top:1px dashed var(--border);padding-top:18px;margin-top:18px;}
-  .circuit:first-of-type{border-top:none;padding-top:0;margin-top:0;}
-  .circuit h3{margin:0 0 8px 0;font-size:1em;color:var(--navy);}
-  .circuit-wrap{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin:10px 0;}
-  .circuit-svg{flex:0 0 auto;background:#fbfcfe;border:1px solid var(--border);border-radius:10px;padding:8px;}
-  .readings{flex:1 1 220px;min-width:220px;}
-  .reading-row{display:flex;align-items:center;gap:8px;margin:8px 0;flex-wrap:wrap;}
-  .reading-row .rlabel{min-width:64px;font-weight:600;}
-  .reading-row input.rinput{width:90px;}
-  .reading-row .runit{color:#555;font-size:0.9em;min-width:14px;}
-  .given{color:#888;font-size:0.9em;}
-  .lbl-svg{font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;}
-
-  .ivgraphs{display:flex;gap:20px;flex-wrap:wrap;justify-content:space-around;margin:14px 0 6px 0;}
-  .ivgraphs figure{margin:0;text-align:center;font-size:0.85em;max-width:220px;}
-  .ivgraphs figcaption{margin-top:6px;color:#444;}
-
-  .graphopt{display:flex;gap:18px;flex-wrap:wrap;margin:10px 0;}
-  .graphopt label{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:0.85em;cursor:pointer;border:2px solid transparent;border-radius:10px;padding:6px;}
-  .graphopt input{margin:0;}
-  .practical ol{padding-left:22px;}
-  .practical li{margin:6px 0;}
-  .flagbox{background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;padding:14px 18px;margin-bottom:16px;font-size:0.9em;}
-  .print-btn-row{text-align:center;margin:30px 0 8px;}
-  .print-btn{background:var(--navy);color:#fff;border:none;padding:12px 30px;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;font-family:inherit;}
-  .print-btn:hover{opacity:0.9;}
-  @media print{
-    .print-btn-row{display:none !important;}
-    .check-btn,.reveal-btn,.hint-btn{display:none !important;}
-    .hint,.solution{display:block !important;}
-    body{background:#fff;padding:6px;}
-    .q,.section,.circuit{page-break-inside:avoid;break-inside:avoid;}
-    iframe{display:none !important;}
+  :root{
+    --navy:#173a5e; --teal:#0e7c86; --teal-dark:#0a5b62; --amber:#d98324;
+    --soft-blue:#eaf3fb; --soft-amber:#fdf1e2; --soft-green:#eaf7ee; --soft-grey:#f4f6f8;
+    --line:#b9c6d3; --ink:#1f2933; --border:#d7e0e8;
+    --purple:#6b4c9a; --soft-purple:#f1ebf9;
+    --good:#2f8f4e; --bad:#c0392b; --soft-bad:#fbebea;
+    /* circuit-diagram accents, carried over from the v1 electricity set for
+       consistency across this worksheet family (style-guide.md: "the v1
+       ammeter/voltmeter/... conventions below are still good practice and
+       worth reusing for consistency with the Electricity set") */
+    --diagram-ammeter:#e8533a; --diagram-ammeter-bg:#fff3f1;
+    --diagram-voltmeter:#3a7bd5; --diagram-voltmeter-bg:#e8f1ff;
   }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; color:var(--ink); background:#f7f9fb; line-height:1.55; font-size:16.5px; padding-top:56px;}
+  main{max-width:920px; margin:0 auto; padding:2rem 2.5rem 5rem 2.5rem;}
+  .cover{background:linear-gradient(135deg,var(--navy),var(--teal-dark)); color:#fff; border-radius:14px; padding:2.5rem 2.5rem; margin-bottom:2rem;}
+  .cover h1{margin:0 0 0.4rem 0; font-size:1.9rem;}
+  .cover p.sub{margin:0; font-size:1.05rem; color:#dceaf0;}
+  .cover .meta{margin-top:1.2rem; font-size:0.9rem; color:#cfe3ee;}
+  .name-box{margin-top:1.4rem; background:rgba(255,255,255,0.1); border:1px dashed rgba(255,255,255,0.5); border-radius:8px; padding:0.9rem 1.1rem;}
+  .name-box label{display:block; font-size:0.8rem; color:#dceaf0; margin-bottom:0.2rem;}
+  .name-box .fill{display:block; width:100%; border:none; border-bottom:1px solid #dceaf0; height:1.6rem; background:transparent; color:#fff; font-size:1rem; font-family:inherit; padding:0; outline:none;}
+  .name-box .fill::placeholder{color:rgba(255,255,255,0.5);}
+  .goals{background:rgba(255,255,255,0.12); border-left:4px solid #fff; border-radius:6px; padding:0.9rem 1.1rem; font-size:0.92rem; color:#fff;}
+  .goals ul{margin:0.4rem 0 0 0; padding-left:1.2rem;}
+
+  section.topic{background:#fff; border:1px solid var(--border); border-radius:12px; padding:1.8rem 2rem; margin-bottom:1.6rem;}
+  section.topic h2{color:var(--navy); font-size:1.4rem; margin-top:0; border-bottom:3px solid var(--amber); padding-bottom:0.4rem;}
+  section.topic h3{color:var(--teal-dark); font-size:1.08rem; margin-top:1.6rem;}
+
+  .keybox{background:var(--soft-blue); border:1px solid #c7ddef; border-radius:8px; padding:0.9rem 1.1rem; margin:0.9rem 0; font-size:0.98rem;}
+  .keybox strong{color:var(--navy);}
+  .eqn{background:#fff; border:1px solid #c7ddef; border-radius:6px; padding:0.6rem 1rem; margin:0.6rem 0; font-size:1.08rem; text-align:center; font-family:"Cambria Math",Cambria,Georgia,serif;}
+  .keyword{background:var(--soft-amber); border-left:4px solid var(--amber); border-radius:6px; padding:0.7rem 1rem; margin:0.9rem 0; font-size:0.92rem;}
+  .keyword b{color:var(--amber);}
+  .example{background:var(--soft-green); border:1px solid #bfe3cc; border-radius:8px; padding:0.9rem 1.1rem; margin:1rem 0;}
+  .example .tag{display:inline-block; background:#3f9a5c; color:#fff; font-size:0.72rem; font-weight:600; letter-spacing:0.03em; padding:0.15rem 0.5rem; border-radius:4px; margin-bottom:0.5rem; text-transform:uppercase;}
+  .stretch-box{background:var(--soft-purple); border:1px solid #d9c9ec; border-radius:8px; padding:0.9rem 1.1rem; margin:1rem 0;}
+  .stretch-box .tag{display:inline-block; background:var(--purple); color:#fff; font-size:0.72rem; font-weight:600; letter-spacing:0.03em; padding:0.15rem 0.5rem; border-radius:4px; margin-bottom:0.5rem; text-transform:uppercase;}
+  .stretch-box strong{color:var(--purple);}
+  .practical-box{background:var(--soft-amber); border:1.5px dashed var(--amber); border-radius:8px; padding:0.9rem 1.1rem; margin:1rem 0;}
+  .practical-box .tag{display:inline-block; background:var(--amber); color:#fff; font-size:0.72rem; font-weight:600; letter-spacing:0.03em; padding:0.15rem 0.5rem; border-radius:4px; margin-bottom:0.5rem; text-transform:uppercase;}
+
+  .question{background:var(--soft-grey); border:1px solid var(--border); border-radius:8px; padding:1rem 1.2rem; margin:1.1rem 0;}
+  .question .qnum{display:inline-block; background:var(--navy); color:#fff; font-weight:700; font-size:0.82rem; width:1.9rem; height:1.9rem; line-height:1.9rem; text-align:center; border-radius:50%; margin-right:0.5rem;}
+  .answer-lines{
+    display:block; width:100%; box-sizing:border-box;
+    background-image:repeating-linear-gradient(to bottom, transparent, transparent 1.65em, var(--line) 1.7em);
+    background-color:transparent;
+    min-height:5.1em; margin:0.6rem 0 0.2rem 0;
+    border:1px solid transparent; border-radius:6px;
+    outline:none; resize:none; overflow:hidden;
+    font:inherit; color:inherit; line-height:1.7em;
+    padding:0.05em 0.4em 0 0.2em;
+  }
+  .answer-lines:focus{
+    border:1px solid var(--teal); background-color:#fbfdff;
+    box-shadow:0 0 0 3px rgba(14,124,134,0.12);
+  }
+  .answer-lines::placeholder{color:#9aa8b4; font-style:italic;}
+  .answer-lines.short{min-height:1.7em;}
+  .answer-lines.long{min-height:8.5em;}
+  .reveal-btn{background:var(--teal); color:#fff; border:none; border-radius:6px; padding:0.35rem 0.8rem; font-size:0.82rem; cursor:pointer; margin-top:0.5rem; margin-right:0.5rem;}
+  .reveal-btn:hover{background:var(--teal-dark);}
+  .answer-panel{display:none; background:#fff; border:1px dashed #3f9a5c; border-radius:6px; padding:0.7rem 1rem; margin-top:0.6rem; font-size:0.92rem;}
+  .answer-panel.shown{display:block;}
+
+  /* ---------- self-marking (auto-checked) question type ---------- */
+  .sm-row{display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; margin-top:0.6rem;}
+  input.sm-input.answer-lines{
+    background:#fff !important; border:1.5px solid var(--line) !important;
+    min-height:0; width:auto; max-width:220px; padding:0.4rem 0.6rem; font-size:0.98rem;
+    background-image:none !important; line-height:normal;
+  }
+  input.sm-input.answer-lines:focus{border-color:var(--teal) !important;}
+  .sm-input.short{max-width:130px;}
+  .sm-unit{color:#5b6b78; font-size:0.92rem;}
+  .check-btn{background:var(--navy); color:#fff; border:none; border-radius:6px; padding:0.35rem 0.8rem; font-size:0.82rem; cursor:pointer;}
+  .check-btn:hover{background:#0f2540;}
+  .hint-btn{background:#fff; color:var(--amber); border:1.5px solid var(--amber); border-radius:6px; padding:0.35rem 0.8rem; font-size:0.82rem; cursor:pointer; margin-top:0.5rem; margin-right:0.5rem;}
+  .hint-btn:hover{background:var(--soft-amber);}
+  .hint-panel{display:none; background:var(--soft-amber); border-left:4px solid var(--amber); border-radius:0 6px 6px 0; padding:0.6rem 1rem; margin-top:0.6rem; font-size:0.9rem;}
+  .hint-panel.shown{display:block;}
+  .sm-feedback{font-weight:700; font-size:0.92rem;}
+  .sm-feedback.correct{color:var(--good);}
+  .sm-feedback.incorrect{color:var(--bad);}
+  .sm-feedback.long{display:block; font-weight:400; margin-top:0.6rem; padding:0.7rem 1rem; border-radius:6px; line-height:1.5;}
+  .sm-feedback.long.correct{background:var(--soft-green); border-left:4px solid var(--good); color:#145233;}
+  .sm-feedback.long.incorrect{background:var(--soft-bad); border-left:4px solid var(--bad); color:#7a1a14;}
+  .reading-input{border:1.5px solid var(--line); border-radius:6px; padding:0.4rem 0.6rem; font-size:0.95rem; font:inherit; color:inherit; width:130px; background:#fff;}
+  .reading-input:focus{outline:none; border-color:var(--teal); box-shadow:0 0 0 3px rgba(14,124,134,0.12);}
+  .progress-status{font-size:0.72rem; color:#5b6b78; white-space:nowrap; flex-shrink:0;}
+
+  .reading-row{display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; margin:0.5rem 0;}
+  .reading-row .lbl{min-width:2.4rem; font-weight:700; color:var(--navy);}
+
+  figure{margin:1.2rem auto; text-align:center; max-width:560px;}
+  figure.wide{max-width:none;}
+  figure svg{max-width:100%; height:auto; max-height:340px;}
+  figcaption{font-size:0.85rem; color:#5b6b78; margin-top:0.4rem;}
+
+  table.eqtable{width:100%; border-collapse:collapse; font-size:0.92rem; margin-top:0.7rem;}
+  table.eqtable th, table.eqtable td{border:1px solid var(--border); padding:0.5rem 0.7rem; text-align:left;}
+  table.eqtable th{background:var(--soft-blue); color:var(--navy);}
+
+  dl.glossary dt{font-weight:700; color:var(--navy); margin-top:0.7rem;}
+  dl.glossary dd{margin-left:0; margin-bottom:0.2rem;}
+
+  .topbar{
+    position:fixed; top:0; left:0; right:0; height:56px; z-index:200;
+    background:#fff; border-bottom:1px solid var(--border); box-shadow:0 2px 8px rgba(0,0,0,0.06);
+    display:flex; align-items:center; gap:0.6rem; padding:0 1rem;
+  }
+  .topbar-actions{
+    display:flex; align-items:center; gap:0.6rem; overflow-x:auto;
+    flex:1 1 auto; min-width:0; height:100%; padding-right:0.4rem;
+  }
+  .topbar .topbar-title{font-weight:700; color:var(--navy); font-size:0.92rem; white-space:nowrap; flex-shrink:0; margin-right:0.4rem;}
+  .topbar button{background:#fff; color:var(--navy); border:1px solid var(--border); border-radius:50px; padding:0.5rem 1rem; font-size:0.82rem; cursor:pointer; white-space:nowrap; flex-shrink:0;}
+  .topbar button:hover{background:var(--soft-blue);}
+  .topbar button.primary{background:var(--amber); color:#fff; border-color:var(--amber); font-weight:600; flex-shrink:0;}
+  .topbar button.primary:hover{background:#c0721c;}
+  .topbar .save-status{font-size:0.72rem; color:#5b6b78; white-space:nowrap; flex-shrink:0;}
+  @media (max-width: 900px){ .topbar .save-status{display:none;} }
+  @media (max-width: 620px){ .topbar .topbar-title{display:none;} }
+  footer.page{font-size:0.8rem; color:#7c8b98; text-align:center; margin-top:2rem;}
+
+  .sim-embed{background:#fff; border:1px solid var(--border); border-radius:10px; padding:1rem 1.2rem; margin:1rem 0;}
+  .sim-embed p.instructions{margin:0 0 0.6rem 0; font-size:0.92rem; color:#3a4753;}
+  .sim-frame{width:100%; border:none; display:block; border-radius:8px; height:560px;}
+  .sim-embed-credit{text-align:center; font-size:0.82rem; color:#7c8b98; margin-top:0.6rem;}
+  .sim-print-note{display:none;}
+
+  @media print{
+    .topbar, .reveal-btn, .check-btn, .hint-btn{display:none !important;}
+    main{max-width:100%; padding:0; margin:0;}
+    body{background:#fff; font-size:11.5pt; padding-top:0;}
+    section.topic{border:none; box-shadow:none; padding:0; margin:0 0 1.2rem 0; page-break-inside:avoid;}
+    .cover{page-break-after:always; border-radius:0;}
+    .answer-panel{display:block !important; border-style:solid;}
+    .hint-panel{display:block !important;}
+    a{color:inherit; text-decoration:none;}
+    .page-break{page-break-before:always;}
+    .answer-lines{border-color:transparent !important; box-shadow:none !important; color:#000;}
+    .answer-lines::placeholder{color:transparent;}
+    .sm-input.answer-lines{border-bottom:1.5px solid #5b6b78 !important; border-top:none !important; border-left:none !important; border-right:none !important; border-radius:0 !important;}
+    .sm-feedback, .progress-status{display:none !important;}
+    .name-box .fill{color:#000; border-bottom-color:#5b6b78;}
+    .name-box .fill::placeholder{color:transparent;}
+    .sim-frame, .sim-embed-credit, .sim-embed p.instructions{display:none !important;}
+    .sim-print-note{display:block !important; text-align:center; font-size:0.85rem; color:#5b6b78; padding:0.9rem; border:1px dashed #b9c6d3; border-radius:8px; margin:0.6rem 0;}
+  }
+
+
 </style>
 </head>
 <body>
-<div class="wb">
-  <h1>Resistance</h1>
-  <p class="tagline">"Join the resistance" ⚡ — resist the urge to skip the notes.</p>
-
-  <div class="formulabox">
-    <strong>Key relationships:</strong><br>
-    R = V / I<br>
-    R = ρ L / A
+<div class="topbar no-print">
+  <div class="topbar-actions">
+    <span class="topbar-title">Resistance</span>
+    <button onclick="revealAll()">Show all answers</button>
+    <button onclick="hideAll()">Hide all answers</button>
+    <button onclick="clearMyAnswers()">Clear my answers</button>
+    <button onclick="saveAnswersToFile()">💾 Save answers</button>
+    <button onclick="triggerLoadAnswers()">📂 Load answers</button>
+    <input type="file" id="loadFileInput" accept="application/json" style="display:none" onchange="handleLoadFile(event)">
+    <button id="btnLinkFile" style="display:none;" onclick="linkSaveFile()">🔗 Link a save file</button>
+    <span class="progress-status" id="progressStatus"></span>
+    <span class="save-status" id="saveStatus">Checking autosave…</span>
   </div>
+  <button class="primary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+</div>
 
-  <div class="section">
-    <h2>What is resistance?</h2>
-    <div class="notes">
-      <p>Resistance is a measure of how difficult it is to make a current pass through a component — it resists the flow of charge and so reduces the current for a given pd.</p>
-      <p>This matters for how we design measuring instruments too: a connecting wire should have almost zero resistance (so it doesn't waste energy or limit the current anywhere else in the circuit); an ammeter sits <em>in series</em>, so it also needs almost zero resistance, or it would change the very current it's trying to measure; a voltmeter sits <em>in parallel</em>, so it needs a very high resistance, so that almost no current takes the "shortcut" through the meter instead of through the component being measured.</p>
-      <p>Ohm investigated the relationship between potential difference and current, and found that for a conductor at constant temperature, current is proportional to pd: V ∝ I, or V = IR. The constant of proportionality, R, is the resistance — a property of that specific component's physical characteristics, under those particular conditions (constant temperature).</p>
-      <div class="ivgraphs" style="justify-content:flex-start;">
-        <figure>
-          <svg viewBox="0 0 160 130" width="150" height="122">
+<main>
+  <section class="cover" id="cover">
+    <h1>Resistance</h1>
+    <div class="goals" style="margin-top:1.3rem;">
+      <strong style="color:#fff;">By the end of this workbook you should be able to:</strong>
+      <ul>
+        <li>explain resistance as the ratio R = V/I, and why ammeters need near-zero resistance while voltmeters need near-infinite resistance</li>
+        <li>use the Drude model to explain, at a microscopic level, why a metal's resistance increases with temperature</li>
+        <li>describe how resistivity, length and cross-sectional area affect the resistance of a wire, and use R = &rho;L/A in calculations</li>
+        <li>use ammeter and voltmeter readings to find unknown resistances in a variety of series and parallel circuits</li>
+        <li>sketch and interpret I&ndash;V graphs for a resistor, a filament lamp and a diode</li>
+      </ul>
+    </div>
+    <div class="name-box">
+      <label>Name</label><input type="text" class="fill" id="studentName" autocomplete="name">
+    </div>
+  </section>
+
+  <section class="topic" id="s1">
+    <h2>1. What is resistance?</h2>
+    <div class="keybox"><strong>Key relationships:</strong><br>R = V / I<br>R = &rho;L / A</div>
+    <p>Resistance is a measure of how difficult it is to make a current pass through a component — it resists the flow of charge and so reduces the current for a given pd.</p>
+    <p>This matters for how we design measuring instruments too: a connecting wire should have almost zero resistance (so it doesn't waste energy or limit the current anywhere else in the circuit); an ammeter sits <em>in series</em>, so it also needs almost zero resistance, or it would change the very current it's trying to measure; a voltmeter sits <em>in parallel</em>, so it needs a very high resistance, so that almost no current takes the "shortcut" through the meter instead of through the component being measured.</p>
+    <p>Ohm investigated the relationship between potential difference and current, and found that for a conductor at constant temperature, current is proportional to pd: V ∝ I, or V = IR. The constant of proportionality, R, is the resistance — a property of that specific component's physical characteristics, under those particular conditions (constant temperature).</p>
+    <figure>
+      <svg viewBox="0 0 160 130" width="150" height="122">
             <line x1="30" y1="10" x2="30" y2="120" stroke="#1b2a4a" stroke-width="1.5"/>
             <line x1="30" y1="110" x2="150" y2="110" stroke="#1b2a4a" stroke-width="1.5"/>
             <line x1="30" y1="108" x2="140" y2="20" stroke="#b91c1c" stroke-width="2.5"/>
             <text x="2" y="24" class="lbl-svg" font-size="11" fill="#1b2a4a">PD / V</text>
             <text x="112" y="128" class="lbl-svg" font-size="11" fill="#1b2a4a">I / A</text>
           </svg>
-          <figcaption>Ohm's law: PD against current, for a conductor at constant temperature.</figcaption>
-        </figure>
-      </div>
-      <p style="text-align:center;font-size:1.3em;margin:10px 0;"><strong>V ∝ I</strong></p>
-      <p style="text-align:center;font-size:1.3em;margin:10px 0;"><strong>V = IR</strong></p>
-      <p>Defining the constant of proportionality as resistance, specific to the physical characteristics of the object tested. This assumes constant conditions (temperature).</p>
-    </div>
-  </div>
+      <figcaption>Ohm's law: PD against current, for a conductor at constant temperature.</figcaption>
+    </figure>
+    <p style="text-align:center;font-size:1.3em;margin:0.6rem 0;"><strong>V &prop; I</strong></p>
+    <p style="text-align:center;font-size:1.3em;margin:0.6rem 0;"><strong>V = IR</strong></p>
+    <p>Defining the constant of proportionality as resistance, specific to the physical characteristics of the object tested. This assumes constant conditions (temperature).</p>
+  </section>
 
-  <div class="section">
-    <h2>How are resistance and temperature linked? — the Drude model</h2>
-
-    <div class="simbox">
+  <section class="topic" id="s2">
+    <h2>2. How are resistance and temperature linked? &mdash; the Drude model</h2>
+    <div class="sim-embed">
+      <p class="instructions">Drag the slider to add thermal energy to the right-hand wire and compare it with the reference wire on the left.</p>
       <iframe title="Resistance and temperature simulation" srcdoc='<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
     :root{--bg-color:#0d1117;--wire-color:#161b22;--ion-color:#ff4757;--electron-color:#00d2ff;}
     body{font-family:Segoe UI,Arial,sans-serif;background-color:var(--bg-color);color:#fff;display:flex;flex-direction:column;align-items:center;padding:10px;margin:0;}
@@ -237,88 +343,102 @@
     frame();
     </script>
     </body></html>'></iframe>
+      <p class="sim-print-note">Interactive simulation &mdash; open the online version of this workbook to launch it.</p>
+      <p class="sim-embed-credit">Drag the slider to add thermal energy to the right-hand wire and compare it with the reference wire on the left — watch how a hotter lattice scatters the tracked electron (white-ringed dot) more often. (credit Dr Jones, https://www.drjonesphysics.com/electricity-apps1)</p>
     </div>
-    <p class="simcaption">Drag the slider to add thermal energy to the right-hand wire and compare it with the reference wire on the left — watch how a hotter lattice scatters the tracked electron (white-ringed dot) more often. (credit Dr Jones, https://www.drjonesphysics.com/electricity-apps1)</p>
-
-    <div class="notes">
+    
       <p>In a metal, the positive ions are fixed in the lattice — the electric field pushes on them too, but they can't accelerate off anywhere, so no net work goes into their kinetic energy. Electrons, by contrast, are free to move: the field does work on them and they gain kinetic energy. That's why it's the electrons that carry the current.</p>
       <p>As temperature rises, the ions vibrate more. They get in the way of the drifting electrons more often, slowing them (resisting their motion) — this is why a metal's resistance increases with temperature.</p>
       <p>Paul Drude (1900) adapted the kinetic theory of gases to the free electrons in a metal, treating the ions as fixed in the lattice. He suggested the electrons' random thermal motion was around 100,000 m s⁻¹ — far faster than the drift velocity caused by the field, which is typically only around 0.0001 m s⁻¹. This drift velocity is a tiny average bias on top of the random motion, and it's what we call the current. Because the ion spacing limits how far an electron can travel before colliding with one, the electrons can't continuously accelerate — instead they repeatedly scatter, with an average time between collisions called the relaxation time, Δt.</p>
       <p>Putting the force equation together with E = V/L and the drift-velocity relationship leads back to Ohm's law, V = IR — where R depends on Δt. Δt is set by the temperature (via the random thermal speed), so changing the temperature changes Δt, which changes the resistivity and therefore the resistance. At constant temperature, Δt (and so resistivity and resistance) stays constant.</p>
       <p>A more modern (quantum) picture describes electrons in a perfectly periodic lattice as Bloch electrons, which can move without any resistance at all. Real resistance comes from electrons scattering off disturbances in the lattice: vibrations (phonons), impurities, and defects. Drude's "collisions" were really an early classical stand-in for these interactions. As temperature rises, the lattice vibrates more strongly, there are more scattering events, Δt falls, and resistivity rises — electrical resistance is the macroscopic result of moving electrons transferring energy to the vibrating crystal lattice.</p>
-    </div>
-
-    <div class="q" data-type="mcq" data-answer="bias">
-      <p class="qtext">If electrons in a metal move randomly at around 100,000 m s⁻¹, why doesn't the current keep changing direction?</p>
-      <select class="mcq-select">
+    
+    <div class="question sm-question" data-qtype="mcq" data-answer="bias" id="q1">
+      <span class="qnum">1</span><strong>If electrons in a metal move randomly at around 100,000 m s⁻¹, why doesn't the current keep changing direction?</strong>
+      <div class="sm-row">
+        <select class="sm-input sm-select">
         <option value="">-- choose --</option>
         <option value="bias">The electric field adds a small statistical bias in one direction on top of the random motion</option>
         <option value="random">Because the motion is random, so direction doesn't matter</option>
         <option value="collide">Because the electrons collide with each other</option>
         <option value="slow">Because the electrons gradually slow down over time</option>
       </select>
-      <button class="check-btn">Check</button><span class="feedback"></span>
-      <div class="btnrow"><button class="reveal-btn secondary">Show full working</button></div>
-      <div class="solution">The random motion really is random and averages to zero net displacement on its own. But the electric field superimposes a tiny <strong>drift velocity</strong> (~0.0001 m s⁻¹) in one direction on top of that random motion. Averaged over huge numbers of electrons, that small bias is the current — and it's steady because the field is steady, even though each individual electron is still mostly moving randomly.</div>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q1-ans')">Show working</button>
+      <div class="answer-panel" id="q1-ans">The random motion really is random and averages to zero net displacement on its own. But the electric field superimposes a tiny <strong>drift velocity</strong> (~0.0001 m s⁻¹) in one direction on top of that random motion. Averaged over huge numbers of electrons, that small bias is the current — and it's steady because the field is steady, even though each individual electron is still mostly moving randomly.</div>
+    </div>
+    <div class="question sm-question" data-qtype="mcq" data-answer="increases" id="q2">
+      <span class="qnum">2</span><strong>As a filament lamp gets hotter, its resistance...</strong>
+      <div class="sm-row">
+        <select class="sm-input sm-select"><option value="">-- choose --</option><option value="increases">Increases</option><option value="decreases">Decreases</option><option value="stays the same">Stays the same</option></select>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+    </div>
+    <div class="question sm-question" data-qtype="mcq" data-answer="zero" id="q3">
+      <span class="qnum">3</span><strong>What is the ideal resistance of a wire?</strong>
+      <div class="sm-row">
+        <select class="sm-input sm-select"><option value="">-- choose --</option><option value="zero">Zero</option><option value="6ohms">6 Ω</option><option value="infinite">Infinite</option></select>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+    </div>
+    <div class="question sm-question" data-qtype="mcq" data-answer="zero" id="q4">
+      <span class="qnum">4</span><strong>What is the ideal resistance of an ammeter?</strong>
+      <div class="sm-row">
+        <select class="sm-input sm-select"><option value="">-- choose --</option><option value="zero">Zero</option><option value="6ohms">6 Ω</option><option value="infinite">Infinite</option></select>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+    </div>
+    <div class="question sm-question" data-qtype="mcq" data-answer="infinite" id="q5">
+      <span class="qnum">5</span><strong>What is the ideal resistance of a voltmeter?</strong>
+      <div class="sm-row">
+        <select class="sm-input sm-select"><option value="">-- choose --</option><option value="zero">Zero</option><option value="6ohms">6 Ω</option><option value="infinite">Infinite</option></select>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
     </div>
 
-    <div class="q" data-type="mcq" data-answer="increases">
-      <p class="qtext">As a filament lamp gets hotter, its resistance...</p>
-      <select class="mcq-select"><option value="">-- choose --</option><option value="increases">Increases</option><option value="decreases">Decreases</option><option value="stays the same">Stays the same</option></select>
-      <button class="check-btn">Check</button><span class="feedback"></span>
-    </div>
+  </section>
 
-    <div class="q" data-type="mcq" data-answer="zero">
-      <p class="qtext">What is the ideal resistance of a wire?</p>
-      <select class="mcq-select"><option value="">-- choose --</option><option value="zero">Zero</option><option value="6ohms">6 Ω</option><option value="infinite">Infinite</option></select>
-      <button class="check-btn">Check</button><span class="feedback"></span>
-    </div>
-
-    <div class="q" data-type="mcq" data-answer="zero">
-      <p class="qtext">What is the ideal resistance of an ammeter?</p>
-      <select class="mcq-select"><option value="">-- choose --</option><option value="zero">Zero</option><option value="6ohms">6 Ω</option><option value="infinite">Infinite</option></select>
-      <button class="check-btn">Check</button><span class="feedback"></span>
-    </div>
-
-    <div class="q" data-type="mcq" data-answer="infinite">
-      <p class="qtext">What is the ideal resistance of a voltmeter?</p>
-      <select class="mcq-select"><option value="">-- choose --</option><option value="zero">Zero</option><option value="6ohms">6 Ω</option><option value="infinite">Infinite</option></select>
-      <button class="check-btn">Check</button><span class="feedback"></span>
-    </div>
-  </div>
-
-  <div class="section">
-    <h2>What affects resistance?</h2>
-    <div class="notes">
+  <section class="topic" id="s3">
+    <h2>3. What affects resistance?</h2>
+    
       <p>The resistance of a component or wire depends on four factors — three geometric/material properties, plus temperature (which we covered above):</p>
       <p><strong>1. Resistivity, ρ</strong> (measured in Ω m): the material's intrinsic opposition to the flow of charge. Copper is a better conductor than steel, so copper has a lower resistivity than steel.</p>
       <p><strong>2. Length, L</strong> (measured in m): in a longer wire, charge carriers have to collide with more ions, so a higher voltage is needed to push the same current through — long wires have high resistance.</p>
       <p><strong>3. Cross-sectional area, A</strong> (measured in m²): in a thick wire, less voltage is needed to push the charge carriers through — thick wires have low resistance.</p>
       <p><strong>4. Temperature</strong>: as covered above, a hotter lattice vibrates more and scatters electrons more often, increasing resistance (for a metal).</p>
       <p>Combining the geometric factors: R = ρL / A.</p>
+    
+    <div class="question sm-question" data-qtype="mcq" data-answer="double" id="q6">
+      <span class="qnum">6</span><strong>For a fixed pd, doubling the length of a wire (same material, same cross-section) makes the resistance...</strong>
+      <div class="sm-row">
+        <select class="sm-input sm-select"><option value="">-- choose --</option><option value="double">Double</option><option value="halve">Halve</option><option value="stay the same">Stay the same</option><option value="quadruple">Quadruple</option></select>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+    </div>
+    <div class="question sm-question" data-qtype="mcq" data-answer="halve" id="q7">
+      <span class="qnum">7</span><strong>Doubling the cross-sectional area of a wire (same length, same material) makes the resistance...</strong>
+      <div class="sm-row">
+        <select class="sm-input sm-select"><option value="">-- choose --</option><option value="double">Double</option><option value="halve">Halve</option><option value="stay the same">Stay the same</option></select>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
     </div>
 
-    <div class="q" data-type="mcq" data-answer="double">
-      <p class="qtext">For a fixed pd, doubling the length of a wire (same material, same cross-section) makes the resistance...</p>
-      <select class="mcq-select"><option value="">-- choose --</option><option value="double">Double</option><option value="halve">Halve</option><option value="stay the same">Stay the same</option><option value="quadruple">Quadruple</option></select>
-      <button class="check-btn">Check</button><span class="feedback"></span>
-    </div>
+  </section>
 
-    <div class="q" data-type="mcq" data-answer="halve">
-      <p class="qtext">Doubling the cross-sectional area of a wire (same length, same material) makes the resistance...</p>
-      <select class="mcq-select"><option value="">-- choose --</option><option value="double">Double</option><option value="halve">Halve</option><option value="stay the same">Stay the same</option></select>
-      <button class="check-btn">Check</button><span class="feedback"></span>
-    </div>
-  </div>
-
-  <div class="section">
-    <h2>Measuring resistance</h2>
-    <p class="note">Assuming ideal components, analyse the following circuits.</p>
-
-    <!-- Circuit 15 -->
-    <div class="circuit" data-circuit="1">
-      <h3>Circuit 1</h3>
-      <div class="circuit-wrap">
+  <section class="topic" id="s4">
+    <h2>4. Measuring resistance</h2>
+    <p>Assuming ideal components, analyse the following circuits.</p>
+    <div class="question" id="circuit1">
+      <h3 style="margin-top:0;">Circuit 1</h3>
+      <figure>
         <svg class="circuit-svg" viewBox="0 0 320 220" width="300" height="206">
           <line x1="30" y1="50" x2="145" y2="50" stroke="#1b2a4a" stroke-width="2"/>
           <line x1="175" y1="50" x2="290" y2="50" stroke="#1b2a4a" stroke-width="2"/>
@@ -344,20 +464,18 @@
           <line x1="190" y1="200" x2="210" y2="180" stroke="#1a1f2e" stroke-width="1.5"/>
           <line x1="215" y1="190" x2="290" y2="190" stroke="#1b2a4a" stroke-width="2"/>
         </svg>
-        <div class="readings">
-          <div class="reading-row"><span class="rlabel">V₁ =</span><span class="given">12 V (given)</span></div>
-          <div class="reading-row"><span class="rlabel">A₁ =</span><span class="given">2 A (given)</span></div>
-          <div class="reading-row" data-answer="6" data-tol="0.05"><span class="rlabel">R =</span><input type="text" class="rinput"><span class="runit">Ω</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-        </div>
+      </figure>
+      <div class="reading-row"><span class="lbl">V₁ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">12 V (given)</span></div>
+      <div class="reading-row"><span class="lbl">A₁ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">2 A (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="6" data-tol="0.05" data-notype="true"><span class="lbl">R =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="R = reading"><span class="sm-unit">Ω</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="reveal-btn no-print" onclick="toggleAnswer('circuit1-ans')">Show working</button>
       </div>
-      <div class="btnrow"><button class="reveal-btn secondary">Show working</button></div>
-      <div class="solution">Single loop, so the bulb takes the full battery pd: R = V₁ / A₁ = 12 / 2 = ….</div>
+      <div class="answer-panel" id="circuit1-ans">Single loop, so the bulb takes the full battery pd: R = V₁ / A₁ = 12 / 2 = ….</div>
     </div>
-
-    <!-- Circuit 16 -->
-    <div class="circuit" data-circuit="2">
-      <h3>Circuit 2</h3>
-      <div class="circuit-wrap">
+    <div class="question" id="circuit2">
+      <h3 style="margin-top:0;">Circuit 2</h3>
+      <figure>
         <svg class="circuit-svg" viewBox="0 0 320 220" width="300" height="206">
           <line x1="30" y1="50" x2="145" y2="50" stroke="#1b2a4a" stroke-width="2"/>
           <line x1="175" y1="50" x2="290" y2="50" stroke="#1b2a4a" stroke-width="2"/>
@@ -383,20 +501,18 @@
           <line x1="190" y1="200" x2="210" y2="180" stroke="#1a1f2e" stroke-width="1.5"/>
           <line x1="215" y1="190" x2="290" y2="190" stroke="#1b2a4a" stroke-width="2"/>
         </svg>
-        <div class="readings">
-          <div class="reading-row"><span class="rlabel">V₁ =</span><span class="given">7 V (given)</span></div>
-          <div class="reading-row" data-answer="0.35" data-tol="0.05"><span class="rlabel">A₁ =</span><input type="text" class="rinput"><span class="runit">A</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row"><span class="rlabel">R =</span><span class="given">20 Ω (given)</span></div>
-        </div>
+      </figure>
+      <div class="reading-row"><span class="lbl">V₁ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">7 V (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="0.35" data-tol="0.05" data-notype="true"><span class="lbl">A₁ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A₁ = reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">R =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">20 Ω (given)</span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="reveal-btn no-print" onclick="toggleAnswer('circuit2-ans')">Show working</button>
       </div>
-      <div class="btnrow"><button class="reveal-btn secondary">Show working</button></div>
-      <div class="solution">A₁ = V₁ / R = 7 / 20 = ….</div>
+      <div class="answer-panel" id="circuit2-ans">A₁ = V₁ / R = 7 / 20 = ….</div>
     </div>
-
-    <!-- Circuit 17 -->
-    <div class="circuit" data-circuit="3">
-      <h3>Circuit 3</h3>
-      <div class="circuit-wrap">
+    <div class="question" id="circuit3">
+      <h3 style="margin-top:0;">Circuit 3</h3>
+      <figure>
         <svg class="circuit-svg" viewBox="0 0 320 260" width="300" height="244">
           <line x1="30" y1="50" x2="145" y2="50" stroke="#1b2a4a" stroke-width="2"/>
           <line x1="175" y1="50" x2="290" y2="50" stroke="#1b2a4a" stroke-width="2"/>
@@ -427,21 +543,19 @@
           <circle cx="90" cy="205" r="15" fill="#e8f1ff" stroke="#3a7bd5" stroke-width="2"/>
           <text x="90" y="209" text-anchor="middle" class="lbl-svg" fill="#3a7bd5" font-weight="bold" font-size="12">V<tspan font-size="8" dy="2">2</tspan></text>
         </svg>
-        <div class="readings">
-          <div class="reading-row"><span class="rlabel">V₁ =</span><span class="given">6 V (given)</span></div>
-          <div class="reading-row" data-answer="6" data-tol="0.05"><span class="rlabel">V₂ =</span><input type="text" class="rinput"><span class="runit">V</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row"><span class="rlabel">A₁ =</span><span class="given">0.1 A (given)</span></div>
-          <div class="reading-row" data-answer="60" data-tol="0.05"><span class="rlabel">R =</span><input type="text" class="rinput"><span class="runit">Ω</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-        </div>
+      </figure>
+      <div class="reading-row"><span class="lbl">V₁ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">6 V (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="6" data-tol="0.05" data-notype="true"><span class="lbl">V₂ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V₂ = reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">A₁ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">0.1 A (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="60" data-tol="0.05" data-notype="true"><span class="lbl">R =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="R = reading"><span class="sm-unit">Ω</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="reveal-btn no-print" onclick="toggleAnswer('circuit3-ans')">Show working</button>
       </div>
-      <div class="btnrow"><button class="reveal-btn secondary">Show working</button></div>
-      <div class="solution">Single loop with only one resistive component, so V₂ = V₁ = …. R = V₂ / A₁ = 6 / 0.1 = ….</div>
+      <div class="answer-panel" id="circuit3-ans">Single loop with only one resistive component, so V₂ = V₁ = …. R = V₂ / A₁ = 6 / 0.1 = ….</div>
     </div>
-
-    <!-- Circuit 18 -->
-    <div class="circuit" data-circuit="4">
-      <h3>Circuit 4</h3>
-      <div class="circuit-wrap">
+    <div class="question" id="circuit4">
+      <h3 style="margin-top:0;">Circuit 4</h3>
+      <figure>
         <svg class="circuit-svg" viewBox="0 0 320 260" width="300" height="244">
           <line x1="30" y1="50" x2="145" y2="50" stroke="#1b2a4a" stroke-width="2"/>
           <line x1="175" y1="50" x2="290" y2="50" stroke="#1b2a4a" stroke-width="2"/>
@@ -472,21 +586,19 @@
           <circle cx="90" cy="205" r="15" fill="#e8f1ff" stroke="#3a7bd5" stroke-width="2"/>
           <text x="90" y="209" text-anchor="middle" class="lbl-svg" fill="#3a7bd5" font-weight="bold" font-size="12">V<tspan font-size="8" dy="2">2</tspan></text>
         </svg>
-        <div class="readings">
-          <div class="reading-row" data-answer="0.6" data-tol="0.05"><span class="rlabel">V₁ =</span><input type="text" class="rinput"><span class="runit">V</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row" data-answer="0.6" data-tol="0.05"><span class="rlabel">V₂ =</span><input type="text" class="rinput"><span class="runit">V</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row"><span class="rlabel">A₁ =</span><span class="given">0.3 A (given)</span></div>
-          <div class="reading-row"><span class="rlabel">R =</span><span class="given">2 Ω (given)</span></div>
-        </div>
+      </figure>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="0.6" data-tol="0.05" data-notype="true"><span class="lbl">V₁ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V₁ = reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="0.6" data-tol="0.05" data-notype="true"><span class="lbl">V₂ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V₂ = reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">A₁ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">0.3 A (given)</span></div>
+      <div class="reading-row"><span class="lbl">R =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">2 Ω (given)</span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="reveal-btn no-print" onclick="toggleAnswer('circuit4-ans')">Show working</button>
       </div>
-      <div class="btnrow"><button class="reveal-btn secondary">Show working</button></div>
-      <div class="solution">V₂ = A₁ × R = 0.3 × 2 = …. Single loop, one resistive component, so V₁ = V₂ = ….</div>
+      <div class="answer-panel" id="circuit4-ans">V₂ = A₁ × R = 0.3 × 2 = …. Single loop, one resistive component, so V₁ = V₂ = ….</div>
     </div>
-
-    <!-- Circuit 19 -->
-    <div class="circuit" data-circuit="5">
-      <h3>Circuit 5</h3>
-      <div class="circuit-wrap">
+    <div class="question" id="circuit5">
+      <h3 style="margin-top:0;">Circuit 5</h3>
+      <figure>
         <svg class="circuit-svg" viewBox="0 0 320 260" width="300" height="244">
           <line x1="30" y1="50" x2="145" y2="50" stroke="#1b2a4a" stroke-width="2"/>
           <line x1="175" y1="50" x2="290" y2="50" stroke="#1b2a4a" stroke-width="2"/>
@@ -517,21 +629,19 @@
           <circle cx="90" cy="205" r="15" fill="#e8f1ff" stroke="#3a7bd5" stroke-width="2"/>
           <text x="90" y="209" text-anchor="middle" class="lbl-svg" fill="#3a7bd5" font-weight="bold" font-size="12">V<tspan font-size="8" dy="2">2</tspan></text>
         </svg>
-        <div class="readings">
-          <div class="reading-row" data-answer="1" data-tol="0.05"><span class="rlabel">V₁ =</span><input type="text" class="rinput"><span class="runit">V</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row" data-answer="1" data-tol="0.05"><span class="rlabel">V₂ =</span><input type="text" class="rinput"><span class="runit">V</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row"><span class="rlabel">A₁ =</span><span class="given">0.01 A (given)</span></div>
-          <div class="reading-row"><span class="rlabel">R =</span><span class="given">100 Ω (given)</span></div>
-        </div>
+      </figure>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="1" data-tol="0.05" data-notype="true"><span class="lbl">V₁ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V₁ = reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="1" data-tol="0.05" data-notype="true"><span class="lbl">V₂ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V₂ = reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">A₁ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">0.01 A (given)</span></div>
+      <div class="reading-row"><span class="lbl">R =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">100 Ω (given)</span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="reveal-btn no-print" onclick="toggleAnswer('circuit5-ans')">Show working</button>
       </div>
-      <div class="btnrow"><button class="reveal-btn secondary">Show working</button></div>
-      <div class="solution">V₂ = A₁ × R = 0.01 × 100 = …. Single loop, one resistive component, so V₁ = V₂ = ….</div>
+      <div class="answer-panel" id="circuit5-ans">V₂ = A₁ × R = 0.01 × 100 = …. Single loop, one resistive component, so V₁ = V₂ = ….</div>
     </div>
-
-    <!-- Circuit 20 -->
-    <div class="circuit" data-circuit="6">
-      <h3>Circuit 6</h3>
-      <div class="circuit-wrap">
+    <div class="question" id="circuit6">
+      <h3 style="margin-top:0;">Circuit 6</h3>
+      <figure>
         <svg class="circuit-svg" viewBox="0 0 320 260" width="300" height="244">
           <line x1="30" y1="50" x2="40" y2="50" stroke="#1b2a4a" stroke-width="2"/>
           <circle cx="55" cy="50" r="15" fill="#fff3f1" stroke="#e8533a" stroke-width="2"/>
@@ -576,24 +686,21 @@
           <circle cx="230" cy="225" r="15" fill="#e8f1ff" stroke="#3a7bd5" stroke-width="2"/>
           <text x="230" y="229" text-anchor="middle" class="lbl-svg" fill="#3a7bd5" font-weight="bold" font-size="12">V<tspan font-size="8" dy="2">3</tspan></text>
         </svg>
-        <div class="readings">
-          <div class="reading-row"><span class="rlabel">V₁ =</span><span class="given">10 V (given)</span></div>
-          <div class="reading-row" data-answer="0.25" data-tol="0.05"><span class="rlabel">A₁ =</span><input type="text" class="rinput"><span class="runit">A</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row" data-answer="8" data-tol="0.05"><span class="rlabel">V₂ =</span><input type="text" class="rinput"><span class="runit">V</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row"><span class="rlabel">A₂ =</span><span class="given">0.25 A (given)</span></div>
-          <div class="reading-row"><span class="rlabel">V₃ =</span><span class="given">2 V (given)</span></div>
-          <div class="reading-row" data-answer="32" data-tol="0.05"><span class="rlabel">R<sub>resistor</sub> =</span><input type="text" class="rinput"><span class="runit">Ω</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-        </div>
+      </figure>
+      <div class="reading-row"><span class="lbl">V₁ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">10 V (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="0.25" data-tol="0.05" data-notype="true"><span class="lbl">A₁ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A₁ = reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="8" data-tol="0.05" data-notype="true"><span class="lbl">V₂ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V₂ = reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">A₂ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">0.25 A (given)</span></div>
+      <div class="reading-row"><span class="lbl">V₃ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">2 V (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="32" data-tol="0.05" data-notype="true"><span class="lbl">R<sub>resistor</sub> =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="R<sub>resistor</sub> = reading"><span class="sm-unit">Ω</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="reveal-btn no-print" onclick="toggleAnswer('circuit6-ans')">Show working</button>
       </div>
-      <div class="btnrow"><button class="reveal-btn secondary">Show working</button></div>
-      <div class="solution">Single loop: A₁ = A₂ = … (same current everywhere). V₂ = V₁ − V₃ = 10 − 2 = … (KVL). R<sub>resistor</sub> = V₂ / A₂ = ….</div>
+      <div class="answer-panel" id="circuit6-ans">Single loop: A₁ = A₂ = … (same current everywhere). V₂ = V₁ − V₃ = 10 − 2 = … (KVL). R<sub>resistor</sub> = V₂ / A₂ = ….</div>
     </div>
-
-    <!-- Circuit 21 -->
-    <div class="circuit" data-circuit="7">
-      <h3>Circuit 7</h3>
-      <p class="note">Assume the resistors are identical.</p>
-      <div class="circuit-wrap">
+    <div class="question" id="circuit7">
+      <h3 style="margin-top:0;">Circuit 7</h3>
+      <figure>
         <svg class="circuit-svg" viewBox="0 0 320 280" width="300" height="263">
           <line x1="30" y1="50" x2="40" y2="50" stroke="#1b2a4a" stroke-width="2"/>
           <circle cx="55" cy="50" r="15" fill="#fff3f1" stroke="#e8533a" stroke-width="2"/>
@@ -643,25 +750,23 @@
           <circle cx="90" cy="245" r="15" fill="#e8f1ff" stroke="#3a7bd5" stroke-width="2"/>
           <text x="90" y="249" text-anchor="middle" class="lbl-svg" fill="#3a7bd5" font-weight="bold" font-size="12">V<tspan font-size="8" dy="2">3</tspan></text>
         </svg>
-        <div class="readings">
-          <div class="reading-row"><span class="rlabel">V₁ =</span><span class="given">6 V (given)</span></div>
-          <div class="reading-row"><span class="rlabel">A₁ =</span><span class="given">1.2 A (given)</span></div>
-          <div class="reading-row" data-answer="6" data-tol="0.05"><span class="rlabel">V₂ =</span><input type="text" class="rinput"><span class="runit">V</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row"><span class="rlabel">A₂ =</span><span class="given">0.6 A (given)</span></div>
-          <div class="reading-row" data-answer="6" data-tol="0.05"><span class="rlabel">V₃ =</span><input type="text" class="rinput"><span class="runit">V</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row" data-answer="0.6" data-tol="0.05"><span class="rlabel">A₃ =</span><input type="text" class="rinput"><span class="runit">A</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row"><span class="rlabel">R =</span><span class="given">10 Ω (given)</span></div>
-          <div class="reading-row" data-answer="1.2" data-tol="0.05"><span class="rlabel">A₄ =</span><input type="text" class="rinput"><span class="runit">A</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-        </div>
+      </figure>
+      <div class="reading-row"><span class="lbl">V₁ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">6 V (given)</span></div>
+      <div class="reading-row"><span class="lbl">A₁ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">1.2 A (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="6" data-tol="0.05" data-notype="true"><span class="lbl">V₂ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V₂ = reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">A₂ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">0.6 A (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="6" data-tol="0.05" data-notype="true"><span class="lbl">V₃ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V₃ = reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="0.6" data-tol="0.05" data-notype="true"><span class="lbl">A₃ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A₃ = reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">R =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">10 Ω (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="1.2" data-tol="0.05" data-notype="true"><span class="lbl">A₄ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A₄ = reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="reveal-btn no-print" onclick="toggleAnswer('circuit7-ans')">Show working</button>
       </div>
-      <div class="btnrow"><button class="reveal-btn secondary">Show working</button></div>
-      <div class="solution">Both branches connect directly across the same rails as the battery, so V₂ = V₃ = V₁ = …. Identical resistors ⇒ A₃ = A₂ = … (check: R = 6/0.6 = 10 Ω ✓). A₄ = A₁ = A₂ + A₃ = ….</div>
+      <div class="answer-panel" id="circuit7-ans">Both branches connect directly across the same rails as the battery, so V₂ = V₃ = V₁ = …. Identical resistors ⇒ A₃ = A₂ = … (check: R = 6/0.6 = 10 Ω ✓). A₄ = A₁ = A₂ + A₃ = ….</div>
     </div>
-
-    <!-- Circuit 22 -->
-    <div class="circuit" data-circuit="8">
-      <h3>Circuit 8</h3>
-      <div class="circuit-wrap">
+    <div class="question" id="circuit8">
+      <h3 style="margin-top:0;">Circuit 8</h3>
+      <figure>
         <svg class="circuit-svg" viewBox="0 0 320 280" width="300" height="263">
           <line x1="30" y1="50" x2="40" y2="50" stroke="#1b2a4a" stroke-width="2"/>
           <circle cx="55" cy="50" r="15" fill="#fff3f1" stroke="#e8533a" stroke-width="2"/>
@@ -713,26 +818,23 @@
           <circle cx="90" cy="245" r="15" fill="#e8f1ff" stroke="#3a7bd5" stroke-width="2"/>
           <text x="90" y="249" text-anchor="middle" class="lbl-svg" fill="#3a7bd5" font-weight="bold" font-size="12">V<tspan font-size="8" dy="2">3</tspan></text>
         </svg>
-        <div class="readings">
-          <div class="reading-row"><span class="rlabel">V₁ =</span><span class="given">4 V (given)</span></div>
-          <div class="reading-row"><span class="rlabel">A₁ = A₄ =</span><span class="given">0.7 A (given)</span></div>
-          <div class="reading-row" data-answer="4" data-tol="0.05"><span class="rlabel">V₂ =</span><input type="text" class="rinput"><span class="runit">V</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row"><span class="rlabel">A₂ =</span><span class="given">0.2 A (given)</span></div>
-          <div class="reading-row" data-answer="4" data-tol="0.05"><span class="rlabel">V₃ =</span><input type="text" class="rinput"><span class="runit">V</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row" data-answer="0.5" data-tol="0.05"><span class="rlabel">A₃ =</span><input type="text" class="rinput"><span class="runit">A</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row" data-answer="8" data-tol="0.05"><span class="rlabel">R<sub>bulb</sub> =</span><input type="text" class="rinput"><span class="runit">Ω</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row"><span class="rlabel">R<sub>resistor</sub> =</span><span class="given">20 Ω (given)</span></div>
-        </div>
+      </figure>
+      <div class="reading-row"><span class="lbl">V₁ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">4 V (given)</span></div>
+      <div class="reading-row"><span class="lbl">A₁ = A₄ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">0.7 A (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="4" data-tol="0.05" data-notype="true"><span class="lbl">V₂ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V₂ = reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">A₂ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">0.2 A (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="4" data-tol="0.05" data-notype="true"><span class="lbl">V₃ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V₃ = reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="0.5" data-tol="0.05" data-notype="true"><span class="lbl">A₃ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A₃ = reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="8" data-tol="0.05" data-notype="true"><span class="lbl">R<sub>bulb</sub> =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="R<sub>bulb</sub> = reading"><span class="sm-unit">Ω</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">R<sub>resistor</sub> =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">20 Ω (given)</span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="reveal-btn no-print" onclick="toggleAnswer('circuit8-ans')">Show working</button>
       </div>
-      <div class="btnrow"><button class="reveal-btn secondary">Show working</button></div>
-      <div class="solution">Both branches connect directly across the same rails, so V₂ = V₃ = V₁ = … (check: R<sub>resistor</sub> = 4/0.2 = 20 Ω ✓). A₃ = A₁ − A₂ = 0.7 − 0.2 = …. R<sub>bulb</sub> = V₃ / A₃ = ….</div>
+      <div class="answer-panel" id="circuit8-ans">Both branches connect directly across the same rails, so V₂ = V₃ = V₁ = … (check: R<sub>resistor</sub> = 4/0.2 = 20 Ω ✓). A₃ = A₁ − A₂ = 0.7 − 0.2 = …. R<sub>bulb</sub> = V₃ / A₃ = ….</div>
     </div>
-
-    <!-- Circuit 23 -->
-    <div class="circuit" data-circuit="9">
-      <h3>Circuit 9</h3>
-      <p class="note">Assume the bulbs are identical.</p>
-      <div class="circuit-wrap">
+    <div class="question" id="circuit9">
+      <h3 style="margin-top:0;">Circuit 9</h3>
+      <figure>
         <svg class="circuit-svg" viewBox="0 0 320 280" width="300" height="263">
           <line x1="30" y1="50" x2="40" y2="50" stroke="#1b2a4a" stroke-width="2"/>
           <circle cx="55" cy="50" r="15" fill="#fff3f1" stroke="#e8533a" stroke-width="2"/>
@@ -794,24 +896,22 @@
           <circle cx="150" cy="245" r="15" fill="#e8f1ff" stroke="#3a7bd5" stroke-width="2"/>
           <text x="150" y="249" text-anchor="middle" class="lbl-svg" fill="#3a7bd5" font-weight="bold" font-size="12">V<tspan font-size="8" dy="2">4</tspan></text>
         </svg>
-        <div class="readings">
-          <div class="reading-row" data-answer="3" data-tol="0.05"><span class="rlabel">V₁ =</span><input type="text" class="rinput"><span class="runit">V</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row" data-answer="0.3" data-tol="0.05"><span class="rlabel">A₁ =</span><input type="text" class="rinput"><span class="runit">A</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row"><span class="rlabel">V₂ =</span><span class="given">3 V (given)</span></div>
-          <div class="reading-row"><span class="rlabel">A₂ =</span><span class="given">0.2 A (given)</span></div>
-          <div class="reading-row" data-answer="1.5" data-tol="0.05"><span class="rlabel">V₃ =</span><input type="text" class="rinput"><span class="runit">V</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row" data-answer="0.1" data-tol="0.05"><span class="rlabel">A₃ =</span><input type="text" class="rinput"><span class="runit">A</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row" data-answer="1.5" data-tol="0.05"><span class="rlabel">V₄ =</span><input type="text" class="rinput"><span class="runit">V</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-        </div>
+      </figure>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="3" data-tol="0.05" data-notype="true"><span class="lbl">V₁ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V₁ = reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="0.3" data-tol="0.05" data-notype="true"><span class="lbl">A₁ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A₁ = reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">V₂ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">3 V (given)</span></div>
+      <div class="reading-row"><span class="lbl">A₂ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">0.2 A (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="1.5" data-tol="0.05" data-notype="true"><span class="lbl">V₃ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V₃ = reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="0.1" data-tol="0.05" data-notype="true"><span class="lbl">A₃ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A₃ = reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="1.5" data-tol="0.05" data-notype="true"><span class="lbl">V₄ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V₄ = reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="reveal-btn no-print" onclick="toggleAnswer('circuit9-ans')">Show working</button>
       </div>
-      <div class="btnrow"><button class="reveal-btn secondary">Show working</button></div>
-      <div class="solution">Bulb resistance: R = V₂ / A₂ = 3 / 0.2 = 15 Ω. This branch connects directly across the rails, so V₁ = V₂ = …. The bottom branch has two identical (15 Ω) bulbs in series (total 30 Ω) across the same 3 V, so A₃ = 3 / 30 = …, and V₃ = V₄ = A₃ × 15 = … each (by symmetry, since the bulbs are identical). A₁ = A₂ + A₃ = ….</div>
+      <div class="answer-panel" id="circuit9-ans">Bulb resistance: R = V₂ / A₂ = 3 / 0.2 = 15 Ω. This branch connects directly across the rails, so V₁ = V₂ = …. The bottom branch has two identical (15 Ω) bulbs in series (total 30 Ω) across the same 3 V, so A₃ = 3 / 30 = …, and V₃ = V₄ = A₃ × 15 = … each (by symmetry, since the bulbs are identical). A₁ = A₂ + A₃ = ….</div>
     </div>
-
-    <!-- Circuit 24 -->
-    <div class="circuit" data-circuit="10">
-      <h3>Circuit 10</h3>
-      <div class="circuit-wrap">
+    <div class="question" id="circuit10">
+      <h3 style="margin-top:0;">Circuit 10</h3>
+      <figure>
         <svg class="circuit-svg" viewBox="0 0 320 260" width="300" height="244">
           <line x1="30" y1="50" x2="72.5" y2="50" stroke="#1b2a4a" stroke-width="2"/>
           <circle cx="87.5" cy="50" r="15" fill="#fff3f1" stroke="#e8533a" stroke-width="2"/>
@@ -856,24 +956,22 @@
           <circle cx="210" cy="225" r="15" fill="#e8f1ff" stroke="#3a7bd5" stroke-width="2"/>
           <text x="210" y="229" text-anchor="middle" class="lbl-svg" fill="#3a7bd5" font-weight="bold" font-size="12">V<tspan font-size="8" dy="2">3</tspan></text>
         </svg>
-        <div class="readings">
-          <div class="reading-row"><span class="rlabel">V₁ =</span><span class="given">9 V (given)</span></div>
-          <div class="reading-row" data-answer="3" data-tol="0.05"><span class="rlabel">A₁ =</span><input type="text" class="rinput"><span class="runit">A</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row"><span class="rlabel">V₂ =</span><span class="given">3 V (given)</span></div>
-          <div class="reading-row"><span class="rlabel">A₂ =</span><span class="given">3 A (given)</span></div>
-          <div class="reading-row" data-answer="6" data-tol="0.05"><span class="rlabel">V₃ =</span><input type="text" class="rinput"><span class="runit">V</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row" data-answer="1" data-tol="0.05"><span class="rlabel">R₁ =</span><input type="text" class="rinput"><span class="runit">Ω</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row"><span class="rlabel">R₂ =</span><span class="given">2 Ω (given)</span></div>
-        </div>
+      </figure>
+      <div class="reading-row"><span class="lbl">V₁ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">9 V (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="3" data-tol="0.05" data-notype="true"><span class="lbl">A₁ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A₁ = reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">V₂ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">3 V (given)</span></div>
+      <div class="reading-row"><span class="lbl">A₂ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">3 A (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="6" data-tol="0.05" data-notype="true"><span class="lbl">V₃ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V₃ = reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="1" data-tol="0.05" data-notype="true"><span class="lbl">R₁ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="R₁ = reading"><span class="sm-unit">Ω</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">R₂ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">2 Ω (given)</span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="reveal-btn no-print" onclick="toggleAnswer('circuit10-ans')">Show working</button>
       </div>
-      <div class="btnrow"><button class="reveal-btn secondary">Show working</button></div>
-      <div class="solution">Single loop, so A₁ = A₂ = …. V₃ = A₂ × R₂ = 3 × 2 = … (check: V₂ + V₃ should add up to V₁ = 9 V). R₁ = V₂ / A₂ = 3 / 3 = ….</div>
+      <div class="answer-panel" id="circuit10-ans">Single loop, so A₁ = A₂ = …. V₃ = A₂ × R₂ = 3 × 2 = … (check: V₂ + V₃ should add up to V₁ = 9 V). R₁ = V₂ / A₂ = 3 / 3 = ….</div>
     </div>
-
-    <!-- Circuit 25 -->
-    <div class="circuit" data-circuit="11">
-      <h3>11. Battery in parallel with two resistors — calculate A₂ first</h3>
-      <div class="circuit-wrap">
+    <div class="question" id="circuit11">
+      <h3 style="margin-top:0;">11. Battery in parallel with two resistors — calculate A₂ first</h3>
+      <figure>
         <svg class="circuit-svg" viewBox="0 0 320 280" width="300" height="263">
           <line x1="30" y1="50" x2="40" y2="50" stroke="#1b2a4a" stroke-width="2"/>
           <circle cx="55" cy="50" r="15" fill="#fff3f1" stroke="#e8533a" stroke-width="2"/>
@@ -925,27 +1023,29 @@
           <circle cx="90" cy="245" r="15" fill="#e8f1ff" stroke="#3a7bd5" stroke-width="2"/>
           <text x="90" y="249" text-anchor="middle" class="lbl-svg" fill="#3a7bd5" font-weight="bold" font-size="12">V<tspan font-size="8" dy="2">3</tspan></text>
         </svg>
-        <div class="readings">
-          <div class="reading-row" data-answer="20" data-tol="0.05"><span class="rlabel">V₁ =</span><input type="text" class="rinput"><span class="runit">V</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row" data-answer="8" data-tol="0.05"><span class="rlabel">A₁ =</span><input type="text" class="rinput"><span class="runit">A</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row" data-answer="20" data-tol="0.05"><span class="rlabel">V₂ =</span><input type="text" class="rinput"><span class="runit">V</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row"><span class="rlabel">A₂ =</span><span class="given">3 A (given)</span></div>
-          <div class="reading-row"><span class="rlabel">V₃ =</span><span class="given">20 V (given)</span></div>
-          <div class="reading-row" data-answer="5" data-tol="0.05"><span class="rlabel">A₃ =</span><input type="text" class="rinput"><span class="runit">A</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row" data-answer="6.67" data-tol="0.06"><span class="rlabel">R₁ =</span><input type="text" class="rinput"><span class="runit">Ω</span><button class="rcheck">Check</button><span class="feedback"></span></div>
-          <div class="reading-row"><span class="rlabel">R₂ =</span><span class="given">4 Ω (given)</span></div>
-          <div class="reading-row"><span class="rlabel">A₄ =</span><span class="given">8 A (given)</span></div>
-        </div>
+      </figure>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="20" data-tol="0.05" data-notype="true"><span class="lbl">V₁ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V₁ = reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="8" data-tol="0.05" data-notype="true"><span class="lbl">A₁ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A₁ = reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="20" data-tol="0.05" data-notype="true"><span class="lbl">V₂ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="V₂ = reading"><span class="sm-unit">V</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">A₂ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">3 A (given)</span></div>
+      <div class="reading-row"><span class="lbl">V₃ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">20 V (given)</span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="5" data-tol="0.05" data-notype="true"><span class="lbl">A₃ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="A₃ = reading"><span class="sm-unit">A</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row sm-question" data-qtype="number" data-answer="6.67" data-tol="0.06" data-notype="true"><span class="lbl">R₁ =</span><input type="text" class="sm-input answer-lines short" inputmode="decimal" aria-label="R₁ = reading"><span class="sm-unit">Ω</span><button class="check-btn no-print" onclick="checkAnswer(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+      <div class="reading-row"><span class="lbl">R₂ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">4 Ω (given)</span></div>
+      <div class="reading-row"><span class="lbl">A₄ =</span><span class="sm-unit" style="font-family:Menlo,Consolas,monospace;background:var(--soft-grey);padding:0.2rem 0.5rem;border-radius:4px;">8 A (given)</span></div>
+      <div class="sm-row" style="margin-top:0.8rem;">
+        <button class="reveal-btn no-print" onclick="toggleAnswer('circuit11-ans')">Show working</button>
       </div>
-      <div class="btnrow"><button class="reveal-btn secondary">Show working</button></div>
-      <div class="solution">Both branches connect directly across the rails, so V₂ = V₃ = … (which is also V₁). A₃ = V₃ / R₂ = 20 / 4 = … (calculate this before A₂ is needed elsewhere — check: A₂ + A₃ should add up to A₄ = 8 A). R₁ = V₂ / A₂ = 20 / 3 = …. A₁ = A₄ = ….</div>
+      <div class="answer-panel" id="circuit11-ans">Both branches connect directly across the rails, so V₂ = V₃ = … (which is also V₁). A₃ = V₃ / R₂ = 20 / 4 = … (calculate this before A₂ is needed elsewhere — check: A₂ + A₃ should add up to A₄ = 8 A). R₁ = V₂ / A₂ = 20 / 3 = …. A₁ = A₄ = ….</div>
     </div>
-  </div>
 
-  <div class="section practical">
-    <h2>Investigating resistance and length (practical)</h2>
-    <div class="notes">
-      <p>This is a hands-on practical, so nothing below is marked automatically — use it as your method sheet and record your own data and graph on paper (or in your own spreadsheet).</p>
+  </section>
+
+  <section class="topic" id="s5">
+    <h2>5. Investigating resistance and length (practical)</h2>
+    <div class="practical-box">
+      <span class="tag">Practical</span>
+      <p>This is a hands-on practical, so nothing below is marked automatically &mdash; use it as your method sheet and record your own data and graph on paper (or in your own spreadsheet).</p>
       <ol>
         <li>Shade an area on graph paper, 1 cm × 10 cm, in pencil.</li>
         <li>Connect two wires to the multimeter.</li>
@@ -955,12 +1055,12 @@
         <li>Plot a graph with length on the x-axis (horizontal) and resistance on the y-axis (vertical). Do not join all the points up — instead, draw a single line of best fit.</li>
       </ol>
     </div>
-  </div>
+  </section>
 
-  <div class="section">
-    <h2>Resistor, bulb and diode — I–V graphs</h2>
-    <div class="ivgraphs">
-      <figure>
+  <section class="topic" id="s6">
+    <h2>6. Resistor, bulb and diode &mdash; I&ndash;V graphs</h2>
+    <div style="text-align:center;">
+      <figure style="display:inline-block;max-width:200px;margin:0 0.8rem;">
         <svg viewBox="0 0 160 130" width="150" height="122">
           <line x1="80" y1="10" x2="80" y2="120" stroke="#1b2a4a" stroke-width="1.5"/>
           <line x1="10" y1="65" x2="150" y2="65" stroke="#1b2a4a" stroke-width="1.5"/>
@@ -970,7 +1070,7 @@
         </svg>
         <figcaption><strong>1. Resistor (constant temp)</strong><br>Current increases in proportion to voltage.</figcaption>
       </figure>
-      <figure>
+      <figure style="display:inline-block;max-width:200px;margin:0 0.8rem;">
         <svg viewBox="0 0 160 130" width="150" height="122">
           <line x1="80" y1="10" x2="80" y2="120" stroke="#1b2a4a" stroke-width="1.5"/>
           <line x1="10" y1="65" x2="150" y2="65" stroke="#1b2a4a" stroke-width="1.5"/>
@@ -980,7 +1080,7 @@
         </svg>
         <figcaption><strong>2. Bulb (filament lamp)</strong><br>As voltage increases the bulb gets hotter and resistance increases.</figcaption>
       </figure>
-      <figure>
+      <figure style="display:inline-block;max-width:200px;margin:0 0.8rem;">
         <svg viewBox="0 0 160 130" width="150" height="122">
           <line x1="80" y1="10" x2="80" y2="120" stroke="#1b2a4a" stroke-width="1.5"/>
           <line x1="10" y1="65" x2="150" y2="65" stroke="#1b2a4a" stroke-width="1.5"/>
@@ -991,186 +1091,490 @@
         <figcaption><strong>3. Diode</strong><br>A diode only lets current go in one direction — very high resistance in the other.</figcaption>
       </figure>
     </div>
-  </div>
+  </section>
 
-  <div class="section">
-    <h2>Resistivity calculations</h2>
-    <p class="note">Formula: ρ = R A / L, rearranged as needed. Diameter → radius → area = πr².</p>
-
-    <div class="q" data-type="mcq" data-answer="a">
-      <p class="qtext">1. A wire of uniform cross-sectional area 0.5 mm² has a length of 10 m and a resistance of 3 Ω. The resistivity of the material is:</p>
-      <select class="mcq-select">
+  <section class="topic" id="s7">
+    <h2>7. Resistivity calculations</h2>
+    <div class="keyword"><b>Formula:</b> Formula: ρ = R A / L, rearranged as needed. Diameter → radius → area = πr².</div>
+    <div class="question sm-question" data-qtype="mcq" data-answer="a" id="q8">
+      <span class="qnum">8</span><strong>1. A wire of uniform cross-sectional area 0.5 mm² has a length of 10 m and a resistance of 3 Ω. The resistivity of the material is:</strong>
+      <div class="sm-row">
+        <select class="sm-input sm-select">
         <option value="">-- choose --</option>
         <option value="a">1.5 × 10⁻⁷ Ω m</option>
         <option value="b">1.5 × 10⁻⁴ Ω m</option>
         <option value="c">6.7 × 10³ Ω m</option>
         <option value="d">6.7 × 10⁶ Ω m</option>
       </select>
-      <button class="check-btn">Check</button><span class="feedback"></span>
-      <div class="btnrow"><button class="reveal-btn secondary">Show full working</button></div>
-      <div class="solution">A = 0.5 mm² = 0.5×10⁻⁶ m². ρ = RA/L = 3 × 0.5×10⁻⁶ / 10 = …</div>
-    </div>
-
-    <div class="q" data-type="mcq" data-answer="d">
-      <p class="qtext">2. Which graph represents the relationship between the length of a wire and its resistance?</p>
-      <div class="graphopt">
-        <label><input type="radio" name="q2graph" value="a">
-          <svg viewBox="0 0 110 100" width="100" height="90"><line x1="20" y1="10" x2="20" y2="90" stroke="#1b2a4a" stroke-width="1.5"/><line x1="20" y1="90" x2="100" y2="90" stroke="#1b2a4a" stroke-width="1.5"/><path d="M20,88 Q35,25 95,20" fill="none" stroke="#b91c1c" stroke-width="2"/><text x="4" y="20" class="lbl-svg" font-size="10">R</text><text x="88" y="100" class="lbl-svg" font-size="10">L</text></svg>
-          a</label>
-        <label><input type="radio" name="q2graph" value="b">
-          <svg viewBox="0 0 110 100" width="100" height="90"><line x1="20" y1="10" x2="20" y2="90" stroke="#1b2a4a" stroke-width="1.5"/><line x1="20" y1="90" x2="100" y2="90" stroke="#1b2a4a" stroke-width="1.5"/><path d="M20,88 Q60,80 95,20" fill="none" stroke="#b91c1c" stroke-width="2"/><text x="4" y="20" class="lbl-svg" font-size="10">R</text><text x="88" y="100" class="lbl-svg" font-size="10">L</text></svg>
-          b</label>
-        <label><input type="radio" name="q2graph" value="c">
-          <svg viewBox="0 0 110 100" width="100" height="90"><line x1="20" y1="10" x2="20" y2="90" stroke="#1b2a4a" stroke-width="1.5"/><line x1="20" y1="90" x2="100" y2="90" stroke="#1b2a4a" stroke-width="1.5"/><line x1="20" y1="88" x2="95" y2="20" stroke="#b91c1c" stroke-width="2"/><text x="4" y="20" class="lbl-svg" font-size="10">R</text><text x="80" y="100" class="lbl-svg" font-size="10">1/L</text></svg>
-          c</label>
-        <label><input type="radio" name="q2graph" value="d">
-          <svg viewBox="0 0 110 100" width="100" height="90"><line x1="20" y1="10" x2="20" y2="90" stroke="#1b2a4a" stroke-width="1.5"/><line x1="20" y1="90" x2="100" y2="90" stroke="#1b2a4a" stroke-width="1.5"/><line x1="20" y1="88" x2="95" y2="20" stroke="#b91c1c" stroke-width="2"/><text x="4" y="20" class="lbl-svg" font-size="10">R</text><text x="88" y="100" class="lbl-svg" font-size="10">L</text></svg>
-          d</label>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
       </div>
-      <button class="check-btn-radio" data-name="q2graph">Check</button><span class="feedback"></span>
-      <div class="btnrow"><button class="reveal-btn secondary">Show full working</button></div>
-      <div class="solution">R = ρL/A, so for a fixed material and cross-section, R is directly proportional to L — a straight line through the origin with R against L. That's option … (option c has the right shape but the wrong x-axis variable, 1/L instead of L; a and b curve, which would mean R isn't proportional to L).</div>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q8-ans')">Show working</button>
+      <div class="answer-panel" id="q8-ans">A = 0.5 mm² = 0.5×10⁻⁶ m². ρ = RA/L = 3 × 0.5×10⁻⁶ / 10 = …</div>
     </div>
-
-    <div class="q" data-type="mcq" data-answer="b">
-      <p class="qtext">3. Find the resistance of a 2.6 m length of eureka wire with cross-sectional area 2.5 × 10⁻⁷ m² (resistivity of eureka = 49 × 10⁻⁸ Ω m).</p>
-      <select class="mcq-select">
+    <div class="question sm-question" data-qtype="mcq" data-answer="d" id="q9">
+      <span class="qnum">9</span><strong>2. Which graph represents the relationship between the length of a wire and its resistance?</strong>
+      <div style="text-align:center;margin:0.6rem 0;">
+        <figure style="display:inline-block;max-width:130px;margin:0 0.6rem;">
+          <svg viewBox="0 0 110 100" width="100" height="90"><line x1="20" y1="10" x2="20" y2="90" stroke="#1b2a4a" stroke-width="1.5"/><line x1="20" y1="90" x2="100" y2="90" stroke="#1b2a4a" stroke-width="1.5"/><path d="M20,88 Q35,25 95,20" fill="none" stroke="#b91c1c" stroke-width="2"/><text x="4" y="20" class="lbl-svg" font-size="10">R</text><text x="88" y="100" class="lbl-svg" font-size="10">L</text></svg>
+          <figcaption>a</figcaption>
+        </figure>
+        <figure style="display:inline-block;max-width:130px;margin:0 0.6rem;">
+          <svg viewBox="0 0 110 100" width="100" height="90"><line x1="20" y1="10" x2="20" y2="90" stroke="#1b2a4a" stroke-width="1.5"/><line x1="20" y1="90" x2="100" y2="90" stroke="#1b2a4a" stroke-width="1.5"/><path d="M20,88 Q60,80 95,20" fill="none" stroke="#b91c1c" stroke-width="2"/><text x="4" y="20" class="lbl-svg" font-size="10">R</text><text x="88" y="100" class="lbl-svg" font-size="10">L</text></svg>
+          <figcaption>b</figcaption>
+        </figure>
+        <figure style="display:inline-block;max-width:130px;margin:0 0.6rem;">
+          <svg viewBox="0 0 110 100" width="100" height="90"><line x1="20" y1="10" x2="20" y2="90" stroke="#1b2a4a" stroke-width="1.5"/><line x1="20" y1="90" x2="100" y2="90" stroke="#1b2a4a" stroke-width="1.5"/><line x1="20" y1="88" x2="95" y2="20" stroke="#b91c1c" stroke-width="2"/><text x="4" y="20" class="lbl-svg" font-size="10">R</text><text x="80" y="100" class="lbl-svg" font-size="10">1/L</text></svg>
+          <figcaption>c</figcaption>
+        </figure>
+        <figure style="display:inline-block;max-width:130px;margin:0 0.6rem;">
+          <svg viewBox="0 0 110 100" width="100" height="90"><line x1="20" y1="10" x2="20" y2="90" stroke="#1b2a4a" stroke-width="1.5"/><line x1="20" y1="90" x2="100" y2="90" stroke="#1b2a4a" stroke-width="1.5"/><line x1="20" y1="88" x2="95" y2="20" stroke="#b91c1c" stroke-width="2"/><text x="4" y="20" class="lbl-svg" font-size="10">R</text><text x="88" y="100" class="lbl-svg" font-size="10">L</text></svg>
+          <figcaption>d</figcaption>
+        </figure>
+      </div>
+      <div class="sm-row">
+        <select class="sm-input sm-select"><option value="">-- choose --</option><option value="a">Graph a</option><option value="b">Graph b</option><option value="c">Graph c</option><option value="d">Graph d</option></select>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q9-ans')">Show working</button>
+      <div class="answer-panel" id="q9-ans">R = ρL/A, so for a fixed material and cross-section, R is directly proportional to L — a straight line through the origin with R against L. That's option … (option c has the right shape but the wrong x-axis variable, 1/L instead of L; a and b curve, which would mean R isn't proportional to L).</div>
+    </div>
+    <div class="question sm-question" data-qtype="mcq" data-answer="b" id="q10">
+      <span class="qnum">10</span><strong>3. Find the resistance of a 2.6 m length of eureka wire with cross-sectional area 2.5 × 10⁻⁷ m² (resistivity of eureka = 49 × 10⁻⁸ Ω m).</strong>
+      <div class="sm-row">
+        <select class="sm-input sm-select">
         <option value="">-- choose --</option>
         <option value="a">4.5 Ω</option>
         <option value="b">5.1 Ω</option>
         <option value="c">6.8 Ω</option>
         <option value="d">7.8 Ω</option>
       </select>
-      <button class="check-btn">Check</button><span class="feedback"></span>
-      <div class="btnrow"><button class="reveal-btn secondary">Show full working</button></div>
-      <div class="solution">R = ρL/A = 49×10⁻⁸ × 2.6 / 2.5×10⁻⁷ = …</div>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q10-ans')">Show working</button>
+      <div class="answer-panel" id="q10-ans">R = ρL/A = 49×10⁻⁸ × 2.6 / 2.5×10⁻⁷ = …</div>
     </div>
-
-    <div class="q" data-type="mcq" data-answer="a">
-      <p class="qtext">4. What length of alloy wire (resistivity 5.0 × 10⁻⁷ Ω m, diameter 0.50 mm) is required to make a 6.0 Ω resistor?</p>
-      <select class="mcq-select">
+    <div class="question sm-question" data-qtype="mcq" data-answer="a" id="q11">
+      <span class="qnum">11</span><strong>4. What length of alloy wire (resistivity 5.0 × 10⁻⁷ Ω m, diameter 0.50 mm) is required to make a 6.0 Ω resistor?</strong>
+      <div class="sm-row">
+        <select class="sm-input sm-select">
         <option value="">-- choose --</option>
         <option value="a">2.4 m</option>
         <option value="b">3.6 m</option>
         <option value="c">4.8 m</option>
         <option value="d">6.0 m</option>
       </select>
-      <button class="check-btn">Check</button><span class="feedback"></span>
-      <div class="btnrow"><button class="reveal-btn secondary">Show full working</button></div>
-      <div class="solution">r = 0.25 mm = 2.5×10⁻⁴ m, A = πr² = 1.96×10⁻⁷ m². L = RA/ρ = 6.0 × 1.96×10⁻⁷ / 5.0×10⁻⁷ = …</div>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q11-ans')">Show working</button>
+      <div class="answer-panel" id="q11-ans">r = 0.25 mm = 2.5×10⁻⁴ m, A = πr² = 1.96×10⁻⁷ m². L = RA/ρ = 6.0 × 1.96×10⁻⁷ / 5.0×10⁻⁷ = …</div>
     </div>
-
-    <div class="q" data-type="mcq" data-answer="d">
-      <p class="qtext">5. A hairdryer's nichrome heating element has diameter 0.46 mm and length 7.3 m. Calculate its resistance at 0 °C, where resistivity is 110 × 10⁻⁸ Ω m.</p>
-      <select class="mcq-select">
+    <div class="question sm-question" data-qtype="mcq" data-answer="d" id="q12">
+      <span class="qnum">12</span><strong>5. A hairdryer's nichrome heating element has diameter 0.46 mm and length 7.3 m. Calculate its resistance at 0 °C, where resistivity is 110 × 10⁻⁸ Ω m.</strong>
+      <div class="sm-row">
+        <select class="sm-input sm-select">
         <option value="">-- choose --</option>
         <option value="a">11.1 Ω</option>
         <option value="b">21.4 Ω</option>
         <option value="c">37.6 Ω</option>
         <option value="d">48.3 Ω</option>
       </select>
-      <button class="check-btn">Check</button><span class="feedback"></span>
-      <div class="btnrow"><button class="reveal-btn secondary">Show full working</button></div>
-      <div class="solution">r = 0.23 mm = 2.3×10⁻⁴ m, A = πr² = 1.66×10⁻⁷ m². R = ρL/A = 110×10⁻⁸ × 7.3 / 1.66×10⁻⁷ = …</div>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q12-ans')">Show working</button>
+      <div class="answer-panel" id="q12-ans">r = 0.23 mm = 2.3×10⁻⁴ m, A = πr² = 1.66×10⁻⁷ m². R = ρL/A = 110×10⁻⁸ × 7.3 / 1.66×10⁻⁷ = …</div>
     </div>
-
-    <div class="q" data-type="mcq" data-answer="c">
-      <p class="qtext">6. A copper PCB track is 35 μm thick and 1.6 mm wide (resistivity of copper 1.69 × 10⁻⁸ Ω m). What is the resistance of 1 cm of track?</p>
-      <select class="mcq-select">
+    <div class="question sm-question" data-qtype="mcq" data-answer="c" id="q13">
+      <span class="qnum">13</span><strong>6. A copper PCB track is 35 μm thick and 1.6 mm wide (resistivity of copper 1.69 × 10⁻⁸ Ω m). What is the resistance of 1 cm of track?</strong>
+      <div class="sm-row">
+        <select class="sm-input sm-select">
         <option value="">-- choose --</option>
         <option value="a">3 × 10² Ω</option>
         <option value="b">3 × 10⁻² Ω</option>
         <option value="c">3 × 10⁻³ Ω</option>
         <option value="d">3 × 10³ Ω</option>
       </select>
-      <button class="check-btn">Check</button><span class="feedback"></span>
-      <div class="btnrow"><button class="reveal-btn secondary">Show full working</button></div>
-      <div class="solution">A = thickness × width = 3.5×10⁻⁵ × 1.6×10⁻³ = 5.6×10⁻⁸ m². R = ρL/A = 1.69×10⁻⁸ × 0.01 / 5.6×10⁻⁸ = …</div>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+        <span class="sm-feedback" aria-live="polite"></span>
+      </div>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q13-ans')">Show working</button>
+      <div class="answer-panel" id="q13-ans">A = thickness × width = 3.5×10⁻⁵ × 1.6×10⁻³ = 5.6×10⁻⁸ m². R = ρL/A = 1.69×10⁻⁸ × 0.01 / 5.6×10⁻⁸ = …</div>
     </div>
-  </div>
 
-  <div class="print-btn-row">
-    <button class="print-btn" onclick="preparePrint()">Print / Save as PDF</button>
-  </div>
-</div>
+  </section>
+
+<footer class="page no-print">Resistance Workbook · Companion resources: <em>06 – Adding Resistors</em>, <em>09 – EMF and Internal Resistance</em>.</footer>
+</main>
 
 <script>
-document.querySelectorAll('.q').forEach(function(q){
-  const type = q.dataset.type;
-  const feedback = q.querySelector('.feedback');
-  const checkBtn = q.querySelector('.check-btn');
-  const checkBtnRadio = q.querySelector('.check-btn-radio');
-  const revealBtn = q.querySelector('.reveal-btn');
-  const solution = q.querySelector('.solution');
+const WORKBOOK_ID = 'resistance';
+const STORAGE_PREFIX = 'ib-workbook-' + WORKBOOK_ID + '-v1-';
+let fillableEls = [];
 
-  if(checkBtn && type === 'mcq'){
-    checkBtn.addEventListener('click', function(){
-      const sel = q.querySelector('.mcq-select');
-      const correct = sel.value === q.dataset.answer;
-      feedback.textContent = correct ? 'Correct' : 'Not quite — try again';
-      feedback.className = 'feedback ' + (correct ? 'correct' : 'incorrect');
-      q.dataset.state = sel.value ? (correct?'correct':'incorrect') : 'unattempted';
-    });
-  }
-  if(checkBtnRadio){
-    checkBtnRadio.addEventListener('click', function(){
-      const name = checkBtnRadio.dataset.name;
-      const picked = q.querySelector('input[name="'+name+'"]:checked');
-      const correct = picked && picked.value === q.dataset.answer;
-      feedback.textContent = correct ? 'Correct' : 'Not quite — try again';
-      feedback.className = 'feedback ' + (correct ? 'correct' : 'incorrect');
-      q.dataset.state = picked ? (correct?'correct':'incorrect') : 'unattempted';
-    });
-  }
-  if(revealBtn){
-    revealBtn.addEventListener('click', function(){
-      solution.classList.toggle('show');
-      if(!q.dataset.state) q.dataset.state = 'reviewed-without-answer';
-      revealBtn.textContent = solution.classList.contains('show') ? 'Hide full working' : 'Show full working';
-    });
-  }
-});
-
-document.querySelectorAll('.reading-row[data-answer]').forEach(function(row){
-  const btn = row.querySelector('.rcheck');
-  const input = row.querySelector('.rinput');
-  const feedback = row.querySelector('.feedback');
-  if(!btn) return;
-  btn.addEventListener('click', function(){
-    const val = parseFloat(input.value);
-    const ans = parseFloat(row.dataset.answer);
-    const tol = parseFloat(row.dataset.tol || '0.05');
-    if(isNaN(val)){
-      feedback.textContent = 'Enter a number';
-      feedback.className = 'feedback incorrect';
-      row.dataset.state = 'incorrect';
-      return;
-    }
-    const correct = Math.abs(val - ans) <= Math.max(tol * Math.abs(ans), 0.01);
-    feedback.textContent = correct ? 'Correct' : 'Not quite — try again';
-    feedback.className = 'feedback ' + (correct ? 'correct' : 'incorrect');
-    row.dataset.state = correct ? 'correct' : 'incorrect';
-  });
-});
-
-document.querySelectorAll('.circuit').forEach(function(circuit){
-  const revealBtn = circuit.querySelector('.reveal-btn');
-  const solution = circuit.querySelector('.solution');
-  if(revealBtn){
-    revealBtn.addEventListener('click', function(){
-      solution.classList.toggle('show');
-      revealBtn.textContent = solution.classList.contains('show') ? 'Hide working' : 'Show working';
-    });
-  }
-});
-
-function preparePrint(){
-  document.querySelectorAll('.hint, .solution, .hint-box').forEach(function(el){
-    el.classList.add('show');
-    el.classList.add('visible');
-  });
-  setTimeout(function(){ window.print(); }, 60);
+function toggleAnswer(id){ document.getElementById(id).classList.toggle('shown'); }
+function revealAll(){
+  document.querySelectorAll('.answer-panel, .hint-panel').forEach(function(el){ el.classList.add('shown'); });
+  document.body.classList.add('answers-visible');
 }
+function hideAll(){
+  document.querySelectorAll('.answer-panel, .hint-panel').forEach(function(el){ el.classList.remove('shown'); });
+  document.body.classList.remove('answers-visible');
+}
+function toggleHint(btn){
+  const panel = btn.parentElement.querySelector('.hint-panel') || btn.closest('.question, .reading-row, .sm-block').querySelector('.hint-panel');
+  panel.classList.toggle('shown');
+  btn.textContent = panel.classList.contains('shown') ? 'Hide hint' : 'Hint';
+}
+
+function storageAvailable(){
+  try{
+    const k = '__test__' + STORAGE_PREFIX;
+    localStorage.setItem(k, '1');
+    localStorage.removeItem(k);
+    return true;
+  } catch(e){ return false; }
+}
+const canStore = storageAvailable();
+
+function autosize(el){
+  if(el.tagName !== 'TEXTAREA') return;
+  el.style.height = 'auto';
+  el.style.height = Math.max(el.scrollHeight, el.offsetHeight) + 'px';
+}
+
+function initFillables(){
+  fillableEls = Array.prototype.slice.call(document.querySelectorAll('.answer-lines, .name-box .fill, .reading-input'));
+  fillableEls.forEach(function(el, i){
+    const key = STORAGE_PREFIX + i;
+    el.dataset.storeKey = key;
+    if(canStore){
+      const saved = localStorage.getItem(key);
+      if(saved !== null){ el.value = saved; }
+    }
+    autosize(el);
+    el.addEventListener('input', function(){
+      autosize(el);
+      if(canStore){
+        try{ localStorage.setItem(el.dataset.storeKey, el.value); } catch(e){}
+      }
+      scheduleFileWrite();
+    });
+  });
+}
+
+function getAnswersArray(){ return fillableEls.map(function(el){ return el.value; }); }
+function applyAnswersArray(arr){
+  fillableEls.forEach(function(el, i){
+    if(arr && arr[i] !== undefined){ el.value = arr[i]; autosize(el); }
+  });
+}
+
+function getExtraState(){
+  const sm = {};
+  document.querySelectorAll('.sm-question, .reading-row[data-answer], .match-row').forEach(function(el, i){
+    if(el.dataset.correct !== undefined || el.dataset.state !== undefined){
+      sm[el.id || ('sm-' + i)] = {state: el.dataset.state || '', correct: el.dataset.correct || ''};
+    }
+  });
+  return { smState: sm };
+}
+function applyExtraState(data){
+  if(!data || !data.smState) return;
+  document.querySelectorAll('.sm-question, .reading-row[data-answer], .match-row').forEach(function(el, i){
+    const key = el.id || ('sm-' + i);
+    const rec = data.smState[key];
+    if(!rec) return;
+    el.dataset.state = rec.state || '';
+    el.dataset.correct = rec.correct || '';
+    const fb = el.querySelector('.sm-feedback');
+    if(fb && rec.state === 'correct'){ fb.textContent = 'Correct'; fb.className = 'sm-feedback correct'; }
+    else if(fb && rec.state === 'incorrect'){ fb.textContent = 'Not quite'; fb.className = 'sm-feedback incorrect'; }
+  });
+  updateProgress();
+}
+
+function buildPayload(){
+  const payload = {
+    workbook: WORKBOOK_ID,
+    savedAt: new Date().toISOString(),
+    studentName: document.getElementById('studentName') ? document.getElementById('studentName').value : '',
+    answers: getAnswersArray()
+  };
+  if(typeof getExtraState === 'function') Object.assign(payload, getExtraState());
+  return payload;
+}
+
+function clearMyAnswers(){
+  if(!confirm('Clear everything you have typed? This cannot be undone.')) return;
+  fillableEls.forEach(function(el){
+    el.value = '';
+    autosize(el);
+    if(canStore){ try{ localStorage.removeItem(el.dataset.storeKey); } catch(e){} }
+  });
+  document.querySelectorAll('.sm-question, .reading-row[data-answer], .match-row').forEach(function(el){
+    delete el.dataset.state; delete el.dataset.correct;
+    const fb = el.querySelector('.sm-feedback'); if(fb){ fb.textContent=''; fb.className='sm-feedback'; }
+  });
+  updateProgress();
+  scheduleFileWrite();
+}
+
+function downloadJSON(obj, filename){
+  const blob = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+}
+
+function saveAnswersToFile(){
+  const nameEl = document.getElementById('studentName');
+  const name = (nameEl ? nameEl.value : '').trim();
+  const safe = name ? name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : 'my';
+  downloadJSON(buildPayload(), WORKBOOK_ID + '-answers-' + safe + '.json');
+}
+
+function triggerLoadAnswers(){ document.getElementById('loadFileInput').click(); }
+
+function handleLoadFile(evt){
+  const file = evt.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(){
+    try{
+      const data = JSON.parse(reader.result);
+      applyAnswersArray(data.answers || []);
+      if(typeof applyExtraState === 'function') applyExtraState(data);
+      if(canStore){
+        fillableEls.forEach(function(el){ try{ localStorage.setItem(el.dataset.storeKey, el.value); } catch(e){} });
+      }
+      alert('Loaded your saved answers from "' + file.name + '".');
+    } catch(e){
+      alert('Sorry, that file could not be read as a saved-answers file.');
+    }
+  };
+  reader.readAsText(file);
+  evt.target.value = '';
+}
+
+let fileHandle = null;
+let pendingHandle = null;
+const fsaSupported = ('showSaveFilePicker' in window);
+let fileWriteTimer = null;
+
+function idbOpen(){
+  return new Promise(function(resolve, reject){
+    const rq = indexedDB.open('ib-workbook-fs', 1);
+    rq.onupgradeneeded = function(){ if(!rq.result.objectStoreNames.contains('handles')) rq.result.createObjectStore('handles'); };
+    rq.onsuccess = function(){ resolve(rq.result); };
+    rq.onerror = function(){ reject(rq.error); };
+  });
+}
+function idbGetHandle(){
+  return idbOpen().then(function(db){
+    return new Promise(function(resolve){
+      const tx = db.transaction('handles', 'readonly');
+      const rq = tx.objectStore('handles').get(WORKBOOK_ID);
+      rq.onsuccess = function(){ resolve(rq.result || null); };
+      rq.onerror = function(){ resolve(null); };
+    });
+  }).catch(function(){ return null; });
+}
+function idbSetHandle(handle){
+  return idbOpen().then(function(db){
+    const tx = db.transaction('handles', 'readwrite');
+    tx.objectStore('handles').put(handle, WORKBOOK_ID);
+  }).catch(function(){});
+}
+
+function updateLinkButton(){
+  const btn = document.getElementById('btnLinkFile');
+  if(!btn) return;
+  btn.textContent = fileHandle ? '\u{1F517} Save file linked' : (pendingHandle ? '\u{1F517} Reconnect save file' : '\u{1F517} Link a save file');
+}
+
+function updateSaveStatus(){
+  const status = document.getElementById('saveStatus');
+  if(!status) return;
+  if(fileHandle){
+    status.textContent = 'Autosaving to your linked file';
+  } else if(canStore){
+    status.textContent = 'Autosaving in this browser — click \u{1F4BE} Save often as a backup';
+  } else {
+    status.textContent = 'Autosave unavailable here — use \u{1F4BE} Save / \u{1F4C2} Load to keep your work';
+  }
+}
+
+function tryRestoreLinkedFile(){
+  if(!fsaSupported) return Promise.resolve();
+  return idbGetHandle().then(function(handle){
+    if(!handle) return;
+    return handle.queryPermission({mode:'readwrite'}).then(function(perm){
+      if(perm === 'granted'){ fileHandle = handle; } else { pendingHandle = handle; }
+    }).catch(function(){});
+  }).then(function(){
+    updateLinkButton();
+    updateSaveStatus();
+  });
+}
+
+function linkSaveFile(){
+  if(!fsaSupported) return;
+  const proceed = pendingHandle
+    ? pendingHandle.requestPermission({mode:'readwrite'}).then(function(req){
+        if(req === 'granted'){ fileHandle = pendingHandle; pendingHandle = null; }
+      })
+    : window.showSaveFilePicker({
+        suggestedName: WORKBOOK_ID + '-answers.json',
+        types: [{ description: 'Workbook answers', accept: {'application/json': ['.json']} }]
+      }).then(function(handle){
+        fileHandle = handle;
+        return idbSetHandle(handle);
+      });
+  proceed.then(function(){
+    updateLinkButton();
+    updateSaveStatus();
+    return writeToLinkedFile();
+  }).catch(function(){ /* user cancelled the picker */ });
+}
+
+function scheduleFileWrite(){
+  if(!fileHandle) return;
+  clearTimeout(fileWriteTimer);
+  fileWriteTimer = setTimeout(writeToLinkedFile, 800);
+}
+
+function writeToLinkedFile(){
+  if(!fileHandle) return Promise.resolve();
+  return fileHandle.createWritable().then(function(writable){
+    return writable.write(JSON.stringify(buildPayload(), null, 2)).then(function(){
+      return writable.close();
+    });
+  }).catch(function(e){ console.warn('Could not write to linked save file', e); });
+}
+
+/* ---------- self-marking (auto-checked) engine ---------- */
+function parseNumber(str){
+  if(str === null || str === undefined) return NaN;
+  str = String(str).trim().replace(/,/g, '');
+  return parseFloat(str);
+}
+const SCI_RE = /^\s*(-?\d+(?:\.\d+)?)\s*[×xX*]\s*10\s*(?:\^\s*\(?\s*(-?\d+)\s*\)?|\(\s*(-?\d+)\s*\))\s*$/;
+function parseSciNotation(str){
+  if(!str) return NaN;
+  const m = String(str).trim().replace(/\s+/g, ' ').match(SCI_RE);
+  if(!m) return NaN;
+  const coeff = parseFloat(m[1]);
+  const exp = parseFloat(m[2] !== undefined ? m[2] : m[3]);
+  if(isNaN(coeff) || isNaN(exp)) return NaN;
+  return coeff * Math.pow(10, exp);
+}
+function nearlyEqual(a, b, tol){
+  if(isNaN(a) || isNaN(b)) return false;
+  if(b === 0) return Math.abs(a - b) <= tol;
+  return Math.abs(a - b) / Math.abs(b) <= tol;
+}
+
+function checkAnswer(btn){
+  const q = btn.closest('.sm-question, .reading-row');
+  const fb = q.querySelector('.sm-feedback');
+  const type = q.dataset.qtype || 'number';
+  let correct = false, attempted = true;
+  if(type === 'number'){
+    const input = q.querySelector('.sm-input');
+    const val = parseNumber(input.value);
+    if(isNaN(val)){ attempted = false; }
+    else if(q.dataset.min !== undefined && q.dataset.max !== undefined){
+      correct = val >= parseFloat(q.dataset.min) && val <= parseFloat(q.dataset.max);
+    } else {
+      const target = parseFloat(q.dataset.answer);
+      const tol = parseFloat(q.dataset.tol || '0.03');
+      correct = nearlyEqual(val, target, tol);
+    }
+  } else if(type === 'sci'){
+    const input = q.querySelector('.sm-input');
+    const val = parseSciNotation(input.value);
+    if(isNaN(val)){ attempted = false; }
+    else {
+      const target = parseFloat(q.dataset.answer);
+      correct = nearlyEqual(val, target, 0.005);
+    }
+  } else if(type === 'mcq'){
+    const sel = q.querySelector('.sm-select');
+    if(!sel.value){ attempted = false; }
+    else { correct = sel.value === q.dataset.answer; }
+  } else if(type === 'keyword'){
+    const input = q.querySelector('input.sm-input');
+    const val = input.value.trim().toLowerCase();
+    if(val.length === 0){ attempted = false; }
+    else {
+      const groups = (q.dataset.keywords || '').split(',').filter(Boolean);
+      correct = groups.some(function(k){ return val.includes(k.trim()); });
+    }
+  } else if(type === 'text'){
+    const ta = q.querySelector('textarea.sm-input');
+    const val = ta.value.trim().toLowerCase();
+    if(val.length < 5){ attempted = false; }
+    else {
+      const groups = (q.dataset.keywords || '').split('|').filter(Boolean);
+      correct = groups.length === 0 || groups.every(function(g){
+        return g.split(',').some(function(k){ return val.includes(k.trim()); });
+      });
+      if(val.length < parseInt(q.dataset.minlen || '30', 10)) correct = false;
+    }
+  }
+  if(!attempted){
+    fb.textContent = 'Enter an answer';
+    fb.className = 'sm-feedback incorrect';
+    return;
+  }
+  q.dataset.attempted = 'true';
+  q.dataset.state = correct ? 'correct' : 'incorrect';
+  if(type === 'text' && (q.dataset.correctB64 || q.dataset.wrongB64)){
+    const b64 = correct ? q.dataset.correctB64 : q.dataset.wrongB64;
+    fb.innerHTML = b64 ? decodeURIComponent(escape(atob(b64))) : (correct ? 'Correct' : 'Not quite — try again');
+    fb.className = 'sm-feedback long ' + (correct ? 'correct' : 'incorrect');
+    updateProgress();
+    scheduleFileWrite();
+    return;
+  }
+  fb.textContent = correct ? 'Correct' : (q.dataset.notype === 'true' ? 'Not quite — try again, or use the hint' : 'Not quite — try again');
+  fb.className = 'sm-feedback ' + (correct ? 'correct' : 'incorrect');
+  updateProgress();
+  scheduleFileWrite();
+}
+
+function updateProgress(){
+  const els = document.querySelectorAll('.sm-question, .reading-row[data-answer]');
+  if(!els.length) return;
+  let checked = 0, correct = 0;
+  els.forEach(function(el){
+    if(el.dataset.state){ checked++; if(el.dataset.state === 'correct') correct++; }
+  });
+  const status = document.getElementById('progressStatus');
+  if(status) status.textContent = 'Checked ' + checked + '/' + els.length + ' · ' + correct + ' correct';
+}
+
+window.addEventListener('beforeprint', function(){
+  fillableEls.forEach(autosize);
+});
+
+document.addEventListener('DOMContentLoaded', function(){
+  initFillables();
+  if(fsaSupported){
+    document.getElementById('btnLinkFile').style.display = '';
+    tryRestoreLinkedFile();
+  }
+  updateSaveStatus();
+  updateProgress();
+});
+
+
 </script>
 </body>
 </html>
