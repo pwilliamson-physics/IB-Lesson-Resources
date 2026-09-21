@@ -136,7 +136,7 @@
 
   .sim-embed{background:#fff; border:1px solid var(--border); border-radius:10px; padding:1rem 1.2rem; margin:1rem 0;}
   .sim-embed p.instructions{margin:0 0 0.6rem 0; font-size:0.92rem; color:#3a4753;}
-  .sim-frame{width:100%; border:none; display:block; border-radius:8px; height:560px;}
+  .sim-frame{width:100%; border:none; display:block; border-radius:8px; height:900px;}
   .sim-embed-credit{text-align:center; font-size:0.82rem; color:#7c8b98; margin-top:0.6rem;}
   .sim-print-note{display:none;}
 
@@ -347,7 +347,7 @@
     <h3>Try it yourself &mdash; interactive simulation</h3>
     <div class="sim-embed">
       <p class="instructions">Use the simulation below to carry out the investigation yourself. With the switch open, the voltmeter reads the emf. Close the switch, vary the rheostat, and record several V&ndash;I pairs &mdash; then plot V against I: the y-intercept (extrapolated to I = 0) gives the emf, and the magnitude of the gradient gives the internal resistance.</p>
-      <iframe title="Finding the EMF and Internal Resistance of a Cell" loading="lazy" srcdoc="<!-- ===================================================================
+      <iframe title="Finding the EMF and Internal Resistance of a Cell" class="sim-frame" loading="lazy" onload="try{this.style.height=(this.contentWindow.document.body.scrollHeight+30)+'px';}catch(e){}" srcdoc="<!-- ===================================================================
      EMF &amp; Internal Resistance of a Cell - investigation
      Single-file, embed-safe HTML. All CSS/JS scoped under #ir-sim-root.
      Method: V = e - I r  ->  intercept = EMF, |gradient| = internal resistance.
