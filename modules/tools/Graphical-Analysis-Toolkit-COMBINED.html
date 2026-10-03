@@ -27,11 +27,11 @@
   }
   .gat-title{ margin:0; font-size:21px; font-weight:700; letter-spacing:-.01em; }
   .gat-sub{ margin:2px 0 0; font-size:12.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--bezel-ink); opacity:.85; }
-  .gat-tabs{ display:flex; flex-wrap:wrap; gap:6px; margin:16px 0 12px; }
+  .gat-tabs{ display:flex; flex-wrap:wrap; gap:10px; margin:16px 0 12px; justify-content:center; }
   .gat-tab{
     font-family:var(--sans); font-size:13.5px; font-weight:600; color:var(--ink-soft);
     background:var(--card); border:1px solid var(--card-edge); border-radius:9px;
-    padding:9px 14px; cursor:pointer; transition:all .12s ease;
+    padding:12px 30px; min-width:200px; text-align:center; cursor:pointer; transition:all .12s ease;
   }
   .gat-tab:hover{ color:var(--ink); border-color:var(--teal); }
   .gat-tab.active{
@@ -40,11 +40,10 @@
   }
   .gat-tab:focus-visible{ outline:3px solid #c87f12; outline-offset:2px; }
   .gat-frame-wrap{
-    background:var(--card); border:1px solid var(--card-edge); border-radius:12px;
-    box-shadow:0 2px 6px rgba(20,40,50,.05); overflow:hidden; padding:2px;
+    overflow:hidden;
   }
   .gat-frame-wrap iframe{
-    width:100%; height:900px; border:0; display:none; background:#fff;
+    width:100%; height:900px; border:0; display:none; background:var(--paper);
   }
   .gat-frame-wrap iframe.active{ display:block; }
   .gat-footer{ text-align:center; font-size:12px; color:var(--ink-soft); margin-top:20px; }
@@ -79,7 +78,8 @@
   <div class="gat-footer">Science Department &middot; Refined with AI</div>
 </div>
 
-<script type="text/plain" id="tpl-teacher"><!DOCTYPE html>
+<script type="text/plain" id="tpl-teacher">
+<!DOCTYPE html>
 <html lang="en-GB"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -100,7 +100,7 @@
 
           <div class="ugt-field ugt-highlight-box">
             <label class="ugt-lab" for="ugt-cv-type">Curve shape</label>
-            <span class="ugt-hint" style="display:block;margin:-4px 0 6px">Click and drag on the graph to select points (e.g. an erroneous reading), then use “Delete selected”.</span>
+            <span class="ugt-hint" style="display:block;margin:-4px 0 6px">Click and drag on the graph to select points (e.g. an erroneous reading). Use “Delete selected” to remove them, or “Fit to selected” to fit the curve using only those points — the highlight clears but the line stays.</span>
             <select id="ugt-cv-type" class="ugt-in">
               <option value="linear">Straight line — y = mx + c</option>
               <option value="expdecay" selected>Exponential decay — y = A·e^(−x/τ)</option>
@@ -123,6 +123,8 @@
               <button id="ugt-cv-savemax" class="ugt-btn ugt-btn-ghost" hidden>Save as Maximum Gradient</button>
               <button id="ugt-cv-download" class="ugt-btn ugt-btn-ghost">Download graph as image</button>
               <button id="ugt-cv-select-del" class="ugt-btn ugt-btn-ghost ugt-btn-danger" type="button" disabled>Delete selected</button>
+              <button id="ugt-cv-select-fit" class="ugt-btn ugt-btn-ghost" type="button" disabled>Fit to selected</button>
+              <button id="ugt-cv-select-fitall" class="ugt-btn ugt-btn-ghost" type="button" disabled>Refit to all points</button>
               <button id="ugt-cv-clearall" class="ugt-btn ugt-btn-ghost ugt-btn-danger" type="button">Clear all</button>
             </div>
 
@@ -673,10 +675,13 @@
   var ccan = $('ugt-curveplot'), cctx = ccan.getContext('2d');
   var cW=520, cH=390, cvPlot=null, cvDrag=null;
   var cvAxisDragStart = null; // {px,py,range,plot} captured when an axis pan/zoom drag starts
-  var cvSelected = [];    // indices into cvData currently selected (for "Delete selected")
+  var cvSelected = [];    // indices into cvData currently selected (for "Delete selected" / "Fit to selected")
   var cvSelectRect = null; // {x0,y0,x1,y1} in canvas px, drawn live while rubber-band-selecting
   var cvSelectStart = null; // {px,py} where a plot-interior pointerdown began
   var cvBezierDragIndex = null; // index into cvParams.xs/ys/m of the handle currently being dragged (freeformfit only)
+  var summaryBoxPos = null;  // null = default top-left; else {x,y} top-left corner the user dragged the results box to
+  var summaryBoxRect = null; // {x,y,w,h} of the results box as last drawn, in canvas px — used to hit-test a drag start
+  var summaryBoxDrag = null; // {offX,offY} grab offset while the results box is being dragged
 
   // least squares, y = m·x + c
   function linReg(xs, ys){
@@ -862,6 +867,10 @@
   var COLOR_MAX = '#2563eb';   // maximum gradient line + its text — blue
   var COLOR_BEST = '#16222c';  // line of best fit + its text — black
   var COLOR_PIVOT = '#2e9e45'; // the draggable pivot point ("green point")
+  // every data set's line of best fit (and any saved minimum/maximum gradient lines) is
+  // extrapolated automatically across the full visible plot width, rather than stopping abruptly
+  // at the data's own x-range — this makes it easy to read off an intercept or see where the
+  // trend is heading, and keeps multiple data sets' lines visually comparable across the graph
 
   function curveY(x){ return CURVES[cvType].y(cvParams, x); }
   function curveSlope(x){ return CURVES[cvType].slope(cvParams, x); }
@@ -875,10 +884,19 @@
   }
   function refitCurve(){
     cvSelected = []; updateSelectUI(); cvBezierDragIndex = null;
+    var activeDS = datasets[activeDataset];
+    // once "Fit to selected" has pinned a fit to a chosen subset of points, an ordinary edit
+    // elsewhere in the table (or adding/deleting a point) should NOT silently refit against every
+    // point again — the whole purpose was to keep the fit from being dragged around by the messy
+    // rest of the data. The pin only clears via the explicit "Refit to all points" button.
+    if(activeDS && activeDS.fitPinned && activeDS.fitParams){
+      cvParams = activeDS.fitParams;
+      return;
+    }
     cvParams = CURVES[cvType].fit(cvData);
     // keep the active data set's own remembered fit in sync — this is what lets a hand-shaped
     // "fit by eye" curve (or any other fit) survive switching to another data set and back
-    if(datasets[activeDataset]) datasets[activeDataset].fitParams = cvParams;
+    if(activeDS) activeDS.fitParams = cvParams;
   }
   // after a refit, re-anchor the pivot onto the (possibly now-different) curve at the same x,
   // translating the tangent rigidly so the student's own slope survives the data edit
@@ -955,7 +973,7 @@
     // a newly added data set automatically shows its own line of best fit — no extra click needed —
     // unless a caller explicitly opts out. fitParams starts empty and is filled in lazily (see the
     // drawing loop) or as soon as this data set becomes active and gets refit for real.
-    var ds = {label:label, points:points, color:color, visible:true, showFit: opts.showFit!==false, fitParams:null};
+    var ds = {label:label, points:points, color:color, visible: opts.visible!==false, showFit: opts.showFit!==false, fitParams:null, fitPinned:false, minLine:null, maxLine:null};
     datasets.push(ds);
     return ds;
   }
@@ -965,7 +983,11 @@
   // "fit by eye" handle is deliberately NOT gated by this — unlike the tangent/min-max tools, it
   // isn't an overlay analysis of one reference line, it's simply how the *active* data set's own
   // line gets drawn, which stays unambiguous no matter how many other lines are also on screen.
-  function multiFitActive(){ return datasets.filter(function(ds){ return ds.showFit; }).length > 1; }
+  // ds.visible is checked too — a hidden data set's fit line isn't drawn at all, so it shouldn't
+  // count toward "2+ lines are on screen at once" and disable the tangent/gradient tools for the
+  // one data set that IS actually shown (see loadCurve: the Teacher version's demo second data set
+  // starts hidden precisely so the gradient-finder tools work normally on the first one).
+  function multiFitActive(){ return datasets.filter(function(ds){ return ds.showFit && ds.visible; }).length > 1; }
   // the fit params to draw/report for a given data set: the active set always uses the live
   // cvParams (so in-progress Bezier dragging etc. shows immediately); any other data set uses its
   // own remembered fitParams if it has one (so a hand-shaped "fit by eye" curve survives switching
@@ -975,11 +997,16 @@
     if(ds.fitParams) return ds.fitParams;
     try{ return CURVES[cvType].fit(ds.points); }catch(e){ return null; }
   }
+  // the saved minimum/maximum GRADIENT lines (linear mode, from the trial-line "Save as Minimum/
+  // Maximum Gradient" buttons) for a given data set — same active/remembered split as fitParams,
+  // so each data set keeps its own pair even though only the active one can be edited at a time
+  function dsMinLine(dsi, ds){ return dsi === activeDataset ? minLine : ds.minLine; }
+  function dsMaxLine(dsi, ds){ return dsi === activeDataset ? maxLine : ds.maxLine; }
   // the curve "shape" (fit type) is shared by every data set — if it changes while more than one
   // data set exists, any other data set's remembered fit was computed against the old shape and
   // must be discarded so it gets fitted fresh against the new one next time it's drawn
   function invalidateOtherFits(){
-    datasets.forEach(function(ds,i){ if(i!==activeDataset) ds.fitParams = null; });
+    datasets.forEach(function(ds,i){ if(i!==activeDataset){ ds.fitParams = null; ds.fitPinned = false; ds.minLine = null; ds.maxLine = null; } });
   }
   function renderDatasetChips(){
     var wrap = $('ugt-ds-chips'); wrap.innerHTML='';
@@ -1004,11 +1031,17 @@
       var fitBtn = document.createElement('button');
       fitBtn.type = 'button';
       fitBtn.className = 'ugt-ds-fit-toggle' + (ds.showFit ? ' ugt-ds-fit-on' : '');
-      fitBtn.textContent = ds.showFit ? '· fit shown' : '· fit hidden';
+      fitBtn.textContent = ds.showFit ? ('· fit shown' + (ds.fitPinned ? ' (selected points only)' : '')) : '· fit hidden';
       fitBtn.title = ds.showFit ? 'Line of best fit is shown for this data set — click to hide it' : 'Click to show this data set\'s own line of best fit';
       fitBtn.addEventListener('click', function(ev){
         ev.stopPropagation();
         ds.showFit = !ds.showFit;
+        // turning the fit ON also brings the data set onto the graph if it wasn't there — a line of
+        // best fit with no visible data set behind it would be confusing, and this is also what
+        // makes the "fit hidden" button double as the single switch that reveals a data set that
+        // started off entirely (see loadCurve's demo second data set). Turning the fit off again
+        // does NOT hide the data set — that stays a separate choice via "Hide data set from graph".
+        if(ds.showFit) ds.visible = true;
         renderDatasetChips(); updateDatasetButtons();
         drawCurvePlot(); updateCurveReadout();
       });
@@ -1017,16 +1050,16 @@
       renameBtn.type = 'button';
       renameBtn.className = 'ugt-ds-rename';
       renameBtn.textContent = 'Rename';
-      renameBtn.title = 'Rename this data set — updates its label everywhere, including the on-canvas legend';
+      renameBtn.title = 'Rename this data set — updates its label on this chip and in the readout below the graph (the movable results box on the graph itself identifies data sets by number, e.g. "Data set (1)", not by name)';
       renameBtn.addEventListener('click', function(ev){ ev.stopPropagation(); startRenameDataset(i, chip); });
 
       chip.appendChild(swatch); chip.appendChild(nameBtn); chip.appendChild(fitBtn); chip.appendChild(renameBtn);
       wrap.appendChild(chip);
     });
   }
-  // swaps a chip's name button for a text input so the data set (and its on-canvas legend entry)
-  // can be renamed — the legend itself lives on the <canvas> and can't be edited directly, so this
-  // chip row doubles as the editable control for it
+  // swaps a chip's name button for a text input so the data set's label can be renamed — that label
+  // shows on the chip and in the readout below the graph; the movable results box on the canvas
+  // itself identifies data sets by number ("Data set (N)") rather than by this editable name
   function startRenameDataset(i, chipEl){
     var ds = datasets[i];
     var input = document.createElement('input');
@@ -1071,8 +1104,14 @@
   }
   function switchActiveDataset(i){
     if(i===activeDataset || !datasets[i]) return;
+    // persist the trial-line min/max gradient results of the data set we're leaving onto that data
+    // set itself, before swapping — mirrors how fitParams survives a switch, so each data set keeps
+    // its own saved minimum/maximum lines rather than sharing one global pair
+    if(datasets[activeDataset]){ datasets[activeDataset].minLine = minLine; datasets[activeDataset].maxLine = maxLine; }
     activeDataset = i;
     cvData = datasets[i].points;
+    minLine = datasets[i].minLine || null;
+    maxLine = datasets[i].maxLine || null;
     // selected-row indices are only meaningful against the data set they were selected in
     cvSelected = []; updateSelectUI();
     renderCurveDataTable();
@@ -1128,7 +1167,7 @@
     $('ugt-cv-h2').textContent = lin ? 'Straight-line graphs & the gradient of the line' : 'Curved graphs & the gradient at a point';
     $('ugt-readout-h3').textContent = lin ? 'Gradient of the line' : 'Gradient at this point';
     $('ugt-cv-method').innerHTML = lin
-      ? 'When your data <b>does</b> fall on a straight line, the gradient is a single constant value for the whole graph, not just at one point. Draw the <b>line of best fit</b> — it should pass close to the <b>mean point</b> (x̄, ȳ) of all your data. Then, to put an uncertainty on the gradient, drag the trial line to the steepest line that still passes through every error bar and click <b>“Save as Maximum Gradient”</b>, then do the same for the shallowest such line and <b>“Save as Minimum Gradient”</b>.'
+      ? 'When your data <b>does</b> fall on a straight line, the gradient is a single constant value for the whole graph, not just at one point. Draw the <b>line of best fit</b> — it should pass close to the <b>mean point</b> (x̄, ȳ) of all your data. Then, to put an uncertainty on the gradient, drag the trial line to the steepest line that still passes through every error bar and click <b>“Save as Maximum Gradient”</b>, then do the same for the shallowest such line and <b>“Save as Minimum Gradient”</b>. If you have more than one data set, you must hide the others to be able to add the maximum and minimum lines.'
       : 'Many experiments yield <b>non-linear data</b>, not a straight line — the gradient then only has meaning <b>at a single instantaneous point</b>. Drag the point to choose where on the curve you want the gradient, then drag the tangent’s free end until the line just touches the curve there. A shaded triangle marks the <b>rise</b> and <b>run</b> along your tangent — gradient = rise ÷ run.';
   }
   function renderCurveDataTable(){
@@ -1243,6 +1282,8 @@
       cvSelected = []; updateSelectUI();
       cvData = p.data.map(function(d){ return {x:num(d.x),y:num(d.y),ex:num(d.ex),ey:num(d.ey)}; });
       datasets[activeDataset].points = cvData;
+      datasets[activeDataset].fitPinned = false;
+      datasets[activeDataset].minLine = null; datasets[activeDataset].maxLine = null;
       if(p.xlab!=null) $('ugt-cv-xlab').value=p.xlab; if(p.xunit!=null) $('ugt-cv-xunit').value=p.xunit;
       if(p.ylab!=null) $('ugt-cv-ylab').value=p.ylab; if(p.yunit!=null) $('ugt-cv-yunit').value=p.yunit;
       refitCurve();
@@ -1278,6 +1319,8 @@
         cvSelected = []; updateSelectUI();
         cvData = parsed.points;
         datasets[activeDataset].points = cvData;
+        datasets[activeDataset].fitPinned = false;
+        datasets[activeDataset].minLine = null; datasets[activeDataset].maxLine = null;
         if(parsed.axis){
           if(parsed.axis.xlab) $('ugt-cv-xlab').value = parsed.axis.xlab;
           if(parsed.axis.xunit) $('ugt-cv-xunit').value = parsed.axis.xunit;
@@ -1300,14 +1343,21 @@
     cvType = type;
     var C = CURVES[type];
     var primaryPoints = STUDENT_MODE ? blankPoints() : C.data.map(function(d){ return {x:d.x,y:d.y,ex:d.ex,ey:d.ey}; });
-    datasets = [{label:'Data set 1', points:primaryPoints, color:DATASET_PALETTE[0], visible:true, showFit:true, fitParams:null}];
+    datasets = [{label:'Data set 1', points:primaryPoints, color:DATASET_PALETTE[0], visible:true, showFit:true, fitParams:null, fitPinned:false, minLine:null, maxLine:null}];
     activeDataset = 0;
     cvData = datasets[0].points;
     if(!STUDENT_MODE){
       // the Teacher version gets a second, ready-made demonstration data set on every example graph
-      addDataset({points:demoSecondDataset(type), label:'Data set 2 (demo)'});
+      // — always available (switch to it via its chip, fill in the table, etc.) but NOT shown on the
+      // graph by default (no points, no fit line), since the tangent-at-a-point / gradient-finder
+      // tools only make sense with one line of best fit on screen, and a teacher opening a fresh
+      // example wants those working immediately. It starts with showFit off too (not just visible
+      // off) so the chip reads "fit hidden" — clicking that single button is what reveals it (see
+      // the chip's fit-toggle handler, which brings visible along with showFit).
+      addDataset({points:demoSecondDataset(type), label:'Data set 2 (demo)', visible:false, showFit:false});
     }
     cvDataDirty = false;
+    summaryBoxPos = null;
     minLine = null; maxLine = null; meanPointShown = false;
     manualRange = null; $('ugt-cv-xmax').value=''; $('ugt-cv-ymax').value='';
     tangentVisible = true; $('ugt-cv-showtan').textContent = 'Hide tangent';
@@ -1330,6 +1380,10 @@
     if(cvDataDirty){
       cvType = newType;
       minLine = null; maxLine = null; meanPointShown = false;
+      // a changed curve shape invalidates any fit cached against the old shape, including a
+      // subset-only fit pinned via "Fit to selected" — refit the active data set against every
+      // point under the new shape, same as a normal first fit
+      if(datasets[activeDataset]) datasets[activeDataset].fitPinned = false;
       refitCurve();
       invalidateOtherFits();
       resetTangent();
@@ -1363,12 +1417,14 @@
     if(!tan) return;
     var m = (tan.x2-tan.x1)!==0 ? (tan.y2-tan.y1)/(tan.x2-tan.x1) : 0;
     minLine = {m:m, c:tan.y1 - m*tan.x1};
+    if(datasets[activeDataset]) datasets[activeDataset].minLine = minLine;
     drawCurvePlot(); updateCurveReadout();
   });
   $('ugt-cv-savemax').addEventListener('click', function(){
     if(!tan) return;
     var m = (tan.x2-tan.x1)!==0 ? (tan.y2-tan.y1)/(tan.x2-tan.x1) : 0;
     maxLine = {m:m, c:tan.y1 - m*tan.x1};
+    if(datasets[activeDataset]) datasets[activeDataset].maxLine = maxLine;
     drawCurvePlot(); updateCurveReadout();
   });
   $('ugt-cv-download').addEventListener('click', function(){
@@ -1554,6 +1610,7 @@
       var xsDS = ds.points.map(function(d){ return d.x; });
       var dsMin = Math.min.apply(null, xsDS), dsMax = Math.max.apply(null, xsDS);
       if(!isFinite(dsMin) || !isFinite(dsMax)) return;
+      dsMin = Math.min(dsMin, x0); dsMax = Math.max(dsMax, x1);
       cctx.strokeStyle = ds.color; cctx.lineWidth = (dsi===activeDataset) ? 2.4 : 1.8; cctx.beginPath();
       for(var i=0;i<=steps;i++){
         var xx = dsMin + (dsMax-dsMin)*i/steps;
@@ -1564,21 +1621,32 @@
       cctx.stroke();
     });
 
-    // saved minimum/maximum gradient lines (linear mode) — drawn alongside the best-fit line
-    // once the student has clicked "Save as Minimum/Maximum Gradient"; like the tangent tools
-    // below, these only apply to a single line at a time, so they're skipped while 2+ data sets
-    // are each showing their own line of best fit — the values are kept, not cleared, and
-    // reappear once back to one line of best fit shown
-    if(CURVES[cvType].isLinear && (minLine || maxLine) && !multiFit){
-      var eL = cvXExtent();
-      [ [minLine,COLOR_MIN], [maxLine,COLOR_MAX] ].forEach(function(pair){
-        var line = pair[0], color = pair[1];
-        if(!line) return;
-        cctx.strokeStyle=color; cctx.lineWidth=2; cctx.setLineDash([7,5]);
-        cctx.beginPath();
-        cctx.moveTo(sx(eL.min), sy(line.m*eL.min+line.c));
-        cctx.lineTo(sx(eL.max), sy(line.m*eL.max+line.c));
-        cctx.stroke(); cctx.setLineDash([]);
+    // saved minimum/maximum GRADIENT lines (linear mode) — drawn alongside each data set's own
+    // line of best fit once "Save as Minimum/Maximum Gradient" has been used for it. Each data set
+    // remembers its own pair (dsMinLine/dsMaxLine), so these are drawn for EVERY visible data set
+    // that has one, regardless of multiFit — only the trial-line tools used to CREATE a new pair are
+    // disabled while 2+ fits are shown at once (same restriction as the tangent tools below), not
+    // the lines already saved elsewhere. Always drawn in the fixed minimum/maximum colours (red/
+    // blue) — the movable results box below spells out which data set each dashed line belongs to,
+    // numbered "Data set (N)" to match.
+    if(CURVES[cvType].isLinear){
+      datasets.forEach(function(ds, dsi){
+        if(!ds.visible || !ds.showFit) return;
+        var dsMinL = dsMinLine(dsi, ds), dsMaxL = dsMaxLine(dsi, ds);
+        if(!dsMinL && !dsMaxL) return;
+        var xsDS2 = ds.points.map(function(d){ return d.x; });
+        var dsMinX = Math.min.apply(null, xsDS2), dsMaxX = Math.max.apply(null, xsDS2);
+        if(!isFinite(dsMinX) || !isFinite(dsMaxX)) return;
+        dsMinX = Math.min(dsMinX, x0); dsMaxX = Math.max(dsMaxX, x1);
+        [ [dsMinL,COLOR_MIN], [dsMaxL,COLOR_MAX] ].forEach(function(pair){
+          var line = pair[0], color = pair[1];
+          if(!line) return;
+          cctx.strokeStyle=color; cctx.lineWidth=2; cctx.setLineDash([7,5]);
+          cctx.beginPath();
+          cctx.moveTo(sx(dsMinX), sy(line.m*dsMinX+line.c));
+          cctx.lineTo(sx(dsMaxX), sy(line.m*dsMaxX+line.c));
+          cctx.stroke(); cctx.setLineDash([]);
+        });
       });
     }
 
@@ -1772,12 +1840,25 @@
       cctx.font='600 12px ui-monospace,monospace';
       lines.forEach(function(l){ maxW = Math.max(maxW, cctx.measureText(l.text).width); });
       var boxW = maxW + bPadX*2, boxH = titleH + lines.length*lineH + bPadY*1.6;
-      var boxX = padL + 10, boxY = padT + 10;
+      var boxDefX = padL + 10, boxDefY = padT + 10;
+      // draggable — see the pointerdown/pointermove handlers below — because the results box can
+      // otherwise land on top of data points
+      var boxX, boxY;
+      if(summaryBoxPos){
+        boxX = Math.max(padL, Math.min(padL+plotW-boxW, summaryBoxPos.x));
+        boxY = Math.max(padT, Math.min(padT+plotH-boxH, summaryBoxPos.y));
+      } else {
+        boxX = boxDefX; boxY = boxDefY;
+      }
+      summaryBoxRect = {x:boxX, y:boxY, w:boxW, h:boxH};
       cctx.fillStyle='rgba(255,255,255,.94)';
       cctx.strokeStyle='#cdd9dd'; cctx.lineWidth=1;
       cctx.beginPath();
       if(cctx.roundRect){ cctx.roundRect(boxX,boxY,boxW,boxH,8); } else { cctx.rect(boxX,boxY,boxW,boxH); }
       cctx.fill(); cctx.stroke();
+      cctx.fillStyle='#9aa7ab'; cctx.font='9px Segoe UI,system-ui,sans-serif';
+      cctx.textAlign='right'; cctx.textBaseline='top';
+      cctx.fillText('move ⠿', boxX+boxW-6, boxY+3);
       cctx.fillStyle='#16222c'; cctx.font='700 12px Segoe UI,system-ui,sans-serif';
       cctx.textAlign='left'; cctx.textBaseline='top';
       cctx.fillText(boxTitle, boxX+bPadX, boxY+bPadY);
@@ -1785,78 +1866,54 @@
       lines.forEach(function(l,i){ cctx.fillStyle=l.color; cctx.fillText(l.text, boxX+bPadX, boxY+bPadY+titleH+i*lineH); });
     }
 
-    if(multiFit && isLin){
-      // 2+ data sets are each showing their own line of best fit — list every shown one, colour-
-      // matched to its line and the legend, instead of the single tangent/min-max summary below
+    if(isLin){
+      // every visible data set that's showing its own line of best fit is listed here, each tagged
+      // "Data set (N)" by its position among all data sets (N = 1, 2, …) — with the on-canvas legend
+      // gone, this movable results box is now the only place that identifies which colour-coded line
+      // belongs to which data set, so it always lists every one shown rather than only once 2+ are
+      // on screen at once. Each data set's own saved minimum/maximum gradient lines are listed right
+      // underneath it, in full (m and c, both with units) — matching how the best-fit line itself is
+      // shown, and giving the best-fit line a ± uncertainty once that data set has both saved.
       var xuF=$('ugt-cv-xunit').value, yuF=$('ugt-cv-yunit').value;
       var gunitF = (yuF||xuF) ? ((yuF||'1')+(xuF?(' '+xuF+'⁻¹'):'')) : '';
       var fitLines = [];
+      var fitDSCount = 0;
       datasets.forEach(function(ds, dsi){
         if(!ds.visible || !ds.showFit) return;
         var p = dsFitParams(dsi, ds);
         if(!p) return;
-        fitLines.push({text:ds.label+': m = '+fmt(p.m,4)+(gunitF?(' '+gunitF):'')+', c = '+fmt(p.c,4)+(yuF?(' '+yuF):''), color:ds.color});
+        fitDSCount++;
+        var tag = 'Data set ('+(dsi+1)+')';
+        var dmnF = dsMinLine(dsi, ds), dmxF = dsMaxLine(dsi, ds);
+        var haveMinMaxF = !!(dmnF && dmxF);
+        var halfMF = haveMinMaxF ? Math.abs(dmxF.m-dmnF.m)/2 : 0;
+        var halfCF = haveMinMaxF ? Math.abs(dmxF.c-dmnF.c)/2 : 0;
+        fitLines.push({text:tag+': m = '+fmt(p.m,4)+(haveMinMaxF?(' ± '+fmt(halfMF,2)):'')+(gunitF?(' '+gunitF):'')+', c = '+fmt(p.c,4)+(haveMinMaxF?(' ± '+fmt(halfCF,2)):'')+(yuF?(' '+yuF):''), color:ds.color});
+        if(dmnF) fitLines.push({text:tag+' minimum: m = '+fmt(dmnF.m,4)+(gunitF?(' '+gunitF):'')+', c = '+fmt(dmnF.c,4)+(yuF?(' '+yuF):''), color:COLOR_MIN});
+        if(dmxF) fitLines.push({text:tag+' maximum: m = '+fmt(dmxF.m,4)+(gunitF?(' '+gunitF):'')+', c = '+fmt(dmxF.c,4)+(yuF?(' '+yuF):''), color:COLOR_MAX});
       });
-      if(fitLines.length) drawFitSummaryBox('Lines of best fit', fitLines);
-    } else if(!multiFit && tan && (isLin || tangentVisible)){
-      // gradient/intercept summary, boxed and baked into the image itself — so a screenshot
-      // or the "download graph as image" button carries the result for an examiner to see.
-      // In linear mode this stays visible even with the trial line hidden (it reports the best-fit/
-      // min/max results, not just the in-progress trial); in curved mode it follows "Show tangent".
+      if(fitLines.length) drawFitSummaryBox(fitDSCount>1?'Lines of best fit':'Line of best fit', fitLines); else summaryBoxRect = null;
+    } else if(!multiFit && tan && tangentVisible){
+      // curved (non-linear) mode: the tangent-at-a-point summary for the active data set only —
+      // the tangent tools only ever apply to one data set at a time (see multiFitActive), so there's
+      // nothing to number here; this follows "Show tangent" and is hidden once 2+ curved fits are
+      // shown at once, same as the tangent line itself
       var xuB=$('ugt-cv-xunit').value, yuB=$('ugt-cv-yunit').value;
       var gunitB = (yuB||xuB) ? ((yuB||'1')+(xuB?(' '+xuB+'⁻¹'):'')) : '';
-      var lines, boxTitle;
-      if(isLin){
-        boxTitle = 'Line of best fit';
-        var haveMinMaxB = !!(minLine && maxLine);
-        var halfMB = haveMinMaxB ? Math.abs(maxLine.m-minLine.m)/2 : 0;
-        var halfCB = haveMinMaxB ? Math.abs(maxLine.c-minLine.c)/2 : 0;
-        lines = [
-          {text:'gradient m = '+fmt(cvParams.m,4)+(haveMinMaxB?(' ± '+fmt(halfMB,2)):'')+(gunitB?(' '+gunitB):''), color:COLOR_BEST},
-          {text:'y-intercept c = '+fmt(cvParams.c,4)+(haveMinMaxB?(' ± '+fmt(halfCB,2)):'')+(yuB?(' '+yuB):''), color:COLOR_BEST}
-        ];
-        if(minLine) lines.push({text:'minimum: m = '+fmt(minLine.m,4)+(gunitB?(' '+gunitB):'')+', c = '+fmt(minLine.c,4)+(yuB?(' '+yuB):''), color:COLOR_MIN});
-        if(maxLine) lines.push({text:'maximum: m = '+fmt(maxLine.m,4)+(gunitB?(' '+gunitB):'')+', c = '+fmt(maxLine.c,4)+(yuB?(' '+yuB):''), color:COLOR_MAX});
-      } else {
-        boxTitle = 'Gradient & intercept';
-        var mStudB = (tan.x2-tan.x1)!==0 ? (tan.y2-tan.y1)/(tan.x2-tan.x1) : 0;
-        var cStudB = tangentIntercept(mStudB);
-        lines = [
-          {text:'gradient m = '+fmt(mStudB,4)+(gunitB?(' '+gunitB):''), color:'#0a615d'},
-          {text:'y-intercept c = '+fmt(cStudB,4)+(yuB?(' '+yuB):''), color:'#0a615d'}
-        ];
-        if(cvRevealed){
-          var mTrueB = curveSlope(tan.x1), cTrueB = tangentIntercept(mTrueB);
-          lines.push({text:'true gradient = '+fmt(mTrueB,4)+(gunitB?(' '+gunitB):''), color:'#0a615d'});
-          lines.push({text:'true y-intercept = '+fmt(cTrueB,4)+(yuB?(' '+yuB):''), color:'#0a615d'});
-        }
+      var mStudB = (tan.x2-tan.x1)!==0 ? (tan.y2-tan.y1)/(tan.x2-tan.x1) : 0;
+      var cStudB = tangentIntercept(mStudB);
+      var lines = [
+        {text:'gradient m = '+fmt(mStudB,4)+(gunitB?(' '+gunitB):''), color:'#0a615d'},
+        {text:'y-intercept c = '+fmt(cStudB,4)+(yuB?(' '+yuB):''), color:'#0a615d'}
+      ];
+      if(cvRevealed){
+        var mTrueB = curveSlope(tan.x1), cTrueB = tangentIntercept(mTrueB);
+        lines.push({text:'true gradient = '+fmt(mTrueB,4)+(gunitB?(' '+gunitB):''), color:'#0a615d'});
+        lines.push({text:'true y-intercept = '+fmt(cTrueB,4)+(yuB?(' '+yuB):''), color:'#0a615d'});
       }
-      drawFitSummaryBox(boxTitle, lines);
-    }
-
-    // small on-canvas legend (top-right) once 2+ data sets are visible — a screenshot or the
-    // "download graph as image" button only captures the canvas itself, not the HTML chip
-    // controls, so this is the only place the colour-coding survives into an exported image
-    var visibleDS = datasets.filter(function(ds){ return ds.visible; });
-    if(visibleDS.length > 1){
-      var lgPadX=9, lgPadY=7, lgLineH=16, lgSwatch=9;
-      cctx.font='600 11.5px Segoe UI,system-ui,sans-serif';
-      var lgMaxW=0;
-      visibleDS.forEach(function(ds){ lgMaxW = Math.max(lgMaxW, cctx.measureText(ds.label).width); });
-      var lgW = lgMaxW + lgSwatch + 8 + lgPadX*2, lgH = visibleDS.length*lgLineH + lgPadY*1.6;
-      var lgX = padL+plotW-10-lgW, lgY = padT+10;
-      cctx.fillStyle='rgba(255,255,255,.94)';
-      cctx.strokeStyle='#cdd9dd'; cctx.lineWidth=1;
-      cctx.beginPath();
-      if(cctx.roundRect){ cctx.roundRect(lgX,lgY,lgW,lgH,8); } else { cctx.rect(lgX,lgY,lgW,lgH); }
-      cctx.fill(); cctx.stroke();
-      visibleDS.forEach(function(ds,i){
-        var rowY = lgY + lgPadY + i*lgLineH + lgLineH/2;
-        cctx.beginPath(); cctx.arc(lgX+lgPadX+lgSwatch/2, rowY, lgSwatch/2, 0, 2*Math.PI);
-        cctx.fillStyle=ds.color; cctx.fill(); cctx.strokeStyle='#fff'; cctx.lineWidth=1; cctx.stroke();
-        cctx.fillStyle='#16222c'; cctx.textAlign='left'; cctx.textBaseline='middle';
-        cctx.fillText(ds.label, lgX+lgPadX+lgSwatch+6, rowY);
-      });
+      drawFitSummaryBox('Gradient & intercept', lines);
+    } else {
+      summaryBoxRect = null;
     }
   }
 
@@ -1873,7 +1930,7 @@
     if(multiFitActive()){
       var htmlM = datasetStatusNote();
       htmlM += '<div class="ugt-gradient-box">';
-      htmlM += '<div class="ugt-step">2 or more data sets are each showing their own line of best fit (see the graph and its legend, top-right). The tangent-at-a-point tools only make sense for one curve at a time, so they\'re greyed out while this is the case — use "Hide line of best fit" on all but one data set to use them again.</div>';
+      htmlM += '<div class="ugt-step">2 or more data sets are each showing their own line of best fit (see the graph). The tangent-at-a-point tools only make sense for one curve at a time, so they\'re greyed out while this is the case — use "Hide line of best fit" on all but one data set to use them again.</div>';
       htmlM += '</div>';
       htmlM += '<div class="ugt-step" style="margin-top:6px">'+(CURVES[cvType].note||'')+'</div>';
       $('ugt-cv-out').innerHTML = htmlM;
@@ -1909,12 +1966,12 @@
     if(multiFitActive()){
       var htmlF = datasetStatusNote();
       htmlF += '<div class="ugt-gradient-box">';
-      htmlF += '<div class="ugt-step">Each data set below is showing its own line of best fit, colour-matched to the graph and its legend:</div>';
+      htmlF += '<div class="ugt-step">Each data set below is showing its own line of best fit, colour-matched to the graph and numbered to match the movable results box on it:</div>';
       datasets.forEach(function(ds, dsi){
         if(!ds.visible || !ds.showFit) return;
         var p = dsFitParams(dsi, ds);
         if(!p) return;
-        htmlF += '<div class="ugt-step" style="color:'+ds.color+'">'+ds.label+': ' +
+        htmlF += '<div class="ugt-step" style="color:'+ds.color+'">Data set ('+(dsi+1)+') — '+ds.label+': ' +
           resultPill('gradient m = '+fmt(p.m,4), '', gunit) + ' ' + resultPill('y-intercept c = '+fmt(p.c,4), '', yu||'') + '</div>';
       });
       htmlF += '</div>';
@@ -1996,6 +2053,13 @@
     var n = cvSelected.length;
     btn.textContent = n ? ('Delete selected ('+n+')') : 'Delete selected';
     btn.disabled = !n;
+    var fitBtn = $('ugt-cv-select-fit');
+    if(fitBtn){
+      fitBtn.textContent = n>=2 ? ('Fit to selected ('+n+')') : 'Fit to selected';
+      fitBtn.disabled = n < 2;
+    }
+    var fitAllBtn = $('ugt-cv-select-fitall');
+    if(fitAllBtn) fitAllBtn.disabled = !(datasets[activeDataset] && datasets[activeDataset].fitPinned);
   }
   // "fit by eye" free-form curve: each data point gets one draggable handle, always rendered a
   // fixed pixel distance to the right of its knot — dragging it up/down sets the curve's local
@@ -2035,6 +2099,16 @@
   }
   ccan.addEventListener('pointerdown', function(ev){
     var p=cvCanvasXY(ev);
+    // the results box is drawn on top of everything else, so grabbing it always wins over a point
+    // underneath it — check this before any other hit-test
+    if(summaryBoxRect && p.x>=summaryBoxRect.x && p.x<=summaryBoxRect.x+summaryBoxRect.w && p.y>=summaryBoxRect.y && p.y<=summaryBoxRect.y+summaryBoxRect.h){
+      cvDrag = 'summaryBox';
+      summaryBoxDrag = {offX: p.x-summaryBoxRect.x, offY: p.y-summaryBoxRect.y};
+      ccan.style.cursor = 'grabbing';
+      try{ ccan.setPointerCapture(ev.pointerId); }catch(e){ /* see the axis-drag capture above */ }
+      ev.preventDefault();
+      return;
+    }
     var bHit = cvBezierHitTest(p.x,p.y);
     if(bHit !== null){
       cvDrag='bezierHandle'; cvBezierDragIndex=bHit;
@@ -2073,12 +2147,19 @@
       // hover feedback only — a pan cursor over most of an axis strip, a resize cursor near its
       // high-value end (last ~18%), a pointer over the draggable pivot/handle, default elsewhere
       if(!cvPlot){ ccan.style.cursor=''; return; }
+      if(summaryBoxRect && p.x>=summaryBoxRect.x && p.x<=summaryBoxRect.x+summaryBoxRect.w && p.y>=summaryBoxRect.y && p.y<=summaryBoxRect.y+summaryBoxRect.h){ ccan.style.cursor = 'grab'; return; }
       var hoverZone = cvAxisZone(p.x, p.y);
       if(hoverZone){ ccan.style.cursor = hoverZone.mode==='zoom' ? (hoverZone.axis==='x'?'ew-resize':'ns-resize') : 'grab'; }
       else if(cvBezierHitTest(p.x,p.y)!==null){ ccan.style.cursor = 'ns-resize'; }
       else if(cvHitTest(p.x,p.y)){ ccan.style.cursor = 'pointer'; }
       else if(p.x>=cvPlot.padL && p.x<=cvPlot.padL+cvPlot.plotW && p.y>=cvPlot.padT && p.y<=cvPlot.padT+cvPlot.plotH){ ccan.style.cursor = 'crosshair'; }
       else { ccan.style.cursor = ''; }
+      return;
+    }
+    if(cvDrag==='summaryBox'){
+      if(!summaryBoxDrag) return;
+      summaryBoxPos = {x: p.x-summaryBoxDrag.offX, y: p.y-summaryBoxDrag.offY};
+      drawCurvePlot();
       return;
     }
     if(cvDrag==='xpan' || cvDrag==='xzoom' || cvDrag==='ypan' || cvDrag==='yzoom'){
@@ -2148,7 +2229,7 @@
     }
     drawCurvePlot(); updateCurveReadout();
   });
-  function cvEndDrag(){ cvDrag=null; cvAxisDragStart=null; cvSelectRect=null; cvBezierDragIndex=null; }
+  function cvEndDrag(){ cvDrag=null; cvAxisDragStart=null; cvSelectRect=null; cvBezierDragIndex=null; summaryBoxDrag=null; }
   ccan.addEventListener('pointerup', function(ev){
     var wasSelectDrag = (cvDrag==='select' && cvSelectRect);
     if(cvDrag==='select' && !cvSelectRect){
@@ -2172,6 +2253,34 @@
     renderCurveDataTable(); refitCurve(); resyncPivot(); drawCurvePlot(); updateCurveReadout();
     flashStatus($('ugt-cv-d-status'), 'Deleted '+n+' point(s).');
   });
+  // fit the curve using only the currently rubber-band-selected points — lets a messy data set
+  // (e.g. one with a few wild outliers) still get a sensible line, by highlighting just the points
+  // you trust, fitting to those, then the highlight clears automatically but the fitted line stays
+  // on the graph. The fit is "pinned" to that subset (see refitCurve) until "Refit to all points".
+  $('ugt-cv-select-fit').addEventListener('click', function(){
+    if(cvSelected.length < 2) return;
+    var subset = cvSelected.map(function(i){ return cvData[i]; }).filter(Boolean);
+    if(subset.length < 2) return;
+    var fitted;
+    try{ fitted = CURVES[cvType].fit(subset); }catch(e){ fitted = null; }
+    if(!fitted){ flashStatus($('ugt-cv-d-status'), 'Could not fit a curve to just those points — try selecting a few more.'); return; }
+    cvParams = fitted;
+    var n = cvSelected.length;
+    if(datasets[activeDataset]){ datasets[activeDataset].fitParams = cvParams; datasets[activeDataset].fitPinned = true; }
+    cvSelected = []; updateSelectUI();
+    resyncPivot();
+    renderDatasetChips(); updateDatasetButtons();
+    drawCurvePlot(); updateCurveReadout();
+    flashStatus($('ugt-cv-d-status'), 'Fitted the curve to the '+n+' selected point(s) only — the highlight is cleared but the line stays. Use "Refit to all points" to go back to fitting every point in this data set.');
+  });
+  $('ugt-cv-select-fitall').addEventListener('click', function(){
+    if(!datasets[activeDataset] || !datasets[activeDataset].fitPinned) return;
+    datasets[activeDataset].fitPinned = false;
+    refitCurve(); resyncPivot();
+    renderDatasetChips(); updateDatasetButtons();
+    drawCurvePlot(); updateCurveReadout();
+    flashStatus($('ugt-cv-d-status'), 'Refitted using every point in this data set.');
+  });
   $('ugt-cv-clearall').addEventListener('click', function(){
     // clears only the active data set's points — matching "Add point", typing, and "Delete
     // selected", which likewise only ever touch the data set currently shown in the table
@@ -2179,6 +2288,8 @@
     cvDataDirty = true;
     cvData = [];
     datasets[activeDataset].points = cvData;
+    datasets[activeDataset].fitPinned = false;
+    datasets[activeDataset].minLine = null; datasets[activeDataset].maxLine = null;
     minLine = null; maxLine = null; meanPointShown = false;
     renderCurveDataTable(); refitCurve(); resyncPivot(); drawCurvePlot(); updateCurveReadout();
     flashStatus($('ugt-cv-d-status'), 'Cleared all data points.');
@@ -2195,8 +2306,10 @@
 <##END_SCRIPT##>
 
 
-</main></div></div></body></html></script>
-<script type="text/plain" id="tpl-student"><!DOCTYPE html>
+</main></div></div></body></html>
+</script>
+<script type="text/plain" id="tpl-student">
+<!DOCTYPE html>
 <html lang="en-GB"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -2217,7 +2330,7 @@
 
           <div class="ugt-field ugt-highlight-box">
             <label class="ugt-lab" for="ugt-cv-type">Curve shape</label>
-            <span class="ugt-hint" style="display:block;margin:-4px 0 6px">Click and drag on the graph to select points (e.g. an erroneous reading), then use “Delete selected”.</span>
+            <span class="ugt-hint" style="display:block;margin:-4px 0 6px">Click and drag on the graph to select points (e.g. an erroneous reading). Use “Delete selected” to remove them, or “Fit to selected” to fit the curve using only those points — the highlight clears but the line stays.</span>
             <select id="ugt-cv-type" class="ugt-in">
               <option value="linear">Straight line — y = mx + c</option>
               <option value="expdecay" selected>Exponential decay — y = A·e^(−x/τ)</option>
@@ -2240,6 +2353,8 @@
               <button id="ugt-cv-savemax" class="ugt-btn ugt-btn-ghost" hidden>Save as Maximum Gradient</button>
               <button id="ugt-cv-download" class="ugt-btn ugt-btn-ghost">Download graph as image</button>
               <button id="ugt-cv-select-del" class="ugt-btn ugt-btn-ghost ugt-btn-danger" type="button" disabled>Delete selected</button>
+              <button id="ugt-cv-select-fit" class="ugt-btn ugt-btn-ghost" type="button" disabled>Fit to selected</button>
+              <button id="ugt-cv-select-fitall" class="ugt-btn ugt-btn-ghost" type="button" disabled>Refit to all points</button>
               <button id="ugt-cv-clearall" class="ugt-btn ugt-btn-ghost ugt-btn-danger" type="button">Clear all</button>
             </div>
 
@@ -2790,10 +2905,13 @@
   var ccan = $('ugt-curveplot'), cctx = ccan.getContext('2d');
   var cW=520, cH=390, cvPlot=null, cvDrag=null;
   var cvAxisDragStart = null; // {px,py,range,plot} captured when an axis pan/zoom drag starts
-  var cvSelected = [];    // indices into cvData currently selected (for "Delete selected")
+  var cvSelected = [];    // indices into cvData currently selected (for "Delete selected" / "Fit to selected")
   var cvSelectRect = null; // {x0,y0,x1,y1} in canvas px, drawn live while rubber-band-selecting
   var cvSelectStart = null; // {px,py} where a plot-interior pointerdown began
   var cvBezierDragIndex = null; // index into cvParams.xs/ys/m of the handle currently being dragged (freeformfit only)
+  var summaryBoxPos = null;  // null = default top-left; else {x,y} top-left corner the user dragged the results box to
+  var summaryBoxRect = null; // {x,y,w,h} of the results box as last drawn, in canvas px — used to hit-test a drag start
+  var summaryBoxDrag = null; // {offX,offY} grab offset while the results box is being dragged
 
   // least squares, y = m·x + c
   function linReg(xs, ys){
@@ -2979,6 +3097,10 @@
   var COLOR_MAX = '#2563eb';   // maximum gradient line + its text — blue
   var COLOR_BEST = '#16222c';  // line of best fit + its text — black
   var COLOR_PIVOT = '#2e9e45'; // the draggable pivot point ("green point")
+  // every data set's line of best fit (and any saved minimum/maximum gradient lines) is
+  // extrapolated automatically across the full visible plot width, rather than stopping abruptly
+  // at the data's own x-range — this makes it easy to read off an intercept or see where the
+  // trend is heading, and keeps multiple data sets' lines visually comparable across the graph
 
   function curveY(x){ return CURVES[cvType].y(cvParams, x); }
   function curveSlope(x){ return CURVES[cvType].slope(cvParams, x); }
@@ -2992,10 +3114,19 @@
   }
   function refitCurve(){
     cvSelected = []; updateSelectUI(); cvBezierDragIndex = null;
+    var activeDS = datasets[activeDataset];
+    // once "Fit to selected" has pinned a fit to a chosen subset of points, an ordinary edit
+    // elsewhere in the table (or adding/deleting a point) should NOT silently refit against every
+    // point again — the whole purpose was to keep the fit from being dragged around by the messy
+    // rest of the data. The pin only clears via the explicit "Refit to all points" button.
+    if(activeDS && activeDS.fitPinned && activeDS.fitParams){
+      cvParams = activeDS.fitParams;
+      return;
+    }
     cvParams = CURVES[cvType].fit(cvData);
     // keep the active data set's own remembered fit in sync — this is what lets a hand-shaped
     // "fit by eye" curve (or any other fit) survive switching to another data set and back
-    if(datasets[activeDataset]) datasets[activeDataset].fitParams = cvParams;
+    if(activeDS) activeDS.fitParams = cvParams;
   }
   // after a refit, re-anchor the pivot onto the (possibly now-different) curve at the same x,
   // translating the tangent rigidly so the student's own slope survives the data edit
@@ -3072,7 +3203,7 @@
     // a newly added data set automatically shows its own line of best fit — no extra click needed —
     // unless a caller explicitly opts out. fitParams starts empty and is filled in lazily (see the
     // drawing loop) or as soon as this data set becomes active and gets refit for real.
-    var ds = {label:label, points:points, color:color, visible:true, showFit: opts.showFit!==false, fitParams:null};
+    var ds = {label:label, points:points, color:color, visible: opts.visible!==false, showFit: opts.showFit!==false, fitParams:null, fitPinned:false, minLine:null, maxLine:null};
     datasets.push(ds);
     return ds;
   }
@@ -3082,7 +3213,11 @@
   // "fit by eye" handle is deliberately NOT gated by this — unlike the tangent/min-max tools, it
   // isn't an overlay analysis of one reference line, it's simply how the *active* data set's own
   // line gets drawn, which stays unambiguous no matter how many other lines are also on screen.
-  function multiFitActive(){ return datasets.filter(function(ds){ return ds.showFit; }).length > 1; }
+  // ds.visible is checked too — a hidden data set's fit line isn't drawn at all, so it shouldn't
+  // count toward "2+ lines are on screen at once" and disable the tangent/gradient tools for the
+  // one data set that IS actually shown (see loadCurve: the Teacher version's demo second data set
+  // starts hidden precisely so the gradient-finder tools work normally on the first one).
+  function multiFitActive(){ return datasets.filter(function(ds){ return ds.showFit && ds.visible; }).length > 1; }
   // the fit params to draw/report for a given data set: the active set always uses the live
   // cvParams (so in-progress Bezier dragging etc. shows immediately); any other data set uses its
   // own remembered fitParams if it has one (so a hand-shaped "fit by eye" curve survives switching
@@ -3092,11 +3227,16 @@
     if(ds.fitParams) return ds.fitParams;
     try{ return CURVES[cvType].fit(ds.points); }catch(e){ return null; }
   }
+  // the saved minimum/maximum GRADIENT lines (linear mode, from the trial-line "Save as Minimum/
+  // Maximum Gradient" buttons) for a given data set — same active/remembered split as fitParams,
+  // so each data set keeps its own pair even though only the active one can be edited at a time
+  function dsMinLine(dsi, ds){ return dsi === activeDataset ? minLine : ds.minLine; }
+  function dsMaxLine(dsi, ds){ return dsi === activeDataset ? maxLine : ds.maxLine; }
   // the curve "shape" (fit type) is shared by every data set — if it changes while more than one
   // data set exists, any other data set's remembered fit was computed against the old shape and
   // must be discarded so it gets fitted fresh against the new one next time it's drawn
   function invalidateOtherFits(){
-    datasets.forEach(function(ds,i){ if(i!==activeDataset) ds.fitParams = null; });
+    datasets.forEach(function(ds,i){ if(i!==activeDataset){ ds.fitParams = null; ds.fitPinned = false; ds.minLine = null; ds.maxLine = null; } });
   }
   function renderDatasetChips(){
     var wrap = $('ugt-ds-chips'); wrap.innerHTML='';
@@ -3121,11 +3261,17 @@
       var fitBtn = document.createElement('button');
       fitBtn.type = 'button';
       fitBtn.className = 'ugt-ds-fit-toggle' + (ds.showFit ? ' ugt-ds-fit-on' : '');
-      fitBtn.textContent = ds.showFit ? '· fit shown' : '· fit hidden';
+      fitBtn.textContent = ds.showFit ? ('· fit shown' + (ds.fitPinned ? ' (selected points only)' : '')) : '· fit hidden';
       fitBtn.title = ds.showFit ? 'Line of best fit is shown for this data set — click to hide it' : 'Click to show this data set\'s own line of best fit';
       fitBtn.addEventListener('click', function(ev){
         ev.stopPropagation();
         ds.showFit = !ds.showFit;
+        // turning the fit ON also brings the data set onto the graph if it wasn't there — a line of
+        // best fit with no visible data set behind it would be confusing, and this is also what
+        // makes the "fit hidden" button double as the single switch that reveals a data set that
+        // started off entirely (see loadCurve's demo second data set). Turning the fit off again
+        // does NOT hide the data set — that stays a separate choice via "Hide data set from graph".
+        if(ds.showFit) ds.visible = true;
         renderDatasetChips(); updateDatasetButtons();
         drawCurvePlot(); updateCurveReadout();
       });
@@ -3134,16 +3280,16 @@
       renameBtn.type = 'button';
       renameBtn.className = 'ugt-ds-rename';
       renameBtn.textContent = 'Rename';
-      renameBtn.title = 'Rename this data set — updates its label everywhere, including the on-canvas legend';
+      renameBtn.title = 'Rename this data set — updates its label on this chip and in the readout below the graph (the movable results box on the graph itself identifies data sets by number, e.g. "Data set (1)", not by name)';
       renameBtn.addEventListener('click', function(ev){ ev.stopPropagation(); startRenameDataset(i, chip); });
 
       chip.appendChild(swatch); chip.appendChild(nameBtn); chip.appendChild(fitBtn); chip.appendChild(renameBtn);
       wrap.appendChild(chip);
     });
   }
-  // swaps a chip's name button for a text input so the data set (and its on-canvas legend entry)
-  // can be renamed — the legend itself lives on the <canvas> and can't be edited directly, so this
-  // chip row doubles as the editable control for it
+  // swaps a chip's name button for a text input so the data set's label can be renamed — that label
+  // shows on the chip and in the readout below the graph; the movable results box on the canvas
+  // itself identifies data sets by number ("Data set (N)") rather than by this editable name
   function startRenameDataset(i, chipEl){
     var ds = datasets[i];
     var input = document.createElement('input');
@@ -3188,8 +3334,14 @@
   }
   function switchActiveDataset(i){
     if(i===activeDataset || !datasets[i]) return;
+    // persist the trial-line min/max gradient results of the data set we're leaving onto that data
+    // set itself, before swapping — mirrors how fitParams survives a switch, so each data set keeps
+    // its own saved minimum/maximum lines rather than sharing one global pair
+    if(datasets[activeDataset]){ datasets[activeDataset].minLine = minLine; datasets[activeDataset].maxLine = maxLine; }
     activeDataset = i;
     cvData = datasets[i].points;
+    minLine = datasets[i].minLine || null;
+    maxLine = datasets[i].maxLine || null;
     // selected-row indices are only meaningful against the data set they were selected in
     cvSelected = []; updateSelectUI();
     renderCurveDataTable();
@@ -3245,7 +3397,7 @@
     $('ugt-cv-h2').textContent = lin ? 'Straight-line graphs & the gradient of the line' : 'Curved graphs & the gradient at a point';
     $('ugt-readout-h3').textContent = lin ? 'Gradient of the line' : 'Gradient at this point';
     $('ugt-cv-method').innerHTML = lin
-      ? 'When your data <b>does</b> fall on a straight line, the gradient is a single constant value for the whole graph, not just at one point. Draw the <b>line of best fit</b> — it should pass close to the <b>mean point</b> (x̄, ȳ) of all your data. Then, to put an uncertainty on the gradient, drag the trial line to the steepest line that still passes through every error bar and click <b>“Save as Maximum Gradient”</b>, then do the same for the shallowest such line and <b>“Save as Minimum Gradient”</b>.'
+      ? 'When your data <b>does</b> fall on a straight line, the gradient is a single constant value for the whole graph, not just at one point. Draw the <b>line of best fit</b> — it should pass close to the <b>mean point</b> (x̄, ȳ) of all your data. Then, to put an uncertainty on the gradient, drag the trial line to the steepest line that still passes through every error bar and click <b>“Save as Maximum Gradient”</b>, then do the same for the shallowest such line and <b>“Save as Minimum Gradient”</b>. If you have more than one data set, you must hide the others to be able to add the maximum and minimum lines.'
       : 'Many experiments yield <b>non-linear data</b>, not a straight line — the gradient then only has meaning <b>at a single instantaneous point</b>. Drag the point to choose where on the curve you want the gradient, then drag the tangent’s free end until the line just touches the curve there. A shaded triangle marks the <b>rise</b> and <b>run</b> along your tangent — gradient = rise ÷ run.';
   }
   function renderCurveDataTable(){
@@ -3360,6 +3512,8 @@
       cvSelected = []; updateSelectUI();
       cvData = p.data.map(function(d){ return {x:num(d.x),y:num(d.y),ex:num(d.ex),ey:num(d.ey)}; });
       datasets[activeDataset].points = cvData;
+      datasets[activeDataset].fitPinned = false;
+      datasets[activeDataset].minLine = null; datasets[activeDataset].maxLine = null;
       if(p.xlab!=null) $('ugt-cv-xlab').value=p.xlab; if(p.xunit!=null) $('ugt-cv-xunit').value=p.xunit;
       if(p.ylab!=null) $('ugt-cv-ylab').value=p.ylab; if(p.yunit!=null) $('ugt-cv-yunit').value=p.yunit;
       refitCurve();
@@ -3395,6 +3549,8 @@
         cvSelected = []; updateSelectUI();
         cvData = parsed.points;
         datasets[activeDataset].points = cvData;
+        datasets[activeDataset].fitPinned = false;
+        datasets[activeDataset].minLine = null; datasets[activeDataset].maxLine = null;
         if(parsed.axis){
           if(parsed.axis.xlab) $('ugt-cv-xlab').value = parsed.axis.xlab;
           if(parsed.axis.xunit) $('ugt-cv-xunit').value = parsed.axis.xunit;
@@ -3417,14 +3573,21 @@
     cvType = type;
     var C = CURVES[type];
     var primaryPoints = STUDENT_MODE ? blankPoints() : C.data.map(function(d){ return {x:d.x,y:d.y,ex:d.ex,ey:d.ey}; });
-    datasets = [{label:'Data set 1', points:primaryPoints, color:DATASET_PALETTE[0], visible:true, showFit:true, fitParams:null}];
+    datasets = [{label:'Data set 1', points:primaryPoints, color:DATASET_PALETTE[0], visible:true, showFit:true, fitParams:null, fitPinned:false, minLine:null, maxLine:null}];
     activeDataset = 0;
     cvData = datasets[0].points;
     if(!STUDENT_MODE){
       // the Teacher version gets a second, ready-made demonstration data set on every example graph
-      addDataset({points:demoSecondDataset(type), label:'Data set 2 (demo)'});
+      // — always available (switch to it via its chip, fill in the table, etc.) but NOT shown on the
+      // graph by default (no points, no fit line), since the tangent-at-a-point / gradient-finder
+      // tools only make sense with one line of best fit on screen, and a teacher opening a fresh
+      // example wants those working immediately. It starts with showFit off too (not just visible
+      // off) so the chip reads "fit hidden" — clicking that single button is what reveals it (see
+      // the chip's fit-toggle handler, which brings visible along with showFit).
+      addDataset({points:demoSecondDataset(type), label:'Data set 2 (demo)', visible:false, showFit:false});
     }
     cvDataDirty = false;
+    summaryBoxPos = null;
     minLine = null; maxLine = null; meanPointShown = false;
     manualRange = null; $('ugt-cv-xmax').value=''; $('ugt-cv-ymax').value='';
     tangentVisible = true; $('ugt-cv-showtan').textContent = 'Hide tangent';
@@ -3447,6 +3610,10 @@
     if(cvDataDirty){
       cvType = newType;
       minLine = null; maxLine = null; meanPointShown = false;
+      // a changed curve shape invalidates any fit cached against the old shape, including a
+      // subset-only fit pinned via "Fit to selected" — refit the active data set against every
+      // point under the new shape, same as a normal first fit
+      if(datasets[activeDataset]) datasets[activeDataset].fitPinned = false;
       refitCurve();
       invalidateOtherFits();
       resetTangent();
@@ -3480,12 +3647,14 @@
     if(!tan) return;
     var m = (tan.x2-tan.x1)!==0 ? (tan.y2-tan.y1)/(tan.x2-tan.x1) : 0;
     minLine = {m:m, c:tan.y1 - m*tan.x1};
+    if(datasets[activeDataset]) datasets[activeDataset].minLine = minLine;
     drawCurvePlot(); updateCurveReadout();
   });
   $('ugt-cv-savemax').addEventListener('click', function(){
     if(!tan) return;
     var m = (tan.x2-tan.x1)!==0 ? (tan.y2-tan.y1)/(tan.x2-tan.x1) : 0;
     maxLine = {m:m, c:tan.y1 - m*tan.x1};
+    if(datasets[activeDataset]) datasets[activeDataset].maxLine = maxLine;
     drawCurvePlot(); updateCurveReadout();
   });
   $('ugt-cv-download').addEventListener('click', function(){
@@ -3671,6 +3840,7 @@
       var xsDS = ds.points.map(function(d){ return d.x; });
       var dsMin = Math.min.apply(null, xsDS), dsMax = Math.max.apply(null, xsDS);
       if(!isFinite(dsMin) || !isFinite(dsMax)) return;
+      dsMin = Math.min(dsMin, x0); dsMax = Math.max(dsMax, x1);
       cctx.strokeStyle = ds.color; cctx.lineWidth = (dsi===activeDataset) ? 2.4 : 1.8; cctx.beginPath();
       for(var i=0;i<=steps;i++){
         var xx = dsMin + (dsMax-dsMin)*i/steps;
@@ -3681,21 +3851,32 @@
       cctx.stroke();
     });
 
-    // saved minimum/maximum gradient lines (linear mode) — drawn alongside the best-fit line
-    // once the student has clicked "Save as Minimum/Maximum Gradient"; like the tangent tools
-    // below, these only apply to a single line at a time, so they're skipped while 2+ data sets
-    // are each showing their own line of best fit — the values are kept, not cleared, and
-    // reappear once back to one line of best fit shown
-    if(CURVES[cvType].isLinear && (minLine || maxLine) && !multiFit){
-      var eL = cvXExtent();
-      [ [minLine,COLOR_MIN], [maxLine,COLOR_MAX] ].forEach(function(pair){
-        var line = pair[0], color = pair[1];
-        if(!line) return;
-        cctx.strokeStyle=color; cctx.lineWidth=2; cctx.setLineDash([7,5]);
-        cctx.beginPath();
-        cctx.moveTo(sx(eL.min), sy(line.m*eL.min+line.c));
-        cctx.lineTo(sx(eL.max), sy(line.m*eL.max+line.c));
-        cctx.stroke(); cctx.setLineDash([]);
+    // saved minimum/maximum GRADIENT lines (linear mode) — drawn alongside each data set's own
+    // line of best fit once "Save as Minimum/Maximum Gradient" has been used for it. Each data set
+    // remembers its own pair (dsMinLine/dsMaxLine), so these are drawn for EVERY visible data set
+    // that has one, regardless of multiFit — only the trial-line tools used to CREATE a new pair are
+    // disabled while 2+ fits are shown at once (same restriction as the tangent tools below), not
+    // the lines already saved elsewhere. Always drawn in the fixed minimum/maximum colours (red/
+    // blue) — the movable results box below spells out which data set each dashed line belongs to,
+    // numbered "Data set (N)" to match.
+    if(CURVES[cvType].isLinear){
+      datasets.forEach(function(ds, dsi){
+        if(!ds.visible || !ds.showFit) return;
+        var dsMinL = dsMinLine(dsi, ds), dsMaxL = dsMaxLine(dsi, ds);
+        if(!dsMinL && !dsMaxL) return;
+        var xsDS2 = ds.points.map(function(d){ return d.x; });
+        var dsMinX = Math.min.apply(null, xsDS2), dsMaxX = Math.max.apply(null, xsDS2);
+        if(!isFinite(dsMinX) || !isFinite(dsMaxX)) return;
+        dsMinX = Math.min(dsMinX, x0); dsMaxX = Math.max(dsMaxX, x1);
+        [ [dsMinL,COLOR_MIN], [dsMaxL,COLOR_MAX] ].forEach(function(pair){
+          var line = pair[0], color = pair[1];
+          if(!line) return;
+          cctx.strokeStyle=color; cctx.lineWidth=2; cctx.setLineDash([7,5]);
+          cctx.beginPath();
+          cctx.moveTo(sx(dsMinX), sy(line.m*dsMinX+line.c));
+          cctx.lineTo(sx(dsMaxX), sy(line.m*dsMaxX+line.c));
+          cctx.stroke(); cctx.setLineDash([]);
+        });
       });
     }
 
@@ -3889,12 +4070,25 @@
       cctx.font='600 12px ui-monospace,monospace';
       lines.forEach(function(l){ maxW = Math.max(maxW, cctx.measureText(l.text).width); });
       var boxW = maxW + bPadX*2, boxH = titleH + lines.length*lineH + bPadY*1.6;
-      var boxX = padL + 10, boxY = padT + 10;
+      var boxDefX = padL + 10, boxDefY = padT + 10;
+      // draggable — see the pointerdown/pointermove handlers below — because the results box can
+      // otherwise land on top of data points
+      var boxX, boxY;
+      if(summaryBoxPos){
+        boxX = Math.max(padL, Math.min(padL+plotW-boxW, summaryBoxPos.x));
+        boxY = Math.max(padT, Math.min(padT+plotH-boxH, summaryBoxPos.y));
+      } else {
+        boxX = boxDefX; boxY = boxDefY;
+      }
+      summaryBoxRect = {x:boxX, y:boxY, w:boxW, h:boxH};
       cctx.fillStyle='rgba(255,255,255,.94)';
       cctx.strokeStyle='#cdd9dd'; cctx.lineWidth=1;
       cctx.beginPath();
       if(cctx.roundRect){ cctx.roundRect(boxX,boxY,boxW,boxH,8); } else { cctx.rect(boxX,boxY,boxW,boxH); }
       cctx.fill(); cctx.stroke();
+      cctx.fillStyle='#9aa7ab'; cctx.font='9px Segoe UI,system-ui,sans-serif';
+      cctx.textAlign='right'; cctx.textBaseline='top';
+      cctx.fillText('move ⠿', boxX+boxW-6, boxY+3);
       cctx.fillStyle='#16222c'; cctx.font='700 12px Segoe UI,system-ui,sans-serif';
       cctx.textAlign='left'; cctx.textBaseline='top';
       cctx.fillText(boxTitle, boxX+bPadX, boxY+bPadY);
@@ -3902,78 +4096,54 @@
       lines.forEach(function(l,i){ cctx.fillStyle=l.color; cctx.fillText(l.text, boxX+bPadX, boxY+bPadY+titleH+i*lineH); });
     }
 
-    if(multiFit && isLin){
-      // 2+ data sets are each showing their own line of best fit — list every shown one, colour-
-      // matched to its line and the legend, instead of the single tangent/min-max summary below
+    if(isLin){
+      // every visible data set that's showing its own line of best fit is listed here, each tagged
+      // "Data set (N)" by its position among all data sets (N = 1, 2, …) — with the on-canvas legend
+      // gone, this movable results box is now the only place that identifies which colour-coded line
+      // belongs to which data set, so it always lists every one shown rather than only once 2+ are
+      // on screen at once. Each data set's own saved minimum/maximum gradient lines are listed right
+      // underneath it, in full (m and c, both with units) — matching how the best-fit line itself is
+      // shown, and giving the best-fit line a ± uncertainty once that data set has both saved.
       var xuF=$('ugt-cv-xunit').value, yuF=$('ugt-cv-yunit').value;
       var gunitF = (yuF||xuF) ? ((yuF||'1')+(xuF?(' '+xuF+'⁻¹'):'')) : '';
       var fitLines = [];
+      var fitDSCount = 0;
       datasets.forEach(function(ds, dsi){
         if(!ds.visible || !ds.showFit) return;
         var p = dsFitParams(dsi, ds);
         if(!p) return;
-        fitLines.push({text:ds.label+': m = '+fmt(p.m,4)+(gunitF?(' '+gunitF):'')+', c = '+fmt(p.c,4)+(yuF?(' '+yuF):''), color:ds.color});
+        fitDSCount++;
+        var tag = 'Data set ('+(dsi+1)+')';
+        var dmnF = dsMinLine(dsi, ds), dmxF = dsMaxLine(dsi, ds);
+        var haveMinMaxF = !!(dmnF && dmxF);
+        var halfMF = haveMinMaxF ? Math.abs(dmxF.m-dmnF.m)/2 : 0;
+        var halfCF = haveMinMaxF ? Math.abs(dmxF.c-dmnF.c)/2 : 0;
+        fitLines.push({text:tag+': m = '+fmt(p.m,4)+(haveMinMaxF?(' ± '+fmt(halfMF,2)):'')+(gunitF?(' '+gunitF):'')+', c = '+fmt(p.c,4)+(haveMinMaxF?(' ± '+fmt(halfCF,2)):'')+(yuF?(' '+yuF):''), color:ds.color});
+        if(dmnF) fitLines.push({text:tag+' minimum: m = '+fmt(dmnF.m,4)+(gunitF?(' '+gunitF):'')+', c = '+fmt(dmnF.c,4)+(yuF?(' '+yuF):''), color:COLOR_MIN});
+        if(dmxF) fitLines.push({text:tag+' maximum: m = '+fmt(dmxF.m,4)+(gunitF?(' '+gunitF):'')+', c = '+fmt(dmxF.c,4)+(yuF?(' '+yuF):''), color:COLOR_MAX});
       });
-      if(fitLines.length) drawFitSummaryBox('Lines of best fit', fitLines);
-    } else if(!multiFit && tan && (isLin || tangentVisible)){
-      // gradient/intercept summary, boxed and baked into the image itself — so a screenshot
-      // or the "download graph as image" button carries the result for an examiner to see.
-      // In linear mode this stays visible even with the trial line hidden (it reports the best-fit/
-      // min/max results, not just the in-progress trial); in curved mode it follows "Show tangent".
+      if(fitLines.length) drawFitSummaryBox(fitDSCount>1?'Lines of best fit':'Line of best fit', fitLines); else summaryBoxRect = null;
+    } else if(!multiFit && tan && tangentVisible){
+      // curved (non-linear) mode: the tangent-at-a-point summary for the active data set only —
+      // the tangent tools only ever apply to one data set at a time (see multiFitActive), so there's
+      // nothing to number here; this follows "Show tangent" and is hidden once 2+ curved fits are
+      // shown at once, same as the tangent line itself
       var xuB=$('ugt-cv-xunit').value, yuB=$('ugt-cv-yunit').value;
       var gunitB = (yuB||xuB) ? ((yuB||'1')+(xuB?(' '+xuB+'⁻¹'):'')) : '';
-      var lines, boxTitle;
-      if(isLin){
-        boxTitle = 'Line of best fit';
-        var haveMinMaxB = !!(minLine && maxLine);
-        var halfMB = haveMinMaxB ? Math.abs(maxLine.m-minLine.m)/2 : 0;
-        var halfCB = haveMinMaxB ? Math.abs(maxLine.c-minLine.c)/2 : 0;
-        lines = [
-          {text:'gradient m = '+fmt(cvParams.m,4)+(haveMinMaxB?(' ± '+fmt(halfMB,2)):'')+(gunitB?(' '+gunitB):''), color:COLOR_BEST},
-          {text:'y-intercept c = '+fmt(cvParams.c,4)+(haveMinMaxB?(' ± '+fmt(halfCB,2)):'')+(yuB?(' '+yuB):''), color:COLOR_BEST}
-        ];
-        if(minLine) lines.push({text:'minimum: m = '+fmt(minLine.m,4)+(gunitB?(' '+gunitB):'')+', c = '+fmt(minLine.c,4)+(yuB?(' '+yuB):''), color:COLOR_MIN});
-        if(maxLine) lines.push({text:'maximum: m = '+fmt(maxLine.m,4)+(gunitB?(' '+gunitB):'')+', c = '+fmt(maxLine.c,4)+(yuB?(' '+yuB):''), color:COLOR_MAX});
-      } else {
-        boxTitle = 'Gradient & intercept';
-        var mStudB = (tan.x2-tan.x1)!==0 ? (tan.y2-tan.y1)/(tan.x2-tan.x1) : 0;
-        var cStudB = tangentIntercept(mStudB);
-        lines = [
-          {text:'gradient m = '+fmt(mStudB,4)+(gunitB?(' '+gunitB):''), color:'#0a615d'},
-          {text:'y-intercept c = '+fmt(cStudB,4)+(yuB?(' '+yuB):''), color:'#0a615d'}
-        ];
-        if(cvRevealed){
-          var mTrueB = curveSlope(tan.x1), cTrueB = tangentIntercept(mTrueB);
-          lines.push({text:'true gradient = '+fmt(mTrueB,4)+(gunitB?(' '+gunitB):''), color:'#0a615d'});
-          lines.push({text:'true y-intercept = '+fmt(cTrueB,4)+(yuB?(' '+yuB):''), color:'#0a615d'});
-        }
+      var mStudB = (tan.x2-tan.x1)!==0 ? (tan.y2-tan.y1)/(tan.x2-tan.x1) : 0;
+      var cStudB = tangentIntercept(mStudB);
+      var lines = [
+        {text:'gradient m = '+fmt(mStudB,4)+(gunitB?(' '+gunitB):''), color:'#0a615d'},
+        {text:'y-intercept c = '+fmt(cStudB,4)+(yuB?(' '+yuB):''), color:'#0a615d'}
+      ];
+      if(cvRevealed){
+        var mTrueB = curveSlope(tan.x1), cTrueB = tangentIntercept(mTrueB);
+        lines.push({text:'true gradient = '+fmt(mTrueB,4)+(gunitB?(' '+gunitB):''), color:'#0a615d'});
+        lines.push({text:'true y-intercept = '+fmt(cTrueB,4)+(yuB?(' '+yuB):''), color:'#0a615d'});
       }
-      drawFitSummaryBox(boxTitle, lines);
-    }
-
-    // small on-canvas legend (top-right) once 2+ data sets are visible — a screenshot or the
-    // "download graph as image" button only captures the canvas itself, not the HTML chip
-    // controls, so this is the only place the colour-coding survives into an exported image
-    var visibleDS = datasets.filter(function(ds){ return ds.visible; });
-    if(visibleDS.length > 1){
-      var lgPadX=9, lgPadY=7, lgLineH=16, lgSwatch=9;
-      cctx.font='600 11.5px Segoe UI,system-ui,sans-serif';
-      var lgMaxW=0;
-      visibleDS.forEach(function(ds){ lgMaxW = Math.max(lgMaxW, cctx.measureText(ds.label).width); });
-      var lgW = lgMaxW + lgSwatch + 8 + lgPadX*2, lgH = visibleDS.length*lgLineH + lgPadY*1.6;
-      var lgX = padL+plotW-10-lgW, lgY = padT+10;
-      cctx.fillStyle='rgba(255,255,255,.94)';
-      cctx.strokeStyle='#cdd9dd'; cctx.lineWidth=1;
-      cctx.beginPath();
-      if(cctx.roundRect){ cctx.roundRect(lgX,lgY,lgW,lgH,8); } else { cctx.rect(lgX,lgY,lgW,lgH); }
-      cctx.fill(); cctx.stroke();
-      visibleDS.forEach(function(ds,i){
-        var rowY = lgY + lgPadY + i*lgLineH + lgLineH/2;
-        cctx.beginPath(); cctx.arc(lgX+lgPadX+lgSwatch/2, rowY, lgSwatch/2, 0, 2*Math.PI);
-        cctx.fillStyle=ds.color; cctx.fill(); cctx.strokeStyle='#fff'; cctx.lineWidth=1; cctx.stroke();
-        cctx.fillStyle='#16222c'; cctx.textAlign='left'; cctx.textBaseline='middle';
-        cctx.fillText(ds.label, lgX+lgPadX+lgSwatch+6, rowY);
-      });
+      drawFitSummaryBox('Gradient & intercept', lines);
+    } else {
+      summaryBoxRect = null;
     }
   }
 
@@ -3990,7 +4160,7 @@
     if(multiFitActive()){
       var htmlM = datasetStatusNote();
       htmlM += '<div class="ugt-gradient-box">';
-      htmlM += '<div class="ugt-step">2 or more data sets are each showing their own line of best fit (see the graph and its legend, top-right). The tangent-at-a-point tools only make sense for one curve at a time, so they\'re greyed out while this is the case — use "Hide line of best fit" on all but one data set to use them again.</div>';
+      htmlM += '<div class="ugt-step">2 or more data sets are each showing their own line of best fit (see the graph). The tangent-at-a-point tools only make sense for one curve at a time, so they\'re greyed out while this is the case — use "Hide line of best fit" on all but one data set to use them again.</div>';
       htmlM += '</div>';
       htmlM += '<div class="ugt-step" style="margin-top:6px">'+(CURVES[cvType].note||'')+'</div>';
       $('ugt-cv-out').innerHTML = htmlM;
@@ -4026,12 +4196,12 @@
     if(multiFitActive()){
       var htmlF = datasetStatusNote();
       htmlF += '<div class="ugt-gradient-box">';
-      htmlF += '<div class="ugt-step">Each data set below is showing its own line of best fit, colour-matched to the graph and its legend:</div>';
+      htmlF += '<div class="ugt-step">Each data set below is showing its own line of best fit, colour-matched to the graph and numbered to match the movable results box on it:</div>';
       datasets.forEach(function(ds, dsi){
         if(!ds.visible || !ds.showFit) return;
         var p = dsFitParams(dsi, ds);
         if(!p) return;
-        htmlF += '<div class="ugt-step" style="color:'+ds.color+'">'+ds.label+': ' +
+        htmlF += '<div class="ugt-step" style="color:'+ds.color+'">Data set ('+(dsi+1)+') — '+ds.label+': ' +
           resultPill('gradient m = '+fmt(p.m,4), '', gunit) + ' ' + resultPill('y-intercept c = '+fmt(p.c,4), '', yu||'') + '</div>';
       });
       htmlF += '</div>';
@@ -4113,6 +4283,13 @@
     var n = cvSelected.length;
     btn.textContent = n ? ('Delete selected ('+n+')') : 'Delete selected';
     btn.disabled = !n;
+    var fitBtn = $('ugt-cv-select-fit');
+    if(fitBtn){
+      fitBtn.textContent = n>=2 ? ('Fit to selected ('+n+')') : 'Fit to selected';
+      fitBtn.disabled = n < 2;
+    }
+    var fitAllBtn = $('ugt-cv-select-fitall');
+    if(fitAllBtn) fitAllBtn.disabled = !(datasets[activeDataset] && datasets[activeDataset].fitPinned);
   }
   // "fit by eye" free-form curve: each data point gets one draggable handle, always rendered a
   // fixed pixel distance to the right of its knot — dragging it up/down sets the curve's local
@@ -4152,6 +4329,16 @@
   }
   ccan.addEventListener('pointerdown', function(ev){
     var p=cvCanvasXY(ev);
+    // the results box is drawn on top of everything else, so grabbing it always wins over a point
+    // underneath it — check this before any other hit-test
+    if(summaryBoxRect && p.x>=summaryBoxRect.x && p.x<=summaryBoxRect.x+summaryBoxRect.w && p.y>=summaryBoxRect.y && p.y<=summaryBoxRect.y+summaryBoxRect.h){
+      cvDrag = 'summaryBox';
+      summaryBoxDrag = {offX: p.x-summaryBoxRect.x, offY: p.y-summaryBoxRect.y};
+      ccan.style.cursor = 'grabbing';
+      try{ ccan.setPointerCapture(ev.pointerId); }catch(e){ /* see the axis-drag capture above */ }
+      ev.preventDefault();
+      return;
+    }
     var bHit = cvBezierHitTest(p.x,p.y);
     if(bHit !== null){
       cvDrag='bezierHandle'; cvBezierDragIndex=bHit;
@@ -4190,12 +4377,19 @@
       // hover feedback only — a pan cursor over most of an axis strip, a resize cursor near its
       // high-value end (last ~18%), a pointer over the draggable pivot/handle, default elsewhere
       if(!cvPlot){ ccan.style.cursor=''; return; }
+      if(summaryBoxRect && p.x>=summaryBoxRect.x && p.x<=summaryBoxRect.x+summaryBoxRect.w && p.y>=summaryBoxRect.y && p.y<=summaryBoxRect.y+summaryBoxRect.h){ ccan.style.cursor = 'grab'; return; }
       var hoverZone = cvAxisZone(p.x, p.y);
       if(hoverZone){ ccan.style.cursor = hoverZone.mode==='zoom' ? (hoverZone.axis==='x'?'ew-resize':'ns-resize') : 'grab'; }
       else if(cvBezierHitTest(p.x,p.y)!==null){ ccan.style.cursor = 'ns-resize'; }
       else if(cvHitTest(p.x,p.y)){ ccan.style.cursor = 'pointer'; }
       else if(p.x>=cvPlot.padL && p.x<=cvPlot.padL+cvPlot.plotW && p.y>=cvPlot.padT && p.y<=cvPlot.padT+cvPlot.plotH){ ccan.style.cursor = 'crosshair'; }
       else { ccan.style.cursor = ''; }
+      return;
+    }
+    if(cvDrag==='summaryBox'){
+      if(!summaryBoxDrag) return;
+      summaryBoxPos = {x: p.x-summaryBoxDrag.offX, y: p.y-summaryBoxDrag.offY};
+      drawCurvePlot();
       return;
     }
     if(cvDrag==='xpan' || cvDrag==='xzoom' || cvDrag==='ypan' || cvDrag==='yzoom'){
@@ -4265,7 +4459,7 @@
     }
     drawCurvePlot(); updateCurveReadout();
   });
-  function cvEndDrag(){ cvDrag=null; cvAxisDragStart=null; cvSelectRect=null; cvBezierDragIndex=null; }
+  function cvEndDrag(){ cvDrag=null; cvAxisDragStart=null; cvSelectRect=null; cvBezierDragIndex=null; summaryBoxDrag=null; }
   ccan.addEventListener('pointerup', function(ev){
     var wasSelectDrag = (cvDrag==='select' && cvSelectRect);
     if(cvDrag==='select' && !cvSelectRect){
@@ -4289,6 +4483,34 @@
     renderCurveDataTable(); refitCurve(); resyncPivot(); drawCurvePlot(); updateCurveReadout();
     flashStatus($('ugt-cv-d-status'), 'Deleted '+n+' point(s).');
   });
+  // fit the curve using only the currently rubber-band-selected points — lets a messy data set
+  // (e.g. one with a few wild outliers) still get a sensible line, by highlighting just the points
+  // you trust, fitting to those, then the highlight clears automatically but the fitted line stays
+  // on the graph. The fit is "pinned" to that subset (see refitCurve) until "Refit to all points".
+  $('ugt-cv-select-fit').addEventListener('click', function(){
+    if(cvSelected.length < 2) return;
+    var subset = cvSelected.map(function(i){ return cvData[i]; }).filter(Boolean);
+    if(subset.length < 2) return;
+    var fitted;
+    try{ fitted = CURVES[cvType].fit(subset); }catch(e){ fitted = null; }
+    if(!fitted){ flashStatus($('ugt-cv-d-status'), 'Could not fit a curve to just those points — try selecting a few more.'); return; }
+    cvParams = fitted;
+    var n = cvSelected.length;
+    if(datasets[activeDataset]){ datasets[activeDataset].fitParams = cvParams; datasets[activeDataset].fitPinned = true; }
+    cvSelected = []; updateSelectUI();
+    resyncPivot();
+    renderDatasetChips(); updateDatasetButtons();
+    drawCurvePlot(); updateCurveReadout();
+    flashStatus($('ugt-cv-d-status'), 'Fitted the curve to the '+n+' selected point(s) only — the highlight is cleared but the line stays. Use "Refit to all points" to go back to fitting every point in this data set.');
+  });
+  $('ugt-cv-select-fitall').addEventListener('click', function(){
+    if(!datasets[activeDataset] || !datasets[activeDataset].fitPinned) return;
+    datasets[activeDataset].fitPinned = false;
+    refitCurve(); resyncPivot();
+    renderDatasetChips(); updateDatasetButtons();
+    drawCurvePlot(); updateCurveReadout();
+    flashStatus($('ugt-cv-d-status'), 'Refitted using every point in this data set.');
+  });
   $('ugt-cv-clearall').addEventListener('click', function(){
     // clears only the active data set's points — matching "Add point", typing, and "Delete
     // selected", which likewise only ever touch the data set currently shown in the table
@@ -4296,6 +4518,8 @@
     cvDataDirty = true;
     cvData = [];
     datasets[activeDataset].points = cvData;
+    datasets[activeDataset].fitPinned = false;
+    datasets[activeDataset].minLine = null; datasets[activeDataset].maxLine = null;
     minLine = null; maxLine = null; meanPointShown = false;
     renderCurveDataTable(); refitCurve(); resyncPivot(); drawCurvePlot(); updateCurveReadout();
     flashStatus($('ugt-cv-d-status'), 'Cleared all data points.');
@@ -4312,8 +4536,10 @@
 <##END_SCRIPT##>
 
 
-</main></div></div></body></html></script>
-<script type="text/plain" id="tpl-click"><!DOCTYPE html>
+</main></div></div></body></html>
+</script>
+<script type="text/plain" id="tpl-click">
+<!DOCTYPE html>
 <html lang="en-GB"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -5048,12 +5274,19 @@
   var meanPointShown = false;  // "Identify mean point" toggle (linear mode)
   var minLine = null, maxLine = null; // {m,c} saved via "Save as Minimum/Maximum Gradient" (linear mode)
   var manualRange = null; // {xlo,xhi,ylo,yhi} set via "Set range"/"Autoscale"; null means the live autoscale below (the original default)
+  var summaryBoxPos = null;  // null = default top-left; else {x,y} top-left corner the user dragged the results box to
+  var summaryBoxRect = null; // {x,y,w,h} of the results box as last drawn, in canvas px — used to hit-test a drag start
+  var summaryBoxDrag = null; // {offX,offY} grab offset while the results box is being dragged
   var cvDataDirty = false;     // true once the student has edited/entered their own data —
                                 // switching the fit type then keeps the data instead of reloading a preset/blank table
   var COLOR_MIN = '#c0392b';   // minimum gradient line + its text — red
   var COLOR_MAX = '#2563eb';   // maximum gradient line + its text — blue
   var COLOR_BEST = '#16222c';  // line of best fit + its text — black
   var COLOR_PIVOT = '#2e9e45'; // the draggable pivot point ("green point")
+  // the line of best fit (and any saved minimum/maximum gradient lines) is extrapolated
+  // automatically across the full visible plot width, rather than stopping abruptly at the
+  // data's own x-range — this makes it easy to read off an intercept or see where the trend
+  // is heading
 
   function curveY(x){ return CURVES[cvType].y(cvParams, x); }
   function curveSlope(x){ return CURVES[cvType].slope(cvParams, x); }
@@ -5301,6 +5534,7 @@
       cvData = C.data.map(function(d){ return {x:d.x,y:d.y,ex:d.ex,ey:d.ey}; });
     }
     cvDataDirty = false;
+    summaryBoxPos = null;
     minLine = null; maxLine = null; meanPointShown = false;
     manualRange = null; $('ugt-cv-xmax').value=''; $('ugt-cv-ymax').value='';
     tangentVisible = true; $('ugt-cv-showtan').textContent = 'Hide tangent';
@@ -5487,9 +5721,11 @@
     // smooth curve — the line of best fit is drawn in black for the linear mode, teal for a curved fit
     cctx.save(); cctx.beginPath(); cctx.rect(padL,padT,plotW,plotH); cctx.clip();
     var e=cvXExtent(), steps=140;
+    var eMin=e.min, eMax=e.max;
+    if(cvData.length>0){ eMin = Math.min(eMin, x0); eMax = Math.max(eMax, x1); }
     cctx.strokeStyle = CURVES[cvType].isLinear ? COLOR_BEST : '#0e8c86'; cctx.lineWidth=2.2; cctx.beginPath();
     for(var i=0;i<=steps;i++){
-      var xx = e.min + (e.max-e.min)*i/steps;
+      var xx = eMin + (eMax-eMin)*i/steps;
       var yy = curveY(xx);
       if(!isFinite(yy)) continue;
       if(i===0) cctx.moveTo(sx(xx),sy(yy)); else cctx.lineTo(sx(xx),sy(yy));
@@ -5499,7 +5735,7 @@
     // saved minimum/maximum gradient lines (linear mode) — drawn alongside the best-fit line
     // once the student has clicked "Save as Minimum/Maximum Gradient"
     if(CURVES[cvType].isLinear && (minLine || maxLine)){
-      var eL = cvXExtent();
+      var eL = {min:eMin, max:eMax};
       [ [minLine,COLOR_MIN], [maxLine,COLOR_MAX] ].forEach(function(pair){
         var line = pair[0], color = pair[1];
         if(!line) return;
@@ -5693,16 +5929,17 @@
       var gunitB = (yuB||xuB) ? ((yuB||'1')+(xuB?(' '+xuB+'⁻¹'):'')) : '';
       var lines, boxTitle;
       if(isLin){
+        // tagged "Data set (1)" the same way the Teacher tab's multi-data-set version numbers each
+        // of its data sets, so the format matches even though this tab only ever has the one
         boxTitle = 'Line of best fit';
         var haveMinMaxB = !!(minLine && maxLine);
         var halfMB = haveMinMaxB ? Math.abs(maxLine.m-minLine.m)/2 : 0;
         var halfCB = haveMinMaxB ? Math.abs(maxLine.c-minLine.c)/2 : 0;
         lines = [
-          {text:'gradient m = '+fmt(cvParams.m,4)+(haveMinMaxB?(' ± '+fmt(halfMB,2)):'')+(gunitB?(' '+gunitB):''), color:COLOR_BEST},
-          {text:'y-intercept c = '+fmt(cvParams.c,4)+(haveMinMaxB?(' ± '+fmt(halfCB,2)):'')+(yuB?(' '+yuB):''), color:COLOR_BEST}
+          {text:'Data set (1): m = '+fmt(cvParams.m,4)+(haveMinMaxB?(' ± '+fmt(halfMB,2)):'')+(gunitB?(' '+gunitB):'')+', c = '+fmt(cvParams.c,4)+(haveMinMaxB?(' ± '+fmt(halfCB,2)):'')+(yuB?(' '+yuB):''), color:COLOR_BEST}
         ];
-        if(minLine) lines.push({text:'minimum: m = '+fmt(minLine.m,4)+(gunitB?(' '+gunitB):'')+', c = '+fmt(minLine.c,4)+(yuB?(' '+yuB):''), color:COLOR_MIN});
-        if(maxLine) lines.push({text:'maximum: m = '+fmt(maxLine.m,4)+(gunitB?(' '+gunitB):'')+', c = '+fmt(maxLine.c,4)+(yuB?(' '+yuB):''), color:COLOR_MAX});
+        if(minLine) lines.push({text:'Data set (1) minimum: m = '+fmt(minLine.m,4)+(gunitB?(' '+gunitB):'')+', c = '+fmt(minLine.c,4)+(yuB?(' '+yuB):''), color:COLOR_MIN});
+        if(maxLine) lines.push({text:'Data set (1) maximum: m = '+fmt(maxLine.m,4)+(gunitB?(' '+gunitB):'')+', c = '+fmt(maxLine.c,4)+(yuB?(' '+yuB):''), color:COLOR_MAX});
       } else {
         boxTitle = 'Gradient & intercept';
         var mStudB = (tan.x2-tan.x1)!==0 ? (tan.y2-tan.y1)/(tan.x2-tan.x1) : 0;
@@ -5723,17 +5960,32 @@
       cctx.font='600 12px ui-monospace,monospace';
       lines.forEach(function(l){ maxW = Math.max(maxW, cctx.measureText(l.text).width); });
       var boxW = maxW + bPadX*2, boxH = titleH + lines.length*lineH + bPadY*1.6;
-      var boxX = padL + 10, boxY = padT + 10;
+      var boxDefX = padL + 10, boxDefY = padT + 10;
+      // draggable — see the pointerdown/pointermove handlers below — because the results box can
+      // otherwise land on top of data points
+      var boxX, boxY;
+      if(summaryBoxPos){
+        boxX = Math.max(padL, Math.min(padL+plotW-boxW, summaryBoxPos.x));
+        boxY = Math.max(padT, Math.min(padT+plotH-boxH, summaryBoxPos.y));
+      } else {
+        boxX = boxDefX; boxY = boxDefY;
+      }
+      summaryBoxRect = {x:boxX, y:boxY, w:boxW, h:boxH};
       cctx.fillStyle='rgba(255,255,255,.94)';
       cctx.strokeStyle='#cdd9dd'; cctx.lineWidth=1;
       cctx.beginPath();
       if(cctx.roundRect){ cctx.roundRect(boxX,boxY,boxW,boxH,8); } else { cctx.rect(boxX,boxY,boxW,boxH); }
       cctx.fill(); cctx.stroke();
+      cctx.fillStyle='#9aa7ab'; cctx.font='9px Segoe UI,system-ui,sans-serif';
+      cctx.textAlign='right'; cctx.textBaseline='top';
+      cctx.fillText('move ⠿', boxX+boxW-6, boxY+3);
       cctx.fillStyle='#16222c'; cctx.font='700 12px Segoe UI,system-ui,sans-serif';
       cctx.textAlign='left'; cctx.textBaseline='top';
       cctx.fillText(boxTitle, boxX+bPadX, boxY+bPadY);
       cctx.font='600 12px ui-monospace,monospace';
       lines.forEach(function(l,i){ cctx.fillStyle=l.color; cctx.fillText(l.text, boxX+bPadX, boxY+bPadY+titleH+i*lineH); });
+    } else {
+      summaryBoxRect = null;
     }
   }
 
@@ -5884,6 +6136,16 @@
   }
   ccan.addEventListener('pointerdown', function(ev){
     var p=cvCanvasXY(ev);
+    // the results box is drawn on top of everything else, so grabbing it always wins over a point
+    // underneath it (or, on this click-to-plot tab, over adding a new point) — check this first
+    if(summaryBoxRect && p.x>=summaryBoxRect.x && p.x<=summaryBoxRect.x+summaryBoxRect.w && p.y>=summaryBoxRect.y && p.y<=summaryBoxRect.y+summaryBoxRect.h){
+      cvDrag = 'summaryBox';
+      summaryBoxDrag = {offX: p.x-summaryBoxRect.x, offY: p.y-summaryBoxRect.y};
+      ccan.style.cursor = 'grabbing';
+      try{ ccan.setPointerCapture(ev.pointerId); }catch(e){ /* see the axis-drag capture above */ }
+      ev.preventDefault();
+      return;
+    }
     var bHit = cvBezierHitTest(p.x,p.y);
     if(bHit !== null){
       cvDrag='bezierHandle'; cvBezierDragIndex=bHit;
@@ -5922,12 +6184,19 @@
       // hover feedback only — a pan cursor over most of an axis strip, a resize cursor near its
       // high-value end (last ~18%), a pointer over the draggable pivot/handle, default elsewhere
       if(!cvPlot){ ccan.style.cursor=''; return; }
+      if(summaryBoxRect && p.x>=summaryBoxRect.x && p.x<=summaryBoxRect.x+summaryBoxRect.w && p.y>=summaryBoxRect.y && p.y<=summaryBoxRect.y+summaryBoxRect.h){ ccan.style.cursor = 'grab'; return; }
       var hoverZone = cvAxisZone(p.x, p.y);
       if(hoverZone){ ccan.style.cursor = hoverZone.mode==='zoom' ? (hoverZone.axis==='x'?'ew-resize':'ns-resize') : 'grab'; }
       else if(cvBezierHitTest(p.x,p.y)!==null){ ccan.style.cursor = 'ns-resize'; }
       else if(cvHitTest(p.x,p.y)){ ccan.style.cursor = 'pointer'; }
       else if(p.x>=cvPlot.padL && p.x<=cvPlot.padL+cvPlot.plotW && p.y>=cvPlot.padT && p.y<=cvPlot.padT+cvPlot.plotH){ ccan.style.cursor = 'crosshair'; }
       else { ccan.style.cursor = ''; }
+      return;
+    }
+    if(cvDrag==='summaryBox'){
+      if(!summaryBoxDrag) return;
+      summaryBoxPos = {x: p.x-summaryBoxDrag.offX, y: p.y-summaryBoxDrag.offY};
+      drawCurvePlot();
       return;
     }
     if(cvDrag==='xpan' || cvDrag==='xzoom' || cvDrag==='ypan' || cvDrag==='yzoom'){
@@ -5997,7 +6266,7 @@
     }
     drawCurvePlot(); updateCurveReadout();
   });
-  function cvEndDrag(){ cvDrag=null; cvAxisDragStart=null; cvSelectRect=null; cvBezierDragIndex=null; }
+  function cvEndDrag(){ cvDrag=null; cvAxisDragStart=null; cvSelectRect=null; cvBezierDragIndex=null; summaryBoxDrag=null; }
   ccan.addEventListener('pointerup', function(ev){
     var wasSelectDrag = (cvDrag==='select' && cvSelectRect);
     if(cvDrag==='select' && !cvSelectRect){
@@ -6041,7 +6310,9 @@
 <##END_SCRIPT##>
 
 
-</main></div></div></body></html></script>
+</main></div></div></body></html>
+</script>
+
 
 <script>
 (function(){
