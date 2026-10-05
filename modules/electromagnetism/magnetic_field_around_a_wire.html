@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Magnetic Field Around a Wire — Student Workbook</title>
+<style>
+  :root{
+    --navy:#173a5e; --teal:#0e7c86; --teal-dark:#0a5b62; --amber:#d98324;
+    --soft-blue:#eaf3fb; --soft-amber:#fdf1e2; --soft-green:#eaf7ee; --soft-grey:#f4f6f8;
+    --line:#b9c6d3; --ink:#1f2933; --border:#d7e0e8;
+    --purple:#6b4c9a; --soft-purple:#f1ebf9;
+    --good:#2f8f4e; --bad:#c0392b; --soft-bad:#fbebea;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; color:var(--ink); background:#f7f9fb; line-height:1.55; font-size:16.5px; padding-top:56px;}
+  main{max-width:920px; margin:0 auto; padding:2rem 2.5rem 5rem 2.5rem;}
+  @media (max-width:640px){ main{padding:1.2rem 1rem 4rem 1rem;} section.topic{padding:1.2rem 1rem !important;} .cover{padding:1.6rem 1.2rem !important;} }
+  .cover{background:linear-gradient(135deg,var(--navy),var(--teal-dark)); color:#fff; border-radius:14px; padding:2.5rem 2.5rem; margin-bottom:2rem;}
+  .cover h1{margin:0 0 0.4rem 0; font-size:1.9rem;}
+  .name-box{margin-top:1.4rem; background:rgba(255,255,255,0.1); border:1px dashed rgba(255,255,255,0.5); border-radius:8px; padding:0.9rem 1.1rem;}
+  .name-box label{display:block; font-size:0.8rem; color:#dceaf0; margin-bottom:0.2rem;}
+  .name-box .fill{display:block; width:100%; border:none; border-bottom:1px solid #dceaf0; height:1.6rem; background:transparent; color:#fff; font-size:1rem; font-family:inherit; padding:0; outline:none;}
+  .goals{background:rgba(255,255,255,0.12); border-left:4px solid #fff; border-radius:6px; padding:0.9rem 1.1rem; font-size:0.92rem; color:#fff;}
+  .goals ul{margin:0.4rem 0 0 0; padding-left:1.2rem;}
+
+  section.topic{background:#fff; border:1px solid var(--border); border-radius:12px; padding:1.8rem 2rem; margin-bottom:1.6rem;}
+  section.topic h2{color:var(--navy); font-size:1.4rem; margin-top:0; border-bottom:3px solid var(--amber); padding-bottom:0.4rem;}
+  section.topic h3{color:var(--teal-dark); font-size:1.08rem; margin-top:1.6rem;}
+
+  .keybox{background:var(--soft-blue); border:1px solid #c7ddef; border-radius:8px; padding:0.9rem 1.1rem; margin:0.9rem 0; font-size:0.98rem;}
+  .keybox strong{color:var(--navy);}
+  .eqn{background:#fff; border:1px solid #c7ddef; border-radius:6px; padding:0.6rem 1rem; margin:0.6rem 0; font-size:1.15rem; text-align:center; font-family:"Cambria Math",Cambria,Georgia,serif;}
+  .eqn.big{font-size:1.45rem; border:2px solid var(--navy); padding:0.9rem 1rem;}
+  .frac{display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; margin:0 0.15em;}
+  .frac > span:first-child{border-bottom:1px solid currentColor; padding:0 0.2em;}
+  .frac > span:last-child{padding:0 0.2em;}
+  .keyword{background:var(--soft-amber); border-left:4px solid var(--amber); border-radius:6px; padding:0.7rem 1rem; margin:0.9rem 0; font-size:0.92rem;}
+  .keyword b{color:var(--amber);}
+  .example{background:var(--soft-green); border:1px solid #bfe3cc; border-radius:8px; padding:0.9rem 1.1rem; margin:1rem 0;}
+  .example .tag{display:inline-block; background:#3f9a5c; color:#fff; font-size:0.72rem; font-weight:600; letter-spacing:0.03em; padding:0.15rem 0.5rem; border-radius:4px; margin-bottom:0.5rem; text-transform:uppercase;}
+  .stretch-box{background:var(--soft-purple); border:1px solid #d9c9ec; border-radius:8px; padding:0.9rem 1.1rem; margin:1rem 0;}
+  .stretch-box .tag{display:inline-block; background:var(--purple); color:#fff; font-size:0.72rem; font-weight:600; letter-spacing:0.03em; padding:0.15rem 0.5rem; border-radius:4px; margin-bottom:0.5rem; text-transform:uppercase;}
+
+  .question{background:var(--soft-grey); border:1px solid var(--border); border-radius:8px; padding:1rem 1.2rem; margin:1.1rem 0;}
+  .question .qnum{display:inline-block; background:var(--navy); color:#fff; font-weight:700; font-size:0.82rem; width:1.9rem; height:1.9rem; line-height:1.9rem; text-align:center; border-radius:50%; margin-right:0.5rem;}
+  .answer-lines{
+    display:block; width:100%; box-sizing:border-box;
+    background-image:repeating-linear-gradient(to bottom, transparent, transparent 1.65em, var(--line) 1.7em);
+    background-color:transparent; min-height:5.1em; margin:0.6rem 0 0.2rem 0;
+    border:1px solid transparent; border-radius:6px; outline:none; resize:none; overflow:hidden;
+    font:inherit; color:inherit; line-height:1.7em; padding:0.05em 0.4em 0 0.2em;
+  }
+  .answer-lines:focus{border:1px solid var(--teal); background-color:#fbfdff; box-shadow:0 0 0 3px rgba(14,124,134,0.12);}
+  .answer-lines::placeholder{color:#9aa8b4; font-style:italic;}
+  .reveal-btn{background:var(--teal); color:#fff; border:none; border-radius:6px; padding:0.35rem 0.8rem; font-size:0.82rem; cursor:pointer; margin-top:0.5rem;}
+  .reveal-btn:hover{background:var(--teal-dark);}
+  .answer-panel{display:none; background:#fff; border:1px dashed #3f9a5c; border-radius:6px; padding:0.7rem 1rem; margin-top:0.6rem; font-size:0.92rem;}
+  .answer-panel.shown{display:block;}
+
+  /* ---------- self-marking question types (numeric/sci + multiple choice) ---------- */
+  .sm-row{display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; margin-top:0.6rem;}
+  .sm-input.answer-lines{width:15rem !important; max-width:100%; min-height:0 !important; height:2.3rem; margin:0 !important;
+    border:1px solid var(--line) !important; background:#fff !important; background-image:none !important;
+    border-radius:6px !important; padding:0 0.6rem !important; line-height:2.3rem !important;}
+  .sm-input.answer-lines:focus{border-color:var(--teal) !important;}
+  .sm-unit{font-weight:600; color:var(--navy);}
+  .check-btn{background:var(--navy); color:#fff; border:none; border-radius:6px; padding:0.45rem 1rem; font-size:0.85rem; cursor:pointer;}
+  .check-btn:hover{background:#0f2a45;}
+  .hint-btn{background:var(--soft-amber); color:#8a4f0e; border:1px solid #f0cf9f; border-radius:6px; padding:0.35rem 0.8rem; font-size:0.82rem; cursor:pointer; margin-top:0.5rem; margin-right:0.35rem;}
+  .hint-panel{display:none; background:var(--soft-amber); border-left:4px solid var(--amber); border-radius:6px; padding:0.6rem 0.9rem; margin-top:0.6rem; font-size:0.9rem;}
+  .hint-panel.shown{display:block;}
+  .sm-feedback{min-height:1.3rem; margin-top:0.45rem; font-weight:600; font-size:0.9rem;}
+  .sm-feedback.good{color:var(--good);} .sm-feedback.bad{color:var(--bad);}
+  .question.is-correct{border-color:#a9d8b8; background:var(--soft-green);}
+  .question.is-wrong{border-color:#efc2bd; background:var(--soft-bad);}
+  .mc-options{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:0.5rem; margin:0.7rem 0;}
+  .mc-options label{display:flex; align-items:center; gap:0.5rem; background:#fff; border:1px solid var(--border); border-radius:8px; padding:0.55rem 0.8rem; cursor:pointer;}
+  .mc-options label:hover{border-color:var(--teal);}
+  .unlock{display:none; margin-top:0.7rem; background:#fff; border:2px solid var(--good); border-radius:8px; padding:0.6rem 1rem;}
+  .unlock.shown{display:block;}
+  .unlock .eqn{border:none; font-size:1.4rem; margin:0.2rem 0;}
+  .unlock p{margin:0.2rem 0; font-size:0.92rem; text-align:center;}
+
+  figure{margin:1.2rem auto; text-align:center; max-width:560px;}
+  figure.wide{max-width:none;}
+  figure svg{max-width:100%; height:auto;}
+  figcaption{font-size:0.85rem; color:#5b6b78; margin-top:0.4rem;}
+  .fig-pair{display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; align-items:flex-end;}
+  .fig-pair figure{margin:0.6rem 0;}
+
+  table.eqtable{width:100%; border-collapse:collapse; font-size:0.9rem; margin-top:0.7rem;}
+  table.eqtable th, table.eqtable td{border:1px solid var(--border); padding:0.45rem 0.6rem; text-align:center;}
+  table.eqtable th{background:var(--soft-blue); color:var(--navy);}
+  .table-scroll{overflow-x:auto;}
+
+  dl.glossary dt{font-weight:700; color:var(--navy); margin-top:0.7rem;}
+  dl.glossary dd{margin-left:0; margin-bottom:0.2rem;}
+
+  /* ---------- permanent top bar ---------- */
+  .topbar{position:fixed; top:0; left:0; right:0; height:56px; z-index:200; background:#fff; border-bottom:1px solid var(--border); box-shadow:0 2px 8px rgba(0,0,0,0.06); display:flex; align-items:center; gap:0.6rem; padding:0 1rem;}
+  .topbar-actions{display:flex; align-items:center; gap:0.6rem; overflow-x:auto; flex:1 1 auto; min-width:0; height:100%; padding-right:0.4rem;}
+  .topbar .topbar-title{font-weight:700; color:var(--navy); font-size:0.92rem; white-space:nowrap; flex-shrink:0; margin-right:0.4rem;}
+  .topbar button{background:#fff; color:var(--navy); border:1px solid var(--border); border-radius:50px; padding:0.5rem 1rem; font-size:0.82rem; cursor:pointer; white-space:nowrap; flex-shrink:0;}
+  .topbar button:hover{background:var(--soft-blue);}
+  .topbar button.primary{background:var(--amber); color:#fff; border-color:var(--amber); font-weight:600; flex-shrink:0;}
+  .topbar button.primary:hover{background:#c0721c;}
+  .topbar .save-status, .topbar .progress-status{font-size:0.72rem; color:#5b6b78; white-space:nowrap; flex-shrink:0;}
+  .topbar .progress-status{background:var(--soft-green); color:var(--good); font-weight:600; padding:0.2rem 0.6rem; border-radius:50px;}
+  @media (max-width: 900px){ .topbar .save-status{display:none;} }
+  @media (max-width: 620px){ .topbar .topbar-title{display:none;} }
+  footer.page{font-size:0.8rem; color:#7c8b98; text-align:center; margin-top:2rem;}
+
+  /* ---------- simulation ---------- */
+  .sim-print-note{display:none;}
+  .sim-wrap{display:flex; gap:1.4rem; align-items:flex-start; flex-wrap:wrap; background:#0f1f30; border-radius:10px; padding:1.1rem; text-align:left;}
+  .sim-canvas-box{flex:0 1 auto; max-width:100%;}
+  .sim-canvas-box canvas{display:block; border-radius:8px; background:#0f1f30; max-width:100%; height:auto;}
+  .sim-controls{flex:1 1 220px; min-width:220px; color:#dceaf0; font-size:0.9rem;}
+  .sim-controls h4{margin:0 0 0.6rem 0; color:#fff; font-size:0.95rem;}
+  .sim-row{margin-bottom:0.9rem;}
+  .sim-row label{display:block; margin-bottom:0.3rem;}
+  .sim-row input[type="range"]{width:100%;}
+  .sim-readout{background:rgba(255,255,255,0.08); border-radius:6px; padding:0.6rem 0.8rem; font-size:0.86rem;}
+  .sim-btns{margin-top:0.8rem; display:flex; gap:0.5rem; flex-wrap:wrap;}
+  .sim-btns button{background:var(--teal); color:#fff; border:none; border-radius:6px; padding:0.4rem 0.9rem; font-size:0.82rem; cursor:pointer;}
+  .sim-btns button:hover{background:var(--teal-dark);}
+  .sim-btns button:disabled{opacity:0.45; cursor:default;}
+  .sim-btns button.alt{background:transparent; border:1px solid rgba(255,255,255,0.4); color:#dceaf0;}
+  .graph-row{display:flex; gap:1rem; flex-wrap:wrap; justify-content:center;}
+  .graph-row figure{margin:0.6rem 0; max-width:420px;}
+  .graph-row canvas{background:#fff; border:1px solid var(--border); border-radius:8px; max-width:100%; height:auto; display:block;}
+
+  @media print{
+    .topbar, .reveal-btn, .check-btn, .hint-btn, .sm-feedback, .hint-panel{display:none !important;}
+    main{max-width:100%; padding:0; margin:0;}
+    body{background:#fff; font-size:11.5pt; padding-top:0;}
+    section.topic{border:none; box-shadow:none; padding:0; margin:0 0 1.2rem 0;}
+    .question, figure, .keybox, .example{page-break-inside:avoid;}
+    .cover{page-break-after:always; border-radius:0;}
+    .answer-panel{display:block !important; border-style:solid;}
+    .unlock{display:block !important;}
+    .question.is-correct, .question.is-wrong{background:var(--soft-grey); border-color:var(--border);}
+    a{color:inherit; text-decoration:none;}
+    .answer-lines{border-color:transparent !important; box-shadow:none !important; color:#000;}
+    .answer-lines::placeholder{color:transparent;}
+    .sm-input.answer-lines{border:none !important; border-bottom:1px solid #5b6b78 !important; border-radius:0 !important;}
+    .name-box .fill{color:#000; border-bottom-color:#5b6b78;}
+    .name-box .fill::placeholder{color:transparent;}
+    .sim-wrap{display:none !important;}
+    .sim-print-note{display:block !important; text-align:center; font-size:0.85rem; color:#5b6b78; padding:0.9rem; border:1px dashed #b9c6d3; border-radius:8px; margin:0.6rem 0;}
+  }
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <div class="topbar-actions">
+    <span class="topbar-title">Magnetic Field Around a Wire</span>
+    <button onclick="revealAll()">Show all answers</button>
+    <button onclick="hideAll()">Hide all answers</button>
+    <button onclick="clearMyAnswers()">Clear my answers</button>
+    <button onclick="saveAnswersToFile()">💾 Save answers</button>
+    <button onclick="triggerLoadAnswers()">📂 Load answers</button>
+    <input type="file" id="loadFileInput" accept="application/json" style="display:none" onchange="handleLoadFile(event)">
+    <button id="btnLinkFile" style="display:none;" onclick="linkSaveFile()">🔗 Link a save file</button>
+    <span class="progress-status" id="progressStatus">Checked 0/0</span>
+    <span class="save-status" id="saveStatus">Checking autosave…</span>
+  </div>
+  <button class="primary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+</div>
+
+<main>
+  <section class="cover" id="cover">
+    <h1>Magnetic Field Around a Wire</h1>
+  </section>
+
+  <!-- ================= SECTION 1 ================= -->
+  <section class="topic" id="s1">
+    <h2>1. The field around a current-carrying wire</h2>
+    <p>Any wire carrying a current is surrounded by a magnetic field. The field lines are <strong>circles centred on the wire</strong>, in planes at right angles to it. Because these circles stick in and out of the page when the wire is drawn on the page, we show the field using two symbols:</p>
+
+    <div class="keyword"><b>Dot and cross notation:</b> a dot <b>•</b> means the field points <em>out of the page</em> (towards you — like seeing the tip of an arrow coming at you). A cross <b>×</b> means the field points <em>into the page</em> (away from you — like seeing the tail feathers of an arrow going away).</div>
+
+    <div class="fig-pair">
+      <figure style="max-width:520px;">
+        <svg viewBox="0 0 520 380" width="520" height="380" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif" role="img" aria-label="Vertical wire with upward conventional current; dots on the left, crosses on the right">
+          <defs>
+            <g id="bOut"><circle r="9" fill="#fff" stroke="#0e7c86" stroke-width="1.8"/><circle r="2.8" fill="#0e7c86"/></g>
+            <g id="bIn"><circle r="9" fill="#fff" stroke="#0e7c86" stroke-width="1.8"/><line x1="-5.2" y1="-5.2" x2="5.2" y2="5.2" stroke="#0e7c86" stroke-width="1.8"/><line x1="-5.2" y1="5.2" x2="5.2" y2="-5.2" stroke="#0e7c86" stroke-width="1.8"/></g>
+          </defs>
+          <!-- label for conventional current -->
+          <text x="260" y="22" text-anchor="middle" font-size="15" font-weight="700" fill="#d98324">conventional current, I</text>
+          <!-- wire -->
+          <rect x="254" y="34" width="12" height="300" rx="3" fill="#c98b4a" stroke="#173a5e" stroke-width="1.5"/>
+          <!-- current arrowheads (upwards) -->
+          <polygon points="260,96 247,120 273,120" fill="#d98324" stroke="#173a5e" stroke-width="1"/>
+          <polygon points="260,236 247,260 273,260" fill="#d98324" stroke="#173a5e" stroke-width="1"/>
+          <!-- left side: field out of page (dots); spacing grows with distance -->
+          <use href="#bOut" x="226" y="70"/><use href="#bOut" x="226" y="120"/><use href="#bOut" x="226" y="170"/><use href="#bOut" x="226" y="220"/><use href="#bOut" x="226" y="270"/><use href="#bOut" x="226" y="320"/>
+          <use href="#bOut" x="188" y="70"/><use href="#bOut" x="188" y="132"/><use href="#bOut" x="188" y="195"/><use href="#bOut" x="188" y="257"/><use href="#bOut" x="188" y="320"/>
+          <use href="#bOut" x="138" y="70"/><use href="#bOut" x="138" y="153"/><use href="#bOut" x="138" y="237"/><use href="#bOut" x="138" y="320"/>
+          <use href="#bOut" x="70" y="70"/><use href="#bOut" x="70" y="195"/><use href="#bOut" x="70" y="320"/>
+          <!-- right side: field into page (crosses) -->
+          <use href="#bIn" x="294" y="70"/><use href="#bIn" x="294" y="120"/><use href="#bIn" x="294" y="170"/><use href="#bIn" x="294" y="220"/><use href="#bIn" x="294" y="270"/><use href="#bIn" x="294" y="320"/>
+          <use href="#bIn" x="332" y="70"/><use href="#bIn" x="332" y="132"/><use href="#bIn" x="332" y="195"/><use href="#bIn" x="332" y="257"/><use href="#bIn" x="332" y="320"/>
+          <use href="#bIn" x="382" y="70"/><use href="#bIn" x="382" y="153"/><use href="#bIn" x="382" y="237"/><use href="#bIn" x="382" y="320"/>
+          <use href="#bIn" x="450" y="70"/><use href="#bIn" x="450" y="195"/><use href="#bIn" x="450" y="320"/>
+          <!-- legend -->
+          <use href="#bOut" x="60" y="362"/><text x="76" y="367" font-size="13" fill="#1f2933">B out of the page</text>
+          <use href="#bIn" x="330" y="362"/><text x="346" y="367" font-size="13" fill="#1f2933">B into the page</text>
+        </svg>
+        <figcaption>Fig. 1.1 A vertical wire carrying conventional current <i>I</i> up the page. The field comes out of the page on the left (•) and goes into the page on the right (×).</figcaption>
+      </figure>
+      <figure style="max-width:260px;">
+        <svg viewBox="0 0 260 270" width="260" height="270" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif" role="img" aria-label="Looking down on the wire: concentric anticlockwise field circles">
+          <circle cx="130" cy="130" r="32" fill="none" stroke="#0e7c86" stroke-width="2"/>
+          <circle cx="130" cy="130" r="64" fill="none" stroke="#0e7c86" stroke-width="2"/>
+          <circle cx="130" cy="130" r="104" fill="none" stroke="#0e7c86" stroke-width="2"/>
+          <!-- anticlockwise arrowheads at the top of each circle (pointing left) -->
+          <polygon points="123,98 134,92 134,104" fill="#0e7c86"/>
+          <polygon points="123,66 134,60 134,72" fill="#0e7c86"/>
+          <polygon points="123,26 134,20 134,32" fill="#0e7c86"/>
+          <!-- arrowheads at the bottom (pointing right) -->
+          <polygon points="137,162 126,156 126,168" fill="#0e7c86"/>
+          <polygon points="137,194 126,188 126,200" fill="#0e7c86"/>
+          <polygon points="137,234 126,228 126,240" fill="#0e7c86"/>
+          <!-- wire cross-section, current out of page -->
+          <circle cx="130" cy="130" r="11" fill="#c98b4a" stroke="#173a5e" stroke-width="1.5"/>
+          <circle cx="130" cy="130" r="3.4" fill="#173a5e"/>
+          <text x="130" y="262" text-anchor="middle" font-size="12" fill="#d98324" font-weight="700">I out of the page (towards you)</text>
+        </svg>
+        <figcaption>Fig. 1.2 Looking down on the same wire from above: the field lines are anticlockwise circles.</figcaption>
+      </figure>
+    </div>
+
+    <div class="keybox"><strong>Right-hand grip rule.</strong> Grip the wire with your right hand, thumb pointing in the direction of the <em>conventional</em> current. Your curled fingers show the direction of the magnetic field lines.</div>
+
+    <h3>Check your understanding</h3>
+    <div class="question">
+      <span class="qnum">1</span><strong>Use the right-hand grip rule to explain why Fig. 1.1 shows dots on the left of the wire and crosses on the right.</strong>
+      <textarea class="answer-lines" rows="3" placeholder="Type your answer here…"></textarea>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q1-ans')">Show answer</button>
+      <div class="answer-panel" id="q1-ans">Point the right thumb up the page (the direction of conventional current). The fingers curl around the wire: on the left side they come up <em>out of</em> the page towards you (•), and on the right side they go back <em>into</em> the page (×).</div>
+    </div>
+    <div class="question">
+      <span class="qnum">2</span><strong>In Fig. 1.1 the symbols get further apart the further they are from the wire. What is this telling you about the magnetic field?</strong>
+      <textarea class="answer-lines" rows="3" placeholder="Type your answer here…"></textarea>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q2-ans')">Show answer</button>
+      <div class="answer-panel" id="q2-ans">The closer together the field lines (symbols), the stronger the field. Wider spacing further away shows that the magnetic field strength <i>B</i> <strong>decreases with distance</strong> from the wire. The rest of this workbook works out <em>exactly how</em> it decreases.</div>
+    </div>
+  </section>
+
+  <!-- ================= SECTION 2 ================= -->
+  <section class="topic" id="s2">
+    <h2>2. What does the field strength depend on?</h2>
+    <p>Magnetic fields are produced by <strong>moving charges</strong>. A wire connected in a circuit has lots of quantities we could measure — the potential difference across it, its resistance, the power it dissipates, the current through it. Only one of these is directly responsible for the field.</p>
+
+    <h3>Check your understanding</h3>
+    <div class="question mc-question" id="q3" data-answer="I" data-unlock="unlock3">
+      <span class="qnum">3</span><strong>The magnetic field strength <i>B</i> around the wire originally depends on which quantity?</strong>
+      <div class="mc-options">
+        <label><input type="radio" name="q3opt" value="I"> Current, <i>I</i></label>
+        <label><input type="radio" name="q3opt" value="V"> Potential difference, <i>V</i></label>
+        <label><input type="radio" name="q3opt" value="R"> Resistance, <i>R</i></label>
+        <label><input type="radio" name="q3opt" value="P"> Power, <i>P</i></label>
+      </div>
+      <button class="check-btn no-print" onclick="checkMC(this)">Check</button>
+      <div class="sm-feedback" aria-live="polite"></div>
+      <div class="unlock" id="unlock3">
+        <div class="eqn"><i>B</i> ∝ <i>I</i></div>
+        <p>Double the current → double the field strength.</p>
+      </div>
+      <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q3-ans')">Show answer</button>
+      <div class="hint-panel">A magnetic field is produced by <em>moving charge</em>. Which of these four quantities measures the rate at which charge flows?</div>
+      <div class="answer-panel" id="q3-ans"><strong>Current, <i>I</i>.</strong> Current is the rate of flow of charge, and moving charge is what creates the magnetic field. More charge passing each second → a stronger field, so <i>B</i> ∝ <i>I</i>.</div>
+    </div>
+
+    <div class="question">
+      <span class="qnum">4</span><strong>A wire is connected to a 12 V supply, but there is a break elsewhere in the circuit. Is there a magnetic field around the wire? Explain why <i>V</i>, <i>R</i> and <i>P</i> only affect <i>B</i> indirectly.</strong>
+      <textarea class="answer-lines" rows="4" placeholder="Type your answer here…"></textarea>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q4-ans')">Show answer</button>
+      <div class="answer-panel" id="q4-ans">No — with a break in the circuit no current flows, so no charges are moving and there is no magnetic field, even though there is a p.d. across the supply. <i>V</i>, <i>R</i> and <i>P</i> can only change <i>B</i> by changing the current (e.g. <i>I</i> = <i>V</i>/<i>R</i>), so current is the quantity <i>B</i> really depends on.</div>
+    </div>
+  </section>
+
+  <!-- ================= SECTION 3 ================= -->
+  <section class="topic" id="s3">
+    <h2>3. How does the field change with distance? A shells model</h2>
+    <p>Now look straight down on the wire, so we see its cross-section with the current coming out of the page towards us (as in Fig. 1.2). In this model, the current produces a fixed "amount" of magnetic field, shown by a set of coloured dots. <strong>The same amount of field has to be shared out around every circle surrounding the wire</strong> — so each ring-shaped shell gets the same number of dots.</p>
+    <p>The <strong>magnetic field strength</strong> at a point is represented by how <em>concentrated</em> the dots are there: dots per unit area.</p>
+
+    <h3>Live simulation: field shells around a wire</h3>
+    <figure class="wide">
+      <div class="sim-wrap">
+        <div class="sim-canvas-box"><canvas id="shellCanvas" width="440" height="440" aria-label="Top-down view of the wire with field dots in shells"></canvas></div>
+        <div class="sim-controls">
+          <h4>Field shells</h4>
+          <div class="sim-row">
+            <label for="currentSlider">Current <i>I</i> = <span id="currentVal">4</span> A</label>
+            <input type="range" id="currentSlider" min="1" max="6" step="1" value="4">
+          </div>
+          <div class="sim-readout" id="shellReadout">Click <b>Add next shell</b> to start.</div>
+          <div class="sim-btns">
+            <button id="btnNextShell">Add next shell</button>
+            <button id="btnAllShells">Fill all shells</button>
+            <button id="btnResetShells" class="alt">Reset</button>
+          </div>
+          <p style="font-size:0.8rem; color:#9fb6c6; margin-top:0.9rem;">Shell 1: 0 → r &nbsp;·&nbsp; Shell 2: r → 2r &nbsp;·&nbsp; … &nbsp;·&nbsp; Shell 5: 4r → 5r.<br>Every shell gets the <b>same</b> number of dots. Change the current to see what happens to that number.</p>
+        </div>
+      </div>
+      <p class="sim-print-note">Interactive simulation — open the online version of this workbook to run it.</p>
+      <figcaption>Fig. 3.1 Looking down on the wire (current out of the page). Each shell is filled with the same number of randomly placed field dots.</figcaption>
+    </figure>
+
+    <div class="table-scroll">
+    <table class="eqtable" id="shellTable">
+      <thead>
+        <tr><th>Shell</th><th>Between</th><th>Dots in shell<br>(field per shell)</th><th>Shell area<br>/ r²</th><th>Dots per r²<br>(field strength <i>B</i>)</th><th>Middle radius<br>/ r</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    </div>
+
+    <div class="graph-row">
+      <figure>
+        <canvas id="graphPerShell" width="400" height="260" aria-label="Bar chart of dots per shell"></canvas>
+        <figcaption>Fig. 3.2 Amount of field in each shell.</figcaption>
+      </figure>
+      <figure>
+        <canvas id="graphStrength" width="400" height="260" aria-label="Graph of field strength against distance"></canvas>
+        <figcaption>Fig. 3.3 Field strength (dot concentration) against distance from the wire. The curve appears once all five shells are filled.</figcaption>
+      </figure>
+    </div>
+
+    <h3>Check your understanding</h3>
+    <div class="question sm-question" data-qtype="number" data-answer="3" id="q5">
+      <span class="qnum">5</span><strong>Shell 1 is a circle of radius r, with area πr². Shell 2 is the ring between r and 2r. How many times bigger is the area of shell 2 than shell 1?</strong>
+      <div class="sm-row">
+        <input type="text" class="sm-input answer-lines" inputmode="decimal" placeholder="Type your answer…" aria-label="Answer to question 5">
+        <span class="sm-unit">times</span>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+      </div>
+      <div class="sm-feedback" aria-live="polite"></div>
+      <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q5-ans')">Show answer</button>
+      <div class="hint-panel">Area of the ring = (area of the big circle, radius 2r) − (area of the small circle, radius r).</div>
+      <div class="answer-panel" id="q5-ans">Area of shell 2 = π(2r)² − πr² = 4πr² − πr² = 3πr². That is <strong>3 times</strong> the area of shell 1.</div>
+    </div>
+
+    <div class="question sm-question" data-qtype="number" data-answer="9" id="q6">
+      <span class="qnum">6</span><strong>Shell 5 is the ring between 4r and 5r. How many times bigger is its area than shell 1?</strong>
+      <div class="sm-row">
+        <input type="text" class="sm-input answer-lines" inputmode="decimal" placeholder="Type your answer…" aria-label="Answer to question 6">
+        <span class="sm-unit">times</span>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+      </div>
+      <div class="sm-feedback" aria-live="polite"></div>
+      <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q6-ans')">Show answer</button>
+      <div class="hint-panel">Same method as question 5, using radii 5r and 4r. The "Shell area / r²" column in the table can help you check.</div>
+      <div class="answer-panel" id="q6-ans">Area of shell 5 = π(5r)² − π(4r)² = 25πr² − 16πr² = 9πr², so <strong>9 times</strong> the area of shell 1.</div>
+    </div>
+
+    <div class="question">
+      <span class="qnum">7</span><strong>Every shell holds the same number of dots (Fig. 3.2 is flat). Describe and explain what happens to the dot concentration — the field strength — as you move away from the wire (Fig. 3.3).</strong>
+      <textarea class="answer-lines" rows="4" placeholder="Type your answer here…"></textarea>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q7-ans')">Show answer</button>
+      <div class="answer-panel" id="q7-ans">The same amount of field is shared out over a bigger and bigger area (1, 3, 5, 7, 9 times shell 1's area), so the dots become more spread out and the field strength falls with distance. Each shell's area is its circumference at the middle radius (2π<i>r</i>) × its thickness (r), so the dot density is the same number of dots ÷ 2π<i>r</i> — the field strength is inversely proportional to the distance <i>r</i>.</div>
+    </div>
+
+    <div class="keyword"><b>Reading the curve:</b> the dashed curve in Fig. 3.3 passes through the shell values. Use it to compare the field strength at 1r, 2r, 3r, 4r and 5r for the next two questions. You can type a fraction (like 1/3) or a decimal.</div>
+
+    <div class="question sm-question" data-qtype="number" data-answer="0.5" data-tol="0.02" id="q8">
+      <span class="qnum">8</span><strong>The field strength at a distance of 1r from the wire is <i>B</i><sub>1</sub>. The field strength at 2r is ______ × <i>B</i><sub>1</sub>.</strong>
+      <div class="sm-row">
+        <input type="text" class="sm-input answer-lines" inputmode="decimal" placeholder="Type your answer…" aria-label="Answer to question 8">
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+      </div>
+      <div class="sm-feedback" aria-live="polite"></div>
+      <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q8-ans')">Show answer</button>
+      <div class="hint-panel">At 2r the same amount of field is spread around a circle with twice the circumference.</div>
+      <div class="answer-panel" id="q8-ans">The circumference doubles (2π × 2r = 2 × 2πr), so the field strength halves: <strong>0.5 × <i>B</i><sub>1</sub></strong>.</div>
+    </div>
+
+    <div class="question sm-question" data-qtype="number" data-answer="0.25" data-tol="0.02" id="q9">
+      <span class="qnum">9</span><strong>The field strength at 4r is ______ × <i>B</i><sub>1</sub>.</strong>
+      <div class="sm-row">
+        <input type="text" class="sm-input answer-lines" inputmode="decimal" placeholder="Type your answer…" aria-label="Answer to question 9">
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+      </div>
+      <div class="sm-feedback" aria-live="polite"></div>
+      <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q9-ans')">Show answer</button>
+      <div class="hint-panel">How many times bigger is the circumference at 4r than at 1r?</div>
+      <div class="answer-panel" id="q9-ans">The circumference is 4 times bigger, so the field strength is a quarter: <strong>0.25 × <i>B</i><sub>1</sub></strong>.</div>
+    </div>
+
+    <div class="question mc-question" id="q10" data-answer="inv-r" data-unlock="unlock10">
+      <span class="qnum">10</span><strong>Which relationship describes how the field strength <i>B</i> depends on the distance <i>r</i> from the wire?</strong>
+      <div class="mc-options">
+        <label><input type="radio" name="q10opt" value="r"> <i>B</i> ∝ <i>r</i></label>
+        <label><input type="radio" name="q10opt" value="inv-r"> <i>B</i> ∝ 1/<i>r</i></label>
+        <label><input type="radio" name="q10opt" value="inv-r2"> <i>B</i> ∝ 1/<i>r</i>²</label>
+        <label><input type="radio" name="q10opt" value="r2"> <i>B</i> ∝ <i>r</i>²</label>
+      </div>
+      <button class="check-btn no-print" onclick="checkMC(this)">Check</button>
+      <div class="sm-feedback" aria-live="polite"></div>
+      <div class="unlock" id="unlock10">
+        <div class="eqn"><i>B</i> ∝ <span class="frac"><span>1</span><span>2π<i>r</i></span></span></div>
+        <p>The field is shared out around a circle of circumference 2π<i>r</i>.</p>
+      </div>
+      <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q10-ans')">Show answer</button>
+      <div class="hint-panel">Look at your answers to questions 8 and 9: doubling the distance halved <i>B</i>; four times the distance gave a quarter.</div>
+      <div class="answer-panel" id="q10-ans"><strong><i>B</i> ∝ 1/<i>r</i></strong> — doubling <i>r</i> halves <i>B</i>. More precisely, the same field is spread around a circumference of 2π<i>r</i>, so <i>B</i> ∝ 1/(2π<i>r</i>).</div>
+    </div>
+  </section>
+
+  <!-- ================= SECTION 4 ================= -->
+  <section class="topic" id="s4">
+    <h2>4. Putting the two together</h2>
+    <p>We now have two results for the field around a long straight wire:</p>
+    <div class="keybox">
+      <strong>From Section 2:</strong> <i>B</i> ∝ <i>I</i> &nbsp; (more current → stronger field)<br>
+      <strong>From Section 3:</strong> <i>B</i> ∝ 1/(2π<i>r</i>) &nbsp; (field shared around a bigger circle → weaker field)
+    </div>
+    <p>Since <i>B</i> is proportional to each of these, it is proportional to their product:</p>
+    <div class="eqn big"><i>B</i> ∝ <span class="frac"><span><i>I</i></span><span>2π<i>r</i></span></span></div>
+
+    <h3>Check your understanding</h3>
+    <div class="question">
+      <span class="qnum">11</span><strong>Explain, in your own words, where the "2π<i>r</i>" in this relationship comes from.</strong>
+      <textarea class="answer-lines" rows="3" placeholder="Type your answer here…"></textarea>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q11-ans')">Show answer</button>
+      <div class="answer-panel" id="q11-ans">The field lines form circles around the wire. At a distance <i>r</i>, the field produced by the current is shared out around a circle of circumference 2π<i>r</i> — so the bigger that circle, the weaker the field at any one point on it.</div>
+    </div>
+
+    <div class="question sm-question" data-qtype="number" data-answer="1" data-tol="0.01" id="q12">
+      <span class="qnum">12</span><strong>The current in a wire is doubled, and you measure the field at twice the distance. The field strength changes by a factor of ______.</strong>
+      <div class="sm-row">
+        <input type="text" class="sm-input answer-lines" inputmode="decimal" placeholder="Type your answer…" aria-label="Answer to question 12">
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+      </div>
+      <div class="sm-feedback" aria-live="polite"></div>
+      <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q12-ans')">Show answer</button>
+      <div class="hint-panel">Deal with each change separately: what does doubling <i>I</i> do to <i>B</i>? What does doubling <i>r</i> do? Then multiply the two factors.</div>
+      <div class="answer-panel" id="q12-ans">Doubling <i>I</i> → × 2. Doubling <i>r</i> → × ½. Overall: 2 × ½ = <strong>1</strong> — the field strength is unchanged.</div>
+    </div>
+
+    <div class="question sm-question" data-qtype="number" data-answer="6" data-tol="0.01" id="q13">
+      <span class="qnum">13</span><strong>The current is tripled and the distance from the wire is halved. The field strength changes by a factor of ______.</strong>
+      <div class="sm-row">
+        <input type="text" class="sm-input answer-lines" inputmode="decimal" placeholder="Type your answer…" aria-label="Answer to question 13">
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+      </div>
+      <div class="sm-feedback" aria-live="polite"></div>
+      <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q13-ans')">Show answer</button>
+      <div class="hint-panel">Halving <i>r</i> halves the denominator 2π<i>r</i>. What does that do to the whole fraction?</div>
+      <div class="answer-panel" id="q13-ans">Tripling <i>I</i> → × 3. Halving <i>r</i> → × 2. Overall: 3 × 2 = <strong>6</strong> times stronger.</div>
+    </div>
+  </section>
+
+  <!-- ================= SECTION 5 ================= -->
+  <section class="topic" id="s5">
+    <h2>5. The constant of proportionality: μ<sub>0</sub></h2>
+    <p>To turn a proportionality into an equation, we need a constant. For the magnetic field in a vacuum (and, to a very good approximation, in air), this constant is the <strong>permeability of free space</strong>, μ<sub>0</sub> ("mu-nought").</p>
+
+    <div class="keyword"><b>Permeability of free space, μ<sub>0</sub>:</b> a constant that describes how readily a magnetic field is set up in a vacuum by a current. μ<sub>0</sub> = 4π × 10<sup>−7</sup> T m A<sup>−1</sup> (≈ 1.26 × 10<sup>−6</sup> T m A<sup>−1</sup>). It is given in your data booklet.</div>
+
+    <p>Replacing "∝" with "= μ<sub>0</sub> ×" completes the equation:</p>
+    <div class="eqn big"><i>B</i> = <span class="frac"><span>μ<sub>0</sub><i>I</i></span><span>2π<i>r</i></span></span></div>
+    <div class="keybox"><strong>The finished result.</strong> <i>B</i> is the magnetic field strength (T), <i>I</i> the current (A), <i>r</i> the perpendicular distance from the wire (m) and μ<sub>0</sub> the permeability of free space. This is the equation in your data booklet for the field around a long, straight current-carrying wire. <br><em>Handy shortcut:</em> μ<sub>0</sub>/(2π) = 2 × 10<sup>−7</sup> T m A<sup>−1</sup> exactly.</div>
+
+    <div class="example">
+      <span class="tag">Worked example 5.1</span>
+      <p>A long straight wire carries a current of 2.0 A. Find the magnetic field strength 1.0 cm from the wire.</p>
+      <p><strong>Answer:</strong><br>
+      Convert the distance: <i>r</i> = 1.0 cm = 0.010 m.<br>
+      <i>B</i> = μ<sub>0</sub><i>I</i> / (2π<i>r</i>)<br>
+      <i>B</i> = (4π × 10<sup>−7</sup> × 2.0) / (2π × 0.010)</p>
+    </div>
+
+    <div class="keyword"><b>Typing standard form:</b> write your answer like <b>5.0 x 10^-5</b>. You can also use × or *, and brackets like <b>10^(-5)</b> or <b>10(-5)</b>; spaces don't matter. Calculator E-notation (5.0E-5) and <b>10-5</b> without a ^ or brackets won't be accepted.</div>
+
+    <h3>Check your understanding</h3>
+    <div class="question sm-question" data-qtype="sci" data-answer="5.0e-5" id="q14">
+      <span class="qnum">14</span><strong>A long straight wire carries a current of 5.0 A. Calculate the magnetic field strength 2.0 cm from the wire. Give your answer in standard form.</strong>
+      <div class="sm-row">
+        <input type="text" class="sm-input answer-lines" placeholder="e.g. 3.0 x 10^-4" aria-label="Answer to question 14">
+        <span class="sm-unit">T</span>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+      </div>
+      <div class="sm-feedback" aria-live="polite"></div>
+      <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q14-ans')">Show answer</button>
+      <div class="hint-panel">Convert 2.0 cm to metres first. Then substitute into <i>B</i> = μ<sub>0</sub><i>I</i>/(2π<i>r</i>), as in the worked example.</div>
+      <div class="answer-panel" id="q14-ans"><i>r</i> = 0.020 m.<br><i>B</i> = (4π × 10<sup>−7</sup> × 5.0) / (2π × 0.020) = (2 × 10<sup>−7</sup> × 5.0) / 0.020 = <strong>5.0 × 10<sup>−5</sup> T</strong></div>
+    </div>
+
+    <div class="question sm-question" data-qtype="number" data-answer="1.0" data-tol="0.02" id="q15">
+      <span class="qnum">15</span><strong>The magnetic field strength 5.0 cm from a long straight wire is 4.0 × 10<sup>−6</sup> T. Calculate the current in the wire.</strong>
+      <div class="sm-row">
+        <input type="text" class="sm-input answer-lines" inputmode="decimal" placeholder="Type your answer…" aria-label="Answer to question 15">
+        <span class="sm-unit">A</span>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+      </div>
+      <div class="sm-feedback" aria-live="polite"></div>
+      <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q15-ans')">Show answer</button>
+      <div class="hint-panel">Rearrange first: <i>I</i> = 2π<i>rB</i> / μ<sub>0</sub>. Remember <i>r</i> in metres.</div>
+      <div class="answer-panel" id="q15-ans"><i>I</i> = 2π<i>rB</i> / μ<sub>0</sub> = (2π × 0.050 × 4.0 × 10<sup>−6</sup>) / (4π × 10<sup>−7</sup>) = <strong>1.0 A</strong></div>
+    </div>
+
+    <div class="question sm-question" data-qtype="number" data-answer="0.10" data-tol="0.02" id="q16">
+      <span class="qnum">16</span><strong>A wire carries a current of 10 A. At what distance from the wire is the magnetic field strength 2.0 × 10<sup>−5</sup> T? Give your answer in metres.</strong>
+      <div class="sm-row">
+        <input type="text" class="sm-input answer-lines" inputmode="decimal" placeholder="Type your answer…" aria-label="Answer to question 16">
+        <span class="sm-unit">m</span>
+        <button class="check-btn no-print" onclick="checkAnswer(this)">Check</button>
+      </div>
+      <div class="sm-feedback" aria-live="polite"></div>
+      <button class="hint-btn no-print" onclick="toggleHint(this)">Hint</button>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q16-ans')">Show answer</button>
+      <div class="hint-panel">Rearrange for <i>r</i>: <i>r</i> = μ<sub>0</sub><i>I</i> / (2π<i>B</i>).</div>
+      <div class="answer-panel" id="q16-ans"><i>r</i> = μ<sub>0</sub><i>I</i> / (2π<i>B</i>) = (4π × 10<sup>−7</sup> × 10) / (2π × 2.0 × 10<sup>−5</sup>) = <strong>0.10 m</strong> (10 cm)</div>
+    </div>
+
+    <div class="question">
+      <span class="qnum">17</span><strong>Rearrange <i>B</i> = μ<sub>0</sub><i>I</i>/(2π<i>r</i>) to make μ<sub>0</sub> the subject, and use it to show that the unit of μ<sub>0</sub> is T m A<sup>−1</sup>.</strong>
+      <textarea class="answer-lines" rows="4" placeholder="Type your answer here…"></textarea>
+      <button class="reveal-btn no-print" onclick="toggleAnswer('q17-ans')">Show answer</button>
+      <div class="answer-panel" id="q17-ans">μ<sub>0</sub> = 2π<i>rB</i> / <i>I</i>. 2π has no unit, so the unit is (m × T) / A = <strong>T m A<sup>−1</sup></strong>.</div>
+    </div>
+  </section>
+
+  <!-- ================= EXTENSION ================= -->
+  <section class="topic" id="sX">
+    <h2>Extension: comparing with the intensity model</h2>
+    <div class="stretch-box">
+      <span class="tag">Extension</span>
+      <p><strong>How is this shells model of a magnetic field similar to, and different from, our intensity model?</strong></p>
+      <p>Some things you might think about:</p>
+      <ul>
+        <li>In each model, what is the "something" that is being shared out, and what sets how much of it there is?</li>
+        <li>What shape does it get spread over at a distance <i>r</i> — and is that a length, an area or a surface?</li>
+        <li>What stays the same from one shell to the next, and what changes?</li>
+        <li>What does the "concentration" represent in each model, and how would you expect it to depend on distance?</li>
+        <li>Where does the factor in the denominator come from in each equation?</li>
+        <li>Where does each model stop being a good description of what is really happening?</li>
+      </ul>
+    </div>
+    <div class="question">
+      <span class="qnum">18</span><strong>Write your comparison: at least two similarities and two differences.</strong>
+      <textarea class="answer-lines long" rows="6" placeholder="Type your answer here…"></textarea>
+    </div>
+  </section>
+
+  <!-- ================= SUMMARY ================= -->
+  <section class="topic" id="sS">
+    <h2>Summary: what you should now be able to do</h2>
+    <div class="keybox">
+<ul style="margin:0; padding-left:1.2rem;">
+        <li>Represent the magnetic field around a straight current-carrying wire using dot (•) and cross (×) notation.</li>
+        <li>Explain why the magnetic field strength <i>B</i> is proportional to the current <i>I</i>.</li>
+        <li>Use a "shells" model to explain why <i>B</i> is proportional to 1/(2π<i>r</i>).</li>
+        <li>Combine these to derive <i>B</i> = μ<sub>0</sub><i>I</i> / (2π<i>r</i>), and use it in calculations.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= GLOSSARY ================= -->
+  <section class="topic" id="sG">
+    <h2>Glossary</h2>
+    <dl class="glossary">
+      <dt>Magnetic field strength, <i>B</i></dt><dd>A measure of how strong a magnetic field is at a point; unit tesla (T). Shown by how close together field lines are.</dd>
+      <dt>Conventional current</dt><dd>The direction positive charge would flow: from the positive terminal of the supply, round the circuit, to the negative terminal.</dd>
+      <dt>Dot (•) / cross (×) notation</dt><dd>Symbols for a field pointing out of the page (•) or into the page (×).</dd>
+      <dt>Right-hand grip rule</dt><dd>Thumb along the conventional current; curled fingers give the direction of the magnetic field around the wire.</dd>
+      <dt>Permeability of free space, μ<sub>0</sub></dt><dd>The constant of proportionality in <i>B</i> = μ<sub>0</sub><i>I</i>/(2π<i>r</i>); μ<sub>0</sub> = 4π × 10<sup>−7</sup> T m A<sup>−1</sup>.</dd>
+    </dl>
+  </section>
+
+  <footer class="page no-print">Magnetic Field Around a Wire Workbook · Companion resources: <em>Faraday's Law and Electromagnetic Induction</em>, <em>The Millikan Experiment</em>.</footer>
+</main>
+
+<script>
+/* ================= Sticky top bar: reveal/hide + answer persistence =================
+   Three layers: linked save file (Chrome/Edge), localStorage, manual Save/Load.
+   See the project's topbar-component.md for the full write-up of this engine.
+   ======================================================================================= */
+const WORKBOOK_ID = 'magnetic-field-around-a-wire';
+const STORAGE_PREFIX = 'ib-workbook-' + WORKBOOK_ID + '-v1-';
+let fillableEls = [];
+
+function toggleAnswer(id){ document.getElementById(id).classList.toggle('shown'); }
+function revealAll(){
+  document.querySelectorAll('.answer-panel, .solution').forEach(function(el){ el.classList.add('shown'); });
+  document.body.classList.add('answers-visible');
+}
+function hideAll(){
+  document.querySelectorAll('.answer-panel, .solution').forEach(function(el){ el.classList.remove('shown'); });
+  document.body.classList.remove('answers-visible');
+}
+
+function storageAvailable(){
+  try{ const k = '__test__' + STORAGE_PREFIX; localStorage.setItem(k, '1'); localStorage.removeItem(k); return true; }
+  catch(e){ return false; }
+}
+const canStore = storageAvailable();
+
+function autosize(el){
+  if(el.tagName !== 'TEXTAREA') return;
+  el.style.height = 'auto';
+  el.style.height = Math.max(el.scrollHeight, el.offsetHeight) + 'px';
+}
+
+function initFillables(){
+  // .sm-input fields also carry .answer-lines, so this selector covers them too.
+  fillableEls = Array.prototype.slice.call(document.querySelectorAll('.answer-lines, .name-box .fill'));
+  fillableEls.forEach(function(el, i){
+    const key = STORAGE_PREFIX + i;
+    el.dataset.storeKey = key;
+    if(canStore){ const saved = localStorage.getItem(key); if(saved !== null){ el.value = saved; } }
+    autosize(el);
+    el.addEventListener('input', function(){
+      autosize(el);
+      if(canStore){ try{ localStorage.setItem(el.dataset.storeKey, el.value); } catch(e){} }
+      scheduleFileWrite();
+    });
+  });
+}
+
+function getAnswersArray(){ return fillableEls.map(function(el){ return el.value; }); }
+function applyAnswersArray(arr){
+  fillableEls.forEach(function(el, i){ if(arr && arr[i] !== undefined){ el.value = arr[i]; autosize(el); } });
+}
+
+/* ---------- extra state: self-marking attempted/correct + multiple-choice selections ---------- */
+function allMarked(){ return Array.prototype.slice.call(document.querySelectorAll('.sm-question, .mc-question')); }
+function getExtraState(){
+  const qstate = {};
+  allMarked().forEach(function(q){
+    const s = { a: q.dataset.attempted === '1', c: q.dataset.correct === '1' };
+    if(q.classList.contains('mc-question')){
+      const sel = q.querySelector('input[type=radio]:checked');
+      s.sel = sel ? sel.value : '';
+    }
+    qstate[q.id] = s;
+  });
+  return { qstate: qstate };
+}
+function resetQuestionUI(q){
+  q.dataset.attempted = ''; q.dataset.correct = '';
+  q.classList.remove('is-correct', 'is-wrong');
+  const fb = q.querySelector('.sm-feedback'); fb.textContent = ''; fb.className = 'sm-feedback';
+  if(q.dataset.unlock){ document.getElementById(q.dataset.unlock).classList.remove('shown'); }
+}
+function applyExtraState(data){
+  const qs = (data && data.qstate) || {};
+  allMarked().forEach(function(q){
+    resetQuestionUI(q);
+    const s = qs[q.id];
+    if(q.classList.contains('mc-question')){
+      q.querySelectorAll('input[type=radio]').forEach(function(r){ r.checked = !!(s && s.sel === r.value); });
+    }
+    if(s && s.a){ gradeQuestion(q, false); }
+  });
+  updateProgress();
+  persistExtra();
+}
+function persistExtra(){
+  if(canStore){ try{ localStorage.setItem(STORAGE_PREFIX + 'extra', JSON.stringify(getExtraState())); } catch(e){} }
+}
+function restoreExtraFromStorage(){
+  if(!canStore) return;
+  try{
+    const raw = localStorage.getItem(STORAGE_PREFIX + 'extra');
+    if(raw){ applyExtraState(JSON.parse(raw)); }
+  } catch(e){}
+}
+
+function buildPayload(){
+  const payload = {
+    workbook: WORKBOOK_ID,
+    savedAt: new Date().toISOString(),
+    studentName: document.getElementById('studentName') ? document.getElementById('studentName').value : '',
+    answers: getAnswersArray()
+  };
+  if(typeof getExtraState === 'function') Object.assign(payload, getExtraState());
+  return payload;
+}
+
+function clearMyAnswers(){
+  if(!confirm('Clear everything you have typed? This cannot be undone.')) return;
+  fillableEls.forEach(function(el){
+    el.value = ''; autosize(el);
+    if(canStore){ try{ localStorage.removeItem(el.dataset.storeKey); } catch(e){} }
+  });
+  if(typeof applyExtraState === 'function') applyExtraState({});
+  scheduleFileWrite();
+}
+
+/* ---------- manual save-to-file / load-from-file ---------- */
+function downloadJSON(obj, filename){
+  const blob = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+}
+function saveAnswersToFile(){
+  const nameEl = document.getElementById('studentName');
+  const name = (nameEl ? nameEl.value : '').trim();
+  const safe = name ? name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : 'my';
+  downloadJSON(buildPayload(), WORKBOOK_ID + '-answers-' + safe + '.json');
+}
+function triggerLoadAnswers(){ document.getElementById('loadFileInput').click(); }
+function handleLoadFile(evt){
+  const file = evt.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(){
+    try{
+      const data = JSON.parse(reader.result);
+      applyAnswersArray(data.answers || []);
+      if(typeof applyExtraState === 'function') applyExtraState(data);
+      if(canStore){ fillableEls.forEach(function(el){ try{ localStorage.setItem(el.dataset.storeKey, el.value); } catch(e){} }); }
+      alert('Loaded your saved answers from "' + file.name + '".');
+    } catch(e){
+      alert('Sorry, that file could not be read as a saved-answers file.');
+    }
+  };
+  reader.readAsText(file);
+  evt.target.value = '';
+}
+
+/* ---------- linked save file (Chrome/Edge — File System Access API) ---------- */
+let fileHandle = null;
+let pendingHandle = null;
+const fsaSupported = ('showSaveFilePicker' in window);
+let fileWriteTimer = null;
+
+function idbOpen(){
+  return new Promise(function(resolve, reject){
+    const rq = indexedDB.open('ib-workbook-fs', 1);
+    rq.onupgradeneeded = function(){ if(!rq.result.objectStoreNames.contains('handles')) rq.result.createObjectStore('handles'); };
+    rq.onsuccess = function(){ resolve(rq.result); };
+    rq.onerror = function(){ reject(rq.error); };
+  });
+}
+function idbGetHandle(){
+  return idbOpen().then(function(db){
+    return new Promise(function(resolve){
+      const tx = db.transaction('handles', 'readonly');
+      const rq = tx.objectStore('handles').get(WORKBOOK_ID);
+      rq.onsuccess = function(){ resolve(rq.result || null); };
+      rq.onerror = function(){ resolve(null); };
+    });
+  }).catch(function(){ return null; });
+}
+function idbSetHandle(handle){
+  return idbOpen().then(function(db){
+    const tx = db.transaction('handles', 'readwrite');
+    tx.objectStore('handles').put(handle, WORKBOOK_ID);
+  }).catch(function(){});
+}
+function updateLinkButton(){
+  const btn = document.getElementById('btnLinkFile');
+  if(!btn) return;
+  btn.textContent = fileHandle ? '🔗 Save file linked' : (pendingHandle ? '🔗 Reconnect save file' : '🔗 Link a save file');
+}
+function updateSaveStatus(){
+  const status = document.getElementById('saveStatus');
+  if(!status) return;
+  if(fileHandle){ status.textContent = 'Autosaving to your linked file'; }
+  else if(canStore){ status.textContent = 'Autosaving in this browser — click 💾 Save often as a backup'; }
+  else { status.textContent = 'Autosave unavailable here — use 💾 Save / 📂 Load to keep your work'; }
+}
+function tryRestoreLinkedFile(){
+  if(!fsaSupported) return Promise.resolve();
+  return idbGetHandle().then(function(handle){
+    if(!handle) return;
+    return handle.queryPermission({mode:'readwrite'}).then(function(perm){
+      if(perm === 'granted'){ fileHandle = handle; } else { pendingHandle = handle; }
+    }).catch(function(){});
+  }).then(function(){ updateLinkButton(); updateSaveStatus(); });
+}
+function linkSaveFile(){
+  if(!fsaSupported) return;
+  const proceed = pendingHandle
+    ? pendingHandle.requestPermission({mode:'readwrite'}).then(function(req){
+        if(req === 'granted'){ fileHandle = pendingHandle; pendingHandle = null; }
+      })
+    : window.showSaveFilePicker({
+        suggestedName: WORKBOOK_ID + '-answers.json',
+        types: [{ description: 'Workbook answers', accept: {'application/json': ['.json']} }]
+      }).then(function(handle){ fileHandle = handle; return idbSetHandle(handle); });
+  proceed.then(function(){ updateLinkButton(); updateSaveStatus(); return writeToLinkedFile(); })
+         .catch(function(){ /* user cancelled */ });
+}
+function scheduleFileWrite(){
+  if(!fileHandle) return;
+  clearTimeout(fileWriteTimer);
+  fileWriteTimer = setTimeout(writeToLinkedFile, 800);
+}
+function writeToLinkedFile(){
+  if(!fileHandle) return Promise.resolve();
+  return fileHandle.createWritable().then(function(writable){
+    return writable.write(JSON.stringify(buildPayload(), null, 2)).then(function(){ return writable.close(); });
+  }).catch(function(e){ console.warn('Could not write to linked save file', e); });
+}
+
+/* ================= Self-marking: numeric, standard form, multiple choice ================= */
+function parseNumber(raw){
+  const s = String(raw).replace(/,/g, '').replace(/\s+/g, '');
+  const frac = s.match(/^(-?\d*\.?\d+)\/(\d*\.?\d+)$/);
+  if(frac){ const d = parseFloat(frac[2]); return d === 0 ? NaN : parseFloat(frac[1]) / d; }
+  if(/^-?\d*\.?\d+$/.test(s)) return parseFloat(s);
+  return NaN;
+}
+function parseSciNotation(raw){
+  const m = String(raw).match(/^\s*(-?\d+(?:\.\d+)?)\s*[×xX*]\s*10\s*(?:\^\s*\(?\s*(-?\d+)\s*\)?|\(\s*(-?\d+)\s*\))\s*$/);
+  if(!m) return null;
+  const exp = parseInt(m[2] !== undefined ? m[2] : m[3], 10);
+  return parseFloat(m[1]) * Math.pow(10, exp);
+}
+function nearlyEqual(a, b, tol){
+  if(b === 0) return Math.abs(a) <= tol;
+  return Math.abs(a - b) <= tol * Math.abs(b);
+}
+function setFeedback(q, cls, text){
+  const fb = q.querySelector('.sm-feedback');
+  fb.className = 'sm-feedback' + (cls ? ' ' + cls : '');
+  fb.textContent = text;
+}
+function markQuestion(q, correct){
+  q.dataset.attempted = '1';
+  q.dataset.correct = correct ? '1' : '0';
+  q.classList.toggle('is-correct', correct);
+  q.classList.toggle('is-wrong', !correct);
+  if(q.dataset.unlock){ document.getElementById(q.dataset.unlock).classList.toggle('shown', correct); }
+}
+const WRONG_MSG = '✗ Not quite — try again, use the hint, or show the answer.';
+
+function gradeQuestion(q, save){
+  if(q.classList.contains('mc-question')){
+    const sel = q.querySelector('input[type=radio]:checked');
+    if(!sel){ setFeedback(q, 'bad', 'Choose an option first.'); return; }
+    const ok = sel.value === q.dataset.answer;
+    markQuestion(q, ok);
+    setFeedback(q, ok ? 'good' : 'bad', ok ? '✓ Correct!' : WRONG_MSG);
+  } else {
+    const inp = q.querySelector('.sm-input');
+    const raw = inp.value.trim();
+    if(!raw){ resetQuestionUI(q); if(save) setFeedback(q, 'bad', 'Type an answer first.'); }
+    else if(q.dataset.qtype === 'sci'){
+      const val = parseSciNotation(raw);
+      if(val === null){
+        markQuestion(q, false);
+        setFeedback(q, 'bad', '✗ Write it in standard form, e.g. 3.0 x 10^-4 — see the box above.');
+      } else {
+        const ok = nearlyEqual(val, parseFloat(q.dataset.answer), 0.005);
+        markQuestion(q, ok);
+        setFeedback(q, ok ? 'good' : 'bad', ok ? '✓ Correct!' : WRONG_MSG);
+      }
+    } else {
+      const val = parseNumber(raw);
+      if(isNaN(val)){
+        markQuestion(q, false);
+        setFeedback(q, 'bad', '✗ Type a plain number (or a fraction like 1/3).');
+      } else {
+        const tol = q.dataset.tol ? parseFloat(q.dataset.tol) : 1e-6;
+        const ok = nearlyEqual(val, parseFloat(q.dataset.answer), tol);
+        markQuestion(q, ok);
+        setFeedback(q, ok ? 'good' : 'bad', ok ? '✓ Correct!' : WRONG_MSG);
+      }
+    }
+  }
+  if(save){ updateProgress(); persistExtra(); scheduleFileWrite(); }
+}
+function checkAnswer(btn){ gradeQuestion(btn.closest('.sm-question'), true); }
+function checkMC(btn){ gradeQuestion(btn.closest('.mc-question'), true); }
+function toggleHint(btn){ btn.closest('.question').querySelector('.hint-panel').classList.toggle('shown'); }
+function updateProgress(){
+  const qs = allMarked();
+  let att = 0, cor = 0;
+  qs.forEach(function(q){ if(q.dataset.attempted === '1'){ att++; if(q.dataset.correct === '1') cor++; } });
+  const el = document.getElementById('progressStatus');
+  if(el) el.textContent = 'Checked ' + att + '/' + qs.length + ' · ' + cor + ' correct';
+}
+
+window.addEventListener('beforeprint', function(){ fillableEls.forEach(autosize); });
+
+document.addEventListener('DOMContentLoaded', function(){
+  initFillables();
+  restoreExtraFromStorage();
+  updateProgress();
+  if(fsaSupported){
+    document.getElementById('btnLinkFile').style.display = '';
+    tryRestoreLinkedFile();
+  }
+  updateSaveStatus();
+});
+
+/* ================= Simulation: field shells around a wire ================= */
+(function(){
+  const canvas = document.getElementById('shellCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, C = W / 2, U = 40;          // U = pixels per r; outer shell edge at 5r = 200px
+  const NSHELLS = 5;
+  const DOTS_PER_AMP = 15;
+  const COLORS = ['#ffb347', '#6fd0ff', '#8fe388', '#f58ab0', '#c4a3ff'];
+  const COLORS_DARK = ['#d98324', '#2b8fc4', '#3f9a5c', '#c94f7c', '#7c5cc4'];
+  const slider = document.getElementById('currentSlider');
+  const currentVal = document.getElementById('currentVal');
+  const readout = document.getElementById('shellReadout');
+  const btnNext = document.getElementById('btnNextShell');
+  const btnAll = document.getElementById('btnAllShells');
+  const btnReset = document.getElementById('btnResetShells');
+  const tbody = document.querySelector('#shellTable tbody');
+  const g1 = document.getElementById('graphPerShell').getContext('2d');
+  const g2 = document.getElementById('graphStrength').getContext('2d');
+
+  let I = parseInt(slider.value, 10);
+  let shells = [];     // shells[n] = array of {x,y} for shell n (between n·r and (n+1)·r)
+  let shown = [];      // number of dots of each shell drawn so far (for the fill-in animation)
+  let animating = false;
+
+  function dotsPerShell(){ return DOTS_PER_AMP * I; }
+  function shellArea(n){ return Math.PI * ((n + 1) * (n + 1) - n * n); }   // in units of r²
+
+  function genShell(n){
+    const pts = [], N = dotsPerShell();
+    for(let k = 0; k < N; k++){
+      // uniform in area within the annulus n·r … (n+1)·r
+      const rr = Math.sqrt(Math.random() * ((n + 1) * (n + 1) - n * n) + n * n);
+      const th = Math.random() * 2 * Math.PI;
+      pts.push({ x: rr * Math.cos(th), y: rr * Math.sin(th) });
+    }
+    return pts;
+  }
+
+  function draw(){
+    ctx.fillStyle = '#0f1f30';
+    ctx.fillRect(0, 0, W, W);
+    // shell boundaries
+    ctx.setLineDash([4, 4]);
+    ctx.lineWidth = 1;
+    for(let k = 1; k <= NSHELLS; k++){
+      ctx.strokeStyle = 'rgba(220,234,240,0.35)';
+      ctx.beginPath(); ctx.arc(C, C, k * U, 0, 2 * Math.PI); ctx.stroke();
+    }
+    ctx.setLineDash([]);
+    // radius labels along +x, edge-anchored
+    ctx.fillStyle = '#9fb6c6'; ctx.font = '12px sans-serif'; ctx.textAlign = 'left';
+    for(let k = 1; k <= NSHELLS; k++){ ctx.fillText(k === 1 ? 'r' : k + 'r', C + k * U + 3, C - 5); }
+    // dots
+    for(let n = 0; n < shells.length; n++){
+      ctx.fillStyle = COLORS[n];
+      for(let j = 0; j < shown[n]; j++){
+        const p = shells[n][j];
+        ctx.beginPath(); ctx.arc(C + p.x * U, C - p.y * U, 2.4, 0, 2 * Math.PI); ctx.fill();
+      }
+    }
+    // wire, current out of page
+    ctx.fillStyle = '#c98b4a'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(C, C, 9, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#173a5e';
+    ctx.beginPath(); ctx.arc(C, C, 3, 0, 2 * Math.PI); ctx.fill();
+    ctx.fillStyle = '#ffd59a'; ctx.font = '12px sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText('I (out of page)', 8, W - 10);
+  }
+
+  function frame(m, w, h, xlab, ylab, ctxg, ymax, ystep){
+    ctxg.fillStyle = '#fff'; ctxg.fillRect(0, 0, w, h);
+    ctxg.strokeStyle = '#d7e0e8'; ctxg.lineWidth = 1;
+    ctxg.fillStyle = '#5b6b78'; ctxg.font = '11px sans-serif'; ctxg.textAlign = 'right';
+    for(let v = 0; v <= ymax + 1e-9; v += ystep){
+      const y = h - m.b - v / ymax * (h - m.t - m.b);
+      ctxg.beginPath(); ctxg.moveTo(m.l, y); ctxg.lineTo(w - m.r, y); ctxg.stroke();
+      ctxg.fillText(String(Math.round(v)), m.l - 5, y + 4);
+    }
+    ctxg.strokeStyle = '#1f2933'; ctxg.lineWidth = 1.5;
+    ctxg.beginPath(); ctxg.moveTo(m.l, m.t); ctxg.lineTo(m.l, h - m.b); ctxg.lineTo(w - m.r, h - m.b); ctxg.stroke();
+    ctxg.fillStyle = '#1f2933'; ctxg.font = '12px sans-serif'; ctxg.textAlign = 'center';
+    ctxg.fillText(xlab, (m.l + w - m.r) / 2, h - 6);
+    ctxg.save(); ctxg.translate(13, (m.t + h - m.b) / 2); ctxg.rotate(-Math.PI / 2); ctxg.fillText(ylab, 0, 0); ctxg.restore();
+  }
+
+  function drawGraphs(){
+    const w = 400, h = 260, m = { l: 46, r: 14, t: 16, b: 44 };
+    const pw = w - m.l - m.r, ph = h - m.t - m.b;
+    const filled = shells.filter(function(s, n){ return shown[n] === s.length; }).length;
+
+    // Graph 1: dots per shell (bar chart)
+    const ymax1 = 100;
+    frame(m, w, h, 'shell', 'dots in shell', g1, ymax1, 20);
+    const labels = ['0–r', 'r–2r', '2r–3r', '3r–4r', '4r–5r'];
+    for(let n = 0; n < NSHELLS; n++){
+      const cx = m.l + (n + 0.5) * pw / NSHELLS;
+      g1.fillStyle = '#1f2933'; g1.font = '11px sans-serif'; g1.textAlign = 'center';
+      g1.fillText(labels[n], cx, h - m.b + 15);
+      if(n < filled){
+        const v = shells[n].length, bh = v / ymax1 * ph;
+        g1.fillStyle = COLORS_DARK[n];
+        g1.fillRect(cx - 18, h - m.b - bh, 36, bh);
+        g1.fillStyle = '#1f2933'; g1.fillText(String(v), cx, h - m.b - bh - 4);
+      }
+    }
+
+    // Graph 2: dots per r² against distance (points at each shell's middle radius)
+    const ymax2 = 30, xmax = 5;
+    frame(m, w, h, 'distance from wire', 'dots per r²  (B)', g2, ymax2, 5);
+    const xp = function(x){ return m.l + x / xmax * pw; };
+    const yp = function(y){ return h - m.b - Math.min(y, ymax2) / ymax2 * ph; };
+    g2.fillStyle = '#1f2933'; g2.font = '11px sans-serif'; g2.textAlign = 'center';
+    for(let k = 0; k <= xmax; k++){
+      g2.fillText(k === 0 ? '0' : (k === 1 ? 'r' : k + 'r'), xp(k), h - m.b + 15);
+      g2.beginPath(); g2.moveTo(xp(k), h - m.b); g2.lineTo(xp(k), h - m.b + 4); g2.stroke();
+    }
+    if(filled === NSHELLS && !animating){
+      const N = dotsPerShell();
+      g2.strokeStyle = '#0e7c86'; g2.lineWidth = 2; g2.setLineDash([6, 4]);
+      g2.beginPath();
+      let started = false;
+      for(let x = 0.2; x <= xmax + 1e-9; x += 0.02){
+        const y = N / (2 * Math.PI * x);
+        if(y > ymax2) continue;
+        if(!started){ g2.moveTo(xp(x), yp(y)); started = true; } else { g2.lineTo(xp(x), yp(y)); }
+      }
+      g2.stroke(); g2.setLineDash([]);
+      g2.fillStyle = '#0a5b62'; g2.font = 'bold 12px sans-serif'; g2.textAlign = 'left';
+      g2.fillText('B ∝ 1/(2πr)', xp(2.7), yp(N / (2 * Math.PI * 2.7)) - 10);
+    }
+    for(let n = 0; n < filled; n++){
+      const d = shells[n].length / shellArea(n);
+      g2.fillStyle = COLORS_DARK[n]; g2.strokeStyle = '#1f2933'; g2.lineWidth = 1;
+      g2.beginPath(); g2.arc(xp(n + 0.5), yp(d), 5, 0, 2 * Math.PI); g2.fill(); g2.stroke();
+    }
+  }
+
+  function updateOutputs(){
+    const N = dotsPerShell();
+    const filled = shells.filter(function(s, n){ return shown[n] === s.length; }).length;
+    let html = 'Current <b>' + I + ' A</b> → <b>' + N + '</b> field dots per shell.<br>Shells filled: <b>' + filled + ' / ' + NSHELLS + '</b>';
+    if(filled > 0){
+      const n = filled - 1;
+      html += '<br>Latest shell area: ' + shellArea(n).toFixed(2) + ' r² → ' + (N / shellArea(n)).toFixed(2) + ' dots per r²';
+    }
+    readout.innerHTML = html;
+    let rows = '';
+    for(let n = 0; n < NSHELLS; n++){
+      const done = n < filled;
+      const between = (n === 0 ? '0' : (n === 1 ? 'r' : n + 'r')) + ' – ' + (n + 1 === 1 ? 'r' : (n + 1) + 'r');
+      rows += '<tr><td>' + (n + 1) + '</td><td>' + between + '</td>' +
+        '<td>' + (done ? N : '') + '</td>' +
+        '<td>' + (done ? shellArea(n).toFixed(2) : '') + '</td>' +
+        '<td>' + (done ? (N / shellArea(n)).toFixed(2) : '') + '</td>' +
+        '<td>' + (done ? (n + 0.5).toFixed(1) : '') + '</td></tr>';
+    }
+    tbody.innerHTML = rows;
+    btnNext.disabled = shells.length >= NSHELLS;
+    btnAll.disabled = shells.length >= NSHELLS;
+    drawGraphs();
+  }
+
+  function step(){
+    let busy = false;
+    for(let n = 0; n < shells.length; n++){
+      if(shown[n] < shells[n].length){
+        shown[n] = Math.min(shells[n].length, shown[n] + 2);
+        busy = true;
+        break;                           // fill shells one at a time, inner first
+      }
+    }
+    draw();
+    if(busy){ requestAnimationFrame(step); updateOutputs(); }
+    else { animating = false; updateOutputs(); }
+  }
+  function startAnim(){ if(!animating){ animating = true; requestAnimationFrame(step); } }
+
+  function addShell(){
+    if(shells.length >= NSHELLS) return;
+    shells.push(genShell(shells.length)); shown.push(0);
+    startAnim();
+  }
+  btnNext.addEventListener('click', addShell);
+  btnAll.addEventListener('click', function(){ while(shells.length < NSHELLS){ addShell(); } });
+  btnReset.addEventListener('click', function(){ shells = []; shown = []; draw(); updateOutputs(); });
+  slider.addEventListener('input', function(){
+    I = parseInt(slider.value, 10);
+    currentVal.textContent = I;
+    // regenerate any shells already drawn with the new number of dots
+    for(let n = 0; n < shells.length; n++){ shells[n] = genShell(n); shown[n] = shells[n].length; }
+    draw(); updateOutputs();
+  });
+
+  draw(); updateOutputs();
+})();
+</script>
+</body>
+</html>
