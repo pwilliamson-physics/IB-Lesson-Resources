@@ -177,7 +177,7 @@
     <span class="progress-status" id="progressStatus"></span>
     <span class="save-status" id="saveStatus">Checking autosave…</span>
   </div>
-  <button class="primary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+  <button class="primary" onclick="revealAll();setTimeout(function(){window.print();},60)">🖨️ Print / Save as PDF</button>
 </div>
 
 <main>
@@ -191,9 +191,6 @@
         <li>use experimental results to state Kirchhoff's current and potential difference laws in your own words</li>
         <li>relate the series/parallel behaviour of current and pd to conservation of charge and energy</li>
       </ul>
-    </div>
-    <div class="name-box">
-      <label>Name</label><input type="text" class="fill" id="studentName" autocomplete="name">
     </div>
   </section>
 
@@ -740,13 +737,6 @@
       <div class="sm-feedback" aria-live="polite"></div>
     </div>
 
-
-    <h3>Summary — Kirchhoff's laws</h3>
-    <p>Use your experimental results to complete these statements:</p>
-    <p><strong>Kirchhoff's First Law (Current / Junction Rule):</strong></p>
-1415
-    <p style="margin-top:1rem;"><strong>Kirchhoff's Second Law (Potential Difference / Loop Rule):</strong></p>
-1617
   </section>
 
 <footer class="page no-print">Basic Circuits Workbook Workbook · Companion resources: <em>01 – Potential Difference and Kirchhoff's Laws</em>, <em>03b – Basic Circuits Concept Check</em>.</footer>
