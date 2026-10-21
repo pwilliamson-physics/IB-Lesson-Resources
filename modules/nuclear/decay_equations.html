@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decay Equations — Student Workbook</title>
+<style>
+  :root{
+    --navy:#173a5e; --teal:#0e7c86; --teal-dark:#0a5b62; --amber:#d98324;
+    --soft-blue:#eaf3fb; --soft-amber:#fdf1e2; --soft-green:#eaf7ee; --soft-grey:#f4f6f8;
+    --line:#b9c6d3; --ink:#1f2933; --border:#d7e0e8;
+    --purple:#6b4c9a; --soft-purple:#f1ebf9;
+    --good:#2f8f4e; --bad:#c0392b; --soft-bad:#fbebea;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; color:var(--ink); background:#f7f9fb; line-height:1.55; font-size:16.5px; padding-top:56px;}
+  main{max-width:920px; margin:0 auto; padding:2rem 2.5rem 5rem 2.5rem;}
+  .cover{background:linear-gradient(135deg,var(--navy),var(--teal-dark)); color:#fff; border-radius:14px; padding:2.5rem 2.5rem; margin-bottom:2rem;}
+  .cover h1{margin:0 0 0.4rem 0; font-size:1.9rem;}
+  .goals{background:rgba(255,255,255,0.12); border-left:4px solid #fff; border-radius:6px; padding:0.9rem 1.1rem; font-size:0.92rem; color:#fff;}
+  .goals ul{margin:0.4rem 0 0 0; padding-left:1.2rem;}
+
+  section.topic{background:#fff; border:1px solid var(--border); border-radius:12px; padding:1.8rem 2rem; margin-bottom:1.6rem;}
+  section.topic h2{color:var(--navy); font-size:1.4rem; margin-top:0; border-bottom:3px solid var(--amber); padding-bottom:0.4rem;}
+  section.topic h3{color:var(--teal-dark); font-size:1.08rem; margin-top:1.6rem;}
+
+  .keybox{background:var(--soft-blue); border:1px solid #c7ddef; border-radius:8px; padding:0.9rem 1.1rem; margin:0.9rem 0; font-size:0.98rem;}
+  .keybox strong{color:var(--navy);}
+  .keyword{background:var(--soft-amber); border-left:4px solid var(--amber); border-radius:6px; padding:0.7rem 1rem; margin:0.9rem 0; font-size:0.92rem;}
+  .keyword b{color:var(--amber);}
+  .example{background:var(--soft-green); border:1px solid #bfe3cc; border-radius:8px; padding:0.9rem 1.1rem; margin:1rem 0;}
+  .example .tag{display:inline-block; background:#3f9a5c; color:#fff; font-size:0.72rem; font-weight:600; letter-spacing:0.03em; padding:0.15rem 0.5rem; border-radius:4px; margin-bottom:0.3rem; text-transform:uppercase;}
+  .example p{margin:0.3rem 0;}
+
+  .question{background:var(--soft-grey); border:1px solid var(--border); border-radius:8px; padding:0.9rem 1.2rem; margin:0.9rem 0;}
+  .question .qnum{display:inline-block; background:var(--navy); color:#fff; font-weight:700; font-size:0.82rem; width:1.9rem; height:1.9rem; line-height:1.9rem; text-align:center; border-radius:50%; margin-right:0.5rem;}
+  .question .qlabel{font-size:0.88rem; color:#5b6b78;}
+  .check-row{display:flex; align-items:center; gap:0.8rem; margin-top:0.4rem; flex-wrap:wrap;}
+  .check-btn{background:var(--teal); color:#fff; border:none; border-radius:6px; padding:0.4rem 0.95rem; font-size:0.85rem; font-weight:600; cursor:pointer;}
+  .check-btn:hover{background:var(--teal-dark);}
+  .sm-feedback{font-size:0.88rem; font-weight:600;}
+  .sm-feedback.good{color:var(--good);}
+  .sm-feedback.bad{color:var(--bad);}
+
+  /* ---------- nuclide notation ---------- */
+  .decay-eq{display:flex; align-items:center; flex-wrap:wrap; gap:0.35rem 0.75rem; margin:0.6rem 0 0.4rem 0; font-family:"Cambria Math",Cambria,Georgia,"Times New Roman",serif; font-size:1.45rem;}
+  .eq-show .decay-eq{justify-content:center; background:#fff; border:1px solid #c7ddef; border-radius:6px; padding:0.5rem 1rem; margin:0.6rem 0;}
+  .decay-eq.small{font-size:1.25rem; margin:0.2rem 0;}
+  .op{color:#3a4753;}
+  .op.arrow{font-size:1.5em; line-height:1; padding:0 0.15rem;}
+  .nuc{display:inline-flex; align-items:center; white-space:nowrap;}
+  .az{display:inline-flex; flex-direction:column; align-items:flex-end; justify-content:center; font-size:0.62em; line-height:1.2; margin-right:0.12em; gap:0.12em;}
+  .sym{font-size:1em;}
+  .nubar{display:inline-block; border-top:0.065em solid currentColor; line-height:0.9; padding-top:0.06em;}
+  .nusub{font-size:0.55em; vertical-align:-0.35em;}
+  .hl{color:var(--teal-dark); font-weight:700;}
+  .nuc-in{font-family:inherit; color:var(--navy); text-align:center; border:1.5px solid #8fa3b5; border-radius:4px; background:#fff; padding:0; outline:none;}
+  .nuc-in:focus{border-color:var(--teal); box-shadow:0 0 0 3px rgba(14,124,134,0.15);}
+  /* each typed box sits in a .slot so its ✓/✗ badge can hang off its top-right corner */
+  .slot{position:relative; display:inline-flex; align-items:center; padding-right:19px; line-height:1;}
+  .slot .mark{position:absolute; right:0; top:50%; transform:translateY(-50%); width:16px; height:16px; border-radius:50%; font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif; font-size:11px; font-weight:700; line-height:16px; text-align:center; color:#fff; display:none; pointer-events:none;}
+  .slot.right .mark{display:block; background:var(--good);}
+  .slot.wrong .mark{display:block; background:var(--bad);}
+  .slot.right .nuc-in{border-color:var(--good); background:var(--soft-green);}
+  .slot.wrong .nuc-in{border-color:var(--bad); background:var(--soft-bad);}
+  .num-in{width:3.2em; height:1.55em; font-size:1em;}
+  .sym-in{width:2.2em; height:1.5em; font-size:1em;}
+
+
+  /* ---------- permanent top bar (topbar-component.md) ---------- */
+  .topbar{position:fixed; top:0; left:0; right:0; height:56px; z-index:200; background:#fff; border-bottom:1px solid var(--border); box-shadow:0 2px 8px rgba(0,0,0,0.06); display:flex; align-items:center; gap:0.6rem; padding:0 1rem;}
+  .topbar-actions{display:flex; align-items:center; gap:0.6rem; overflow-x:auto; flex:1 1 auto; min-width:0; height:100%; padding-right:0.4rem;}
+  .topbar .topbar-title{font-weight:700; color:var(--navy); font-size:0.92rem; white-space:nowrap; flex-shrink:0; margin-right:0.4rem;}
+  .topbar button{background:#fff; color:var(--navy); border:1px solid var(--border); border-radius:50px; padding:0.5rem 1rem; font-size:0.82rem; cursor:pointer; white-space:nowrap; flex-shrink:0;}
+  .topbar button:hover{background:var(--soft-blue);}
+  .topbar button.primary{background:var(--amber); color:#fff; border-color:var(--amber); font-weight:600; flex-shrink:0;}
+  .topbar button.primary:hover{background:#c0721c;}
+  .topbar .progress-status{font-size:0.78rem; font-weight:600; color:var(--teal-dark); white-space:nowrap; flex-shrink:0;}
+  .topbar .save-status{font-size:0.72rem; color:#5b6b78; white-space:nowrap; flex-shrink:0;}
+  @media (max-width: 900px){ .topbar .save-status{display:none;} }
+  @media (max-width: 620px){ .topbar .topbar-title{display:none;} .slot{padding-right:15px;} .slot .mark{width:14px; height:14px; line-height:14px; font-size:10px;} .decay-eq .op{font-size:0.9em;} .question .decay-eq{font-size:1.08rem; gap:0.3rem 0.35rem;} .num-in{width:2.9em;} .question{padding:0.8rem 0.7rem;} main{padding:1rem 0.8rem 4rem 0.8rem;} section.topic{padding:1.2rem 1rem;} .cover{padding:1.6rem 1.3rem;} .decay-eq{font-size:1.25rem; gap:0.3rem 0.5rem;} }
+
+  @media print{
+    .topbar, .check-row{display:none !important;}
+    .slot .mark{display:none !important;}
+    .slot{padding-right:4px;}
+    .slot .nuc-in{background:#fff !important; border-color:#555 !important;}
+    main{max-width:100%; padding:0; margin:0;}
+    body{background:#fff; font-size:11.5pt; padding-top:0;}
+    section.topic{border:none; box-shadow:none; padding:0; margin:0 0 1.2rem 0;}
+    .question{page-break-inside:avoid; background:#fff;}
+    .cover{border-radius:0; -webkit-print-color-adjust:exact; print-color-adjust:exact;}
+    .nuc-in{border:1.5px solid #555 !important; box-shadow:none !important; color:#000;}
+    a{color:inherit; text-decoration:none;}
+  }
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <div class="topbar-actions">
+    <span class="topbar-title">Decay Equations</span>
+    <button onclick="clearMyAnswers()">Clear my answers</button>
+    <button onclick="saveAnswersToFile()">💾 Save answers</button>
+    <button onclick="triggerLoadAnswers()">📂 Load answers</button>
+    <input type="file" id="loadFileInput" accept="application/json" style="display:none" onchange="handleLoadFile(event)">
+    <button id="btnLinkFile" style="display:none;" onclick="linkSaveFile()">🔗 Link a save file</button>
+    <span class="progress-status" id="progressStatus"></span>
+    <span class="save-status" id="saveStatus">Checking autosave…</span>
+  </div>
+  <button class="primary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+</div>
+
+<main>
+  <section class="cover" id="cover">
+    <h1>Decay Equations</h1>
+    <div class="goals" style="margin-top:1.3rem;">
+      <strong style="color:#fff;">By the end of this workbook you should be able to:</strong>
+      <ul>
+        <li>Write the general equations for alpha and beta-minus decay</li>
+        <li>Use mass numbers and atomic numbers to complete a decay equation</li>
+        <li>Identify the daughter nucleus from its atomic number</li>
+        <li>Include the electron antineutrino in a beta-minus decay equation</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= SECTION 1: ALPHA ================= -->
+  <section class="topic" id="s1">
+    <h2>1. Alpha decay</h2>
+    <p>Radioactive nuclei are not stable. They become more stable by emitting (giving out) energy in the form of radiation and particles.</p>
+    <p>In alpha decay the nucleus emits an alpha particle: 2 protons and 2 neutrons, which is the same as a helium nucleus.</p>
+    <div class="eq-show"><div class="decay-eq"><span class="nuc"><span class="az"><span class="a">A</span><span class="z">Z</span></span><span class="sym">X</span></span><span class="op arrow" aria-label="decays to">→</span><span class="nuc"><span class="az"><span class="a">A−4</span><span class="z">Z−2</span></span><span class="sym">Y</span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">4</span><span class="z">2</span></span><span class="sym">α</span></span></div></div>
+    <p>The alpha particle is shown as the symbol α above, but as a helium nucleus below. In both cases the equation is identical.</p>
+    <div class="eq-show"><div class="decay-eq"><span class="nuc"><span class="az"><span class="a">A</span><span class="z">Z</span></span><span class="sym">X</span></span><span class="op arrow" aria-label="decays to">→</span><span class="nuc"><span class="az"><span class="a">A−4</span><span class="z">Z−2</span></span><span class="sym">Y</span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">4</span><span class="z">2</span></span><span class="sym">He</span></span></div></div>
+
+    <div class="keyword"><b>Balancing rule:</b> the top numbers (mass numbers) must add up to the same total on both sides of the arrow, and so must the bottom numbers (atomic numbers). Use a periodic table to find the element symbol that matches an atomic number.</div>
+
+    <div class="example">
+      <span class="tag">Worked example 1.1</span>
+      <p>Radium-226 decays by alpha emission. Mass number: 226 − 4 = 222. Atomic number: 88 − 2 = 86, which is radon (Rn).</p>
+      <div class="decay-eq"><span class="nuc"><span class="az"><span class="a">226</span><span class="z">88</span></span><span class="sym">Ra</span></span><span class="op arrow" aria-label="decays to">→</span><span class="nuc"><span class="az"><span class="a">222</span><span class="z">86</span></span><span class="sym">Rn</span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">4</span><span class="z">2</span></span><span class="sym">α</span></span></div>
+    </div>
+
+    <h3>Check your understanding</h3>
+    <p>Type the missing numbers and element symbols in the boxes, then click <strong>Check</strong>. A green ✓ or red ✗ appears by every box. Element symbols need the correct capital letters (e.g. Pb, not PB).</p>
+    <div class="question" id="q1">
+      <span class="qnum">1</span><span class="qlabel">Complete the equation.</span>
+      <div class="decay-eq"><span class="nuc"><span class="az"><span class="a">252</span><span class="z">101</span></span><span class="sym">Md</span></span><span class="op arrow" aria-label="decays to">→</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="248" aria-label="Daughter nucleus: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="99" aria-label="Daughter nucleus: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="slot"><input class="nuc-in sym-in" type="text" maxlength="2" autocomplete="off" spellcheck="false" autocapitalize="off" data-answer="Es" aria-label="Daughter nucleus: element symbol"><span class="mark" aria-hidden="true"></span></span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="4" aria-label="alpha particle: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="2" aria-label="alpha particle: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="sym">α</span></span></div>
+      <div class="check-row no-print"><button class="check-btn" onclick="checkQuestion(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+    </div>
+    <div class="question" id="q2">
+      <span class="qnum">2</span><span class="qlabel">Complete the equation.</span>
+      <div class="decay-eq"><span class="nuc"><span class="az"><span class="a">208</span><span class="z">84</span></span><span class="sym">Po</span></span><span class="op arrow" aria-label="decays to">→</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="204" aria-label="Daughter nucleus: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="82" aria-label="Daughter nucleus: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="sym">Pb</span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="4" aria-label="helium nucleus: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="2" aria-label="helium nucleus: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="sym">He</span></span></div>
+      <div class="check-row no-print"><button class="check-btn" onclick="checkQuestion(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+    </div>
+    <div class="question" id="q3">
+      <span class="qnum">3</span><span class="qlabel">Complete the equation.</span>
+      <div class="decay-eq"><span class="nuc"><span class="az"><span class="a">219</span><span class="z">86</span></span><span class="sym">Rn</span></span><span class="op arrow" aria-label="decays to">→</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="215" aria-label="Daughter nucleus: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="84" aria-label="Daughter nucleus: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="sym">Po</span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="4" aria-label="alpha particle: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="2" aria-label="alpha particle: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="sym">α</span></span></div>
+      <div class="check-row no-print"><button class="check-btn" onclick="checkQuestion(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+    </div>
+    <div class="question" id="q4">
+      <span class="qnum">4</span><span class="qlabel">Complete the equation.</span>
+      <div class="decay-eq"><span class="nuc"><span class="az"><span class="a">219</span><span class="z">90</span></span><span class="sym">Th</span></span><span class="op arrow" aria-label="decays to">→</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="215" aria-label="Daughter nucleus: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="88" aria-label="Daughter nucleus: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="slot"><input class="nuc-in sym-in" type="text" maxlength="2" autocomplete="off" spellcheck="false" autocapitalize="off" data-answer="Ra" aria-label="Daughter nucleus: element symbol"><span class="mark" aria-hidden="true"></span></span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="4" aria-label="alpha particle: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="2" aria-label="alpha particle: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="sym">α</span></span></div>
+      <div class="check-row no-print"><button class="check-btn" onclick="checkQuestion(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+    </div>
+    <div class="question" id="q5">
+      <span class="qnum">5</span><span class="qlabel">Complete the equation.</span>
+      <div class="decay-eq"><span class="nuc"><span class="az"><span class="a">236</span><span class="z">95</span></span><span class="sym">Am</span></span><span class="op arrow" aria-label="decays to">→</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="232" aria-label="Daughter nucleus: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="93" aria-label="Daughter nucleus: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="slot"><input class="nuc-in sym-in" type="text" maxlength="2" autocomplete="off" spellcheck="false" autocapitalize="off" data-answer="Np" aria-label="Daughter nucleus: element symbol"><span class="mark" aria-hidden="true"></span></span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="4" aria-label="alpha particle: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="2" aria-label="alpha particle: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="sym">α</span></span></div>
+      <div class="check-row no-print"><button class="check-btn" onclick="checkQuestion(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+    </div>
+    <div class="question" id="q6">
+      <span class="qnum">6</span><span class="qlabel">Complete the equation.</span>
+      <div class="decay-eq"><span class="nuc"><span class="az"><span class="a">210</span><span class="z">84</span></span><span class="sym">Po</span></span><span class="op arrow" aria-label="decays to">→</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="206" aria-label="Daughter nucleus: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="82" aria-label="Daughter nucleus: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="slot"><input class="nuc-in sym-in" type="text" maxlength="2" autocomplete="off" spellcheck="false" autocapitalize="off" data-answer="Pb" aria-label="Daughter nucleus: element symbol"><span class="mark" aria-hidden="true"></span></span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="4" aria-label="helium nucleus: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="2" aria-label="helium nucleus: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="sym">He</span></span></div>
+      <div class="check-row no-print"><button class="check-btn" onclick="checkQuestion(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+    </div>
+    <div class="question" id="q7">
+      <span class="qnum">7</span><span class="qlabel">Complete the equation.</span>
+      <div class="decay-eq"><span class="nuc"><span class="az"><span class="a">238</span><span class="z">94</span></span><span class="sym">Pu</span></span><span class="op arrow" aria-label="decays to">→</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="234" aria-label="Daughter nucleus: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="92" aria-label="Daughter nucleus: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="slot"><input class="nuc-in sym-in" type="text" maxlength="2" autocomplete="off" spellcheck="false" autocapitalize="off" data-answer="U" aria-label="Daughter nucleus: element symbol"><span class="mark" aria-hidden="true"></span></span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="4" aria-label="alpha particle: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="2" aria-label="alpha particle: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="sym">α</span></span></div>
+      <div class="check-row no-print"><button class="check-btn" onclick="checkQuestion(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+    </div>
+  </section>
+
+  <!-- ================= SECTION 2: BETA ================= -->
+  <section class="topic" id="s2">
+    <h2>2. Beta decay</h2>
+    <p>In beta-minus decay a neutron in the nucleus changes into a proton. The nucleus emits an electron (the beta particle) and an electron antineutrino.</p>
+    <div class="eq-show"><div class="decay-eq"><span class="nuc"><span class="az"><span class="a">A</span><span class="z">Z</span></span><span class="sym">X</span></span><span class="op arrow" aria-label="decays to">→</span><span class="nuc"><span class="az"><span class="a">A</span><span class="z">Z+1</span></span><span class="sym">Y</span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">0</span><span class="z">−1</span></span><span class="sym">β</span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">0</span><span class="z">0</span></span><span class="sym"><span class="nubar">ν</span><sub class="nusub">e</sub></span></span></div></div>
+    <p>The beta particle is shown as the symbol β above, but as an electron below. In both cases the equation is identical.</p>
+    <div class="eq-show"><div class="decay-eq"><span class="nuc"><span class="az"><span class="a">A</span><span class="z">Z</span></span><span class="sym">X</span></span><span class="op arrow" aria-label="decays to">→</span><span class="nuc"><span class="az"><span class="a">A</span><span class="z">Z+1</span></span><span class="sym">Y</span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">0</span><span class="z">−1</span></span><span class="sym">e</span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">0</span><span class="z">0</span></span><span class="sym"><span class="nubar">ν</span><sub class="nusub">e</sub></span></span></div></div>
+
+    <div class="keybox"><strong>The electron antineutrino, <span style="font-family:Cambria,Georgia,serif;"><span class="nubar">ν</span><sub>e</sub></span>.</strong> It has no charge and almost no mass, so its mass number and charge number are both 0. It doesn't change the totals on either side, but a complete beta-minus decay equation must include it.</div>
+
+    <div class="example">
+      <span class="tag">Worked example 2.1</span>
+      <p>Iodine-131 decays by beta-minus emission. The mass number stays at 131. Atomic number: 53 + 1 = 54, which is xenon (Xe).</p>
+      <div class="decay-eq"><span class="nuc"><span class="az"><span class="a">131</span><span class="z">53</span></span><span class="sym">I</span></span><span class="op arrow" aria-label="decays to">→</span><span class="nuc"><span class="az"><span class="a">131</span><span class="z">54</span></span><span class="sym">Xe</span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">0</span><span class="z">−1</span></span><span class="sym">β</span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">0</span><span class="z">0</span></span><span class="sym"><span class="nubar">ν</span><sub class="nusub">e</sub></span></span></div>
+    </div>
+
+    <h3>Check your understanding</h3>
+    <p>Type the missing numbers and element symbols in the boxes, then click <strong>Check</strong>. A green ✓ or red ✗ appears by every box. Element symbols need the correct capital letters (e.g. Pb, not PB).</p>
+    <div class="question" id="q8">
+      <span class="qnum">8</span><span class="qlabel">Complete the equation.</span>
+      <div class="decay-eq"><span class="nuc"><span class="az"><span class="a">215</span><span class="z">84</span></span><span class="sym">Po</span></span><span class="op arrow" aria-label="decays to">→</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="215" aria-label="Daughter nucleus: mass number"><span class="mark" aria-hidden="true"></span></span><span class="z">85</span></span><span class="sym">At</span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">0</span><span class="z">−1</span></span><span class="sym">e</span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">0</span><span class="z">0</span></span><span class="sym"><span class="nubar">ν</span><sub class="nusub">e</sub></span></span></div>
+      <div class="check-row no-print"><button class="check-btn" onclick="checkQuestion(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+    </div>
+    <div class="question" id="q9">
+      <span class="qnum">9</span><span class="qlabel">Complete the equation.</span>
+      <div class="decay-eq"><span class="nuc"><span class="az"><span class="a">220</span><span class="z">84</span></span><span class="sym">Po</span></span><span class="op arrow" aria-label="decays to">→</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="220" aria-label="Daughter nucleus: mass number"><span class="mark" aria-hidden="true"></span></span><span class="z">85</span></span><span class="sym">At</span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">0</span><span class="z">−1</span></span><span class="sym">β</span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">0</span><span class="z">0</span></span><span class="sym"><span class="nubar">ν</span><sub class="nusub">e</sub></span></span></div>
+      <div class="check-row no-print"><button class="check-btn" onclick="checkQuestion(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+    </div>
+    <div class="question" id="q10">
+      <span class="qnum">10</span><span class="qlabel">Complete the equation.</span>
+      <div class="decay-eq"><span class="nuc"><span class="az"><span class="a">132</span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="53" aria-label="Parent nucleus: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="sym">I</span></span><span class="op arrow" aria-label="decays to">→</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="132" aria-label="Daughter nucleus: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="54" aria-label="Daughter nucleus: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="slot"><input class="nuc-in sym-in" type="text" maxlength="2" autocomplete="off" spellcheck="false" autocapitalize="off" data-answer="Xe" aria-label="Daughter nucleus: element symbol"><span class="mark" aria-hidden="true"></span></span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">0</span><span class="z">−1</span></span><span class="sym">β</span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">0</span><span class="z">0</span></span><span class="sym"><span class="nubar">ν</span><sub class="nusub">e</sub></span></span></div>
+      <div class="check-row no-print"><button class="check-btn" onclick="checkQuestion(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+    </div>
+    <div class="question" id="q11">
+      <span class="qnum">11</span><span class="qlabel">Complete the equation.</span>
+      <div class="decay-eq"><span class="nuc"><span class="az"><span class="a">28</span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="11" aria-label="Parent nucleus: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="sym">Na</span></span><span class="op arrow" aria-label="decays to">→</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="28" aria-label="Daughter nucleus: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="12" aria-label="Daughter nucleus: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="slot"><input class="nuc-in sym-in" type="text" maxlength="2" autocomplete="off" spellcheck="false" autocapitalize="off" data-answer="Mg" aria-label="Daughter nucleus: element symbol"><span class="mark" aria-hidden="true"></span></span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">0</span><span class="z">−1</span></span><span class="sym">e</span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">0</span><span class="z">0</span></span><span class="sym"><span class="nubar">ν</span><sub class="nusub">e</sub></span></span></div>
+      <div class="check-row no-print"><button class="check-btn" onclick="checkQuestion(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+    </div>
+    <div class="question" id="q12">
+      <span class="qnum">12</span><span class="qlabel">Complete the equation.</span>
+      <div class="decay-eq"><span class="nuc"><span class="az"><span class="a">14</span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="6" aria-label="Parent nucleus: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="sym">C</span></span><span class="op arrow" aria-label="decays to">→</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="14" aria-label="Daughter nucleus: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="7" aria-label="Daughter nucleus: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="slot"><input class="nuc-in sym-in" type="text" maxlength="2" autocomplete="off" spellcheck="false" autocapitalize="off" data-answer="N" aria-label="Daughter nucleus: element symbol"><span class="mark" aria-hidden="true"></span></span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="0" aria-label="beta particle: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="-1" aria-label="beta particle: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="sym">β</span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">0</span><span class="z">0</span></span><span class="sym"><span class="nubar">ν</span><sub class="nusub">e</sub></span></span></div>
+      <div class="check-row no-print"><button class="check-btn" onclick="checkQuestion(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+    </div>
+    <div class="question" id="q13">
+      <span class="qnum">13</span><span class="qlabel">Complete the equation.</span>
+      <div class="decay-eq"><span class="nuc"><span class="az"><span class="a">246</span><span class="z">95</span></span><span class="sym">Am</span></span><span class="op arrow" aria-label="decays to">→</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="246" aria-label="Daughter nucleus: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="96" aria-label="Daughter nucleus: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="slot"><input class="nuc-in sym-in" type="text" maxlength="2" autocomplete="off" spellcheck="false" autocapitalize="off" data-answer="Cm" aria-label="Daughter nucleus: element symbol"><span class="mark" aria-hidden="true"></span></span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="0" aria-label="beta particle: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="-1" aria-label="beta particle: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="sym">β</span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">0</span><span class="z">0</span></span><span class="sym"><span class="nubar">ν</span><sub class="nusub">e</sub></span></span></div>
+      <div class="check-row no-print"><button class="check-btn" onclick="checkQuestion(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+    </div>
+    <div class="question" id="q14">
+      <span class="qnum">14</span><span class="qlabel">Complete the equation.</span>
+      <div class="decay-eq"><span class="nuc"><span class="az"><span class="a">231</span><span class="z">89</span></span><span class="sym">Ac</span></span><span class="op arrow" aria-label="decays to">→</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="231" aria-label="Daughter nucleus: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="90" aria-label="Daughter nucleus: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="slot"><input class="nuc-in sym-in" type="text" maxlength="2" autocomplete="off" spellcheck="false" autocapitalize="off" data-answer="Th" aria-label="Daughter nucleus: element symbol"><span class="mark" aria-hidden="true"></span></span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="0" aria-label="beta particle: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="-1" aria-label="beta particle: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="sym">β</span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">0</span><span class="z">0</span></span><span class="sym"><span class="nubar">ν</span><sub class="nusub">e</sub></span></span></div>
+      <div class="check-row no-print"><button class="check-btn" onclick="checkQuestion(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+    </div>
+    <div class="question" id="q15">
+      <span class="qnum">15</span><span class="qlabel">Complete the equation.</span>
+      <div class="decay-eq"><span class="nuc"><span class="az"><span class="a">90</span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="38" aria-label="Parent nucleus: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="sym">Sr</span></span><span class="op arrow" aria-label="decays to">→</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="90" aria-label="Daughter nucleus: mass number"><span class="mark" aria-hidden="true"></span></span><span class="z">39</span></span><span class="slot"><input class="nuc-in sym-in" type="text" maxlength="2" autocomplete="off" spellcheck="false" autocapitalize="off" data-answer="Y" aria-label="Daughter nucleus: element symbol"><span class="mark" aria-hidden="true"></span></span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">0</span><span class="z">−1</span></span><span class="sym">e</span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">0</span><span class="z">0</span></span><span class="sym"><span class="nubar">ν</span><sub class="nusub">e</sub></span></span></div>
+      <div class="check-row no-print"><button class="check-btn" onclick="checkQuestion(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+    </div>
+    <div class="question" id="q16">
+      <span class="qnum">16</span><span class="qlabel">Complete the equation.</span>
+      <div class="decay-eq"><span class="nuc"><span class="az"><span class="a">234</span><span class="z">90</span></span><span class="sym">Th</span></span><span class="op arrow" aria-label="decays to">→</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="234" aria-label="Daughter nucleus: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="91" aria-label="Daughter nucleus: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="slot"><input class="nuc-in sym-in" type="text" maxlength="2" autocomplete="off" spellcheck="false" autocapitalize="off" data-answer="Pa" aria-label="Daughter nucleus: element symbol"><span class="mark" aria-hidden="true"></span></span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="0" aria-label="beta particle: mass number"><span class="mark" aria-hidden="true"></span></span><span class="slot"><input class="nuc-in num-in" type="text" maxlength="4" autocomplete="off" spellcheck="false" data-answer="-1" aria-label="beta particle: atomic number"><span class="mark" aria-hidden="true"></span></span></span><span class="sym">β</span></span><span class="op">+</span><span class="nuc"><span class="az"><span class="a">0</span><span class="z">0</span></span><span class="sym"><span class="nubar">ν</span><sub class="nusub">e</sub></span></span></div>
+      <div class="check-row no-print"><button class="check-btn" onclick="checkQuestion(this)">Check</button><span class="sm-feedback" aria-live="polite"></span></div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+/* ================= Sticky top bar: answer persistence =================
+   See topbar-component.md. No name field and no student name in the save file —
+   per project instructions, this worksheet collects no student data. */
+const WORKBOOK_ID = 'decay-equations';
+const STORAGE_PREFIX = 'ib-workbook-' + WORKBOOK_ID + '-v1-';
+let fillableEls = [];
+
+
+/* ================= Self-marking: Check marks every typed box ✓ / ✗ =================
+   Numbers: spaces ignored, and a typed minus/dash/en-dash all count as "−".
+   Element symbols: spaces ignored, but capitalisation must be correct (Pb, not PB or pb). */
+function norm(v, isSym){
+  v = String(v).replace(/\s+/g, '');
+  if(!isSym) v = v.replace(/[\u2212\u2013\u2014]/g, '-').replace(/^\+/, '');
+  return v;
+}
+function markSlot(inp){
+  const slot = inp.parentNode;
+  const isSym = inp.classList.contains('sym-in');
+  const ok = norm(inp.value, isSym) === norm(inp.dataset.answer, isSym);
+  slot.classList.remove('right', 'wrong');
+  slot.classList.add(ok ? 'right' : 'wrong');
+  slot.querySelector('.mark').textContent = ok ? '✓' : '✗';
+  return ok;
+}
+function checkQuestion(btn){
+  const q = btn.closest('.question');
+  const inputs = Array.prototype.slice.call(q.querySelectorAll('.nuc-in'));
+  let right = 0;
+  inputs.forEach(function(inp){ if(markSlot(inp)) right++; });
+  const fb = q.querySelector('.sm-feedback');
+  const all = right === inputs.length;
+  fb.className = 'sm-feedback ' + (all ? 'good' : 'bad');
+  fb.textContent = all ? '✓ All correct — well done!' : right + ' of ' + inputs.length + ' boxes correct. Fix the red ones and check again.';
+  q.dataset.attempted = '1';
+  q.dataset.correct = all ? '1' : '0';
+  updateProgress();
+  saveExtra();
+}
+function clearMarks(q){
+  q.querySelectorAll('.slot').forEach(function(sl){ sl.classList.remove('right', 'wrong'); });
+  const fb = q.querySelector('.sm-feedback'); fb.textContent = ''; fb.className = 'sm-feedback';
+  delete q.dataset.attempted; delete q.dataset.correct;
+}
+function updateProgress(){
+  const qs = document.querySelectorAll('.question');
+  let a = 0, c = 0;
+  qs.forEach(function(q){ if(q.dataset.attempted){ a++; if(q.dataset.correct === '1') c++; } });
+  const el = document.getElementById('progressStatus');
+  if(el) el.textContent = 'Checked ' + a + '/' + qs.length + ' · ' + c + ' correct';
+}
+// Which questions have been checked is remembered too, so the ✓/✗ marks come back after a reload.
+function getExtraState(){
+  return { checked: Array.prototype.map.call(document.querySelectorAll('.question'), function(q){ return q.dataset.attempted ? 1 : 0; }) };
+}
+function applyExtraState(data){
+  const checked = (data && data.checked) || [];
+  document.querySelectorAll('.question').forEach(function(q, i){
+    if(checked[i]) checkQuestion(q.querySelector('.check-btn')); else clearMarks(q);
+  });
+  updateProgress();
+}
+function saveExtra(){ if(canStore){ try{ localStorage.setItem(STORAGE_PREFIX + 'extra', JSON.stringify(getExtraState())); } catch(e){} } }
+
+function storageAvailable(){
+  try{ const k = '__test__' + STORAGE_PREFIX; localStorage.setItem(k, '1'); localStorage.removeItem(k); return true; }
+  catch(e){ return false; }
+}
+const canStore = storageAvailable();
+
+function initFillables(){
+  fillableEls = Array.prototype.slice.call(document.querySelectorAll('.nuc-in'));
+  fillableEls.forEach(function(el, i){
+    const key = STORAGE_PREFIX + i;
+    el.dataset.storeKey = key;
+    if(canStore){ const saved = localStorage.getItem(key); if(saved !== null){ el.value = saved; } }
+    el.addEventListener('input', function(){
+      // editing a box removes its old mark until the question is checked again
+      el.parentNode.classList.remove('right', 'wrong');
+      if(canStore){ try{ localStorage.setItem(el.dataset.storeKey, el.value); } catch(e){} }
+      scheduleFileWrite();
+    });
+  });
+}
+
+function getAnswersArray(){ return fillableEls.map(function(el){ return el.value; }); }
+function applyAnswersArray(arr){ fillableEls.forEach(function(el, i){ if(arr && arr[i] !== undefined){ el.value = arr[i]; } }); }
+function buildPayload(){ return Object.assign({ workbook: WORKBOOK_ID, savedAt: new Date().toISOString(), answers: getAnswersArray() }, getExtraState()); }
+
+function clearMyAnswers(){
+  if(!confirm('Clear everything you have typed? This cannot be undone.')) return;
+  fillableEls.forEach(function(el){
+    el.value = '';
+    if(canStore){ try{ localStorage.removeItem(el.dataset.storeKey); } catch(e){} }
+  });
+  applyExtraState({});
+  saveExtra();
+  scheduleFileWrite();
+}
+
+function downloadJSON(obj, filename){
+  const blob = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+}
+function saveAnswersToFile(){ downloadJSON(buildPayload(), WORKBOOK_ID + '-answers.json'); }
+function triggerLoadAnswers(){ document.getElementById('loadFileInput').click(); }
+function handleLoadFile(evt){
+  const file = evt.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(){
+    try{
+      const data = JSON.parse(reader.result);
+      applyAnswersArray(data.answers || []);
+      applyExtraState(data);
+      if(canStore){ fillableEls.forEach(function(el){ try{ localStorage.setItem(el.dataset.storeKey, el.value); } catch(e){} }); }
+      saveExtra();
+      alert('Loaded your saved answers from "' + file.name + '".');
+    } catch(e){ alert('Sorry, that file could not be read as a saved-answers file.'); }
+  };
+  reader.readAsText(file);
+  evt.target.value = '';
+}
+
+/* ---------- linked save file (Chrome/Edge — File System Access API) ---------- */
+let fileHandle = null, pendingHandle = null, fileWriteTimer = null;
+const fsaSupported = ('showSaveFilePicker' in window);
+function idbOpen(){
+  return new Promise(function(resolve, reject){
+    const rq = indexedDB.open('ib-workbook-fs', 1);
+    rq.onupgradeneeded = function(){ if(!rq.result.objectStoreNames.contains('handles')) rq.result.createObjectStore('handles'); };
+    rq.onsuccess = function(){ resolve(rq.result); };
+    rq.onerror = function(){ reject(rq.error); };
+  });
+}
+function idbGetHandle(){
+  return idbOpen().then(function(db){
+    return new Promise(function(resolve){
+      const rq = db.transaction('handles', 'readonly').objectStore('handles').get(WORKBOOK_ID);
+      rq.onsuccess = function(){ resolve(rq.result || null); };
+      rq.onerror = function(){ resolve(null); };
+    });
+  }).catch(function(){ return null; });
+}
+function idbSetHandle(handle){
+  return idbOpen().then(function(db){ db.transaction('handles', 'readwrite').objectStore('handles').put(handle, WORKBOOK_ID); }).catch(function(){});
+}
+function updateLinkButton(){
+  const btn = document.getElementById('btnLinkFile');
+  if(btn) btn.textContent = fileHandle ? '🔗 Save file linked' : (pendingHandle ? '🔗 Reconnect save file' : '🔗 Link a save file');
+}
+function updateSaveStatus(){
+  const s = document.getElementById('saveStatus');
+  if(!s) return;
+  s.textContent = fileHandle ? 'Autosaving to your linked file'
+    : canStore ? 'Autosaving in this browser — click 💾 Save often as a backup'
+    : 'Autosave unavailable here — use 💾 Save / 📂 Load to keep your work';
+}
+function tryRestoreLinkedFile(){
+  if(!fsaSupported) return Promise.resolve();
+  return idbGetHandle().then(function(handle){
+    if(!handle) return;
+    return handle.queryPermission({mode:'readwrite'}).then(function(p){ if(p === 'granted') fileHandle = handle; else pendingHandle = handle; }).catch(function(){});
+  }).then(function(){ updateLinkButton(); updateSaveStatus(); });
+}
+function linkSaveFile(){
+  if(!fsaSupported) return;
+  const proceed = pendingHandle
+    ? pendingHandle.requestPermission({mode:'readwrite'}).then(function(r){ if(r === 'granted'){ fileHandle = pendingHandle; pendingHandle = null; } })
+    : window.showSaveFilePicker({ suggestedName: WORKBOOK_ID + '-answers.json', types: [{ description: 'Workbook answers', accept: {'application/json': ['.json']} }] })
+        .then(function(h){ fileHandle = h; return idbSetHandle(h); });
+  proceed.then(function(){ updateLinkButton(); updateSaveStatus(); return writeToLinkedFile(); }).catch(function(){});
+}
+function scheduleFileWrite(){ if(!fileHandle) return; clearTimeout(fileWriteTimer); fileWriteTimer = setTimeout(writeToLinkedFile, 800); }
+function writeToLinkedFile(){
+  if(!fileHandle) return Promise.resolve();
+  return fileHandle.createWritable().then(function(w){ return w.write(JSON.stringify(buildPayload(), null, 2)).then(function(){ return w.close(); }); })
+    .catch(function(e){ console.warn('Could not write to linked save file', e); });
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  initFillables();
+  let extra = {};
+  if(canStore){ try{ extra = JSON.parse(localStorage.getItem(STORAGE_PREFIX + 'extra') || '{}'); } catch(e){} }
+  applyExtraState(extra);
+  if(fsaSupported){ document.getElementById('btnLinkFile').style.display = ''; tryRestoreLinkedFile(); }
+  updateSaveStatus();
+});
+</script>
+</body>
+</html>
